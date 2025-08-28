@@ -21,7 +21,7 @@ const VinylProductContentSchema = new mongoose.Schema({
 });
 
 const VinylProductContentModel = mongoose.model(
-  "vinylProductcontents",
+  "vinylproductcontents",
   VinylProductContentSchema
 );
 

@@ -2,22 +2,13 @@ const bannerModel = require("../../models/banners/bannerModel");
 const cloudinary = require("../../utils/cloudinary");
 const path = require("path");
 const fs = require("fs");
-const { uploadToS3 } = require("../../utils/s3Uploads");
+// const { uploadToS3 } = require("../../utils/s3Uploads");
 
 const createBanner = async (req, res) => {
   try {
     const { alt, heading, banner, page } = req.body;
     let bannerData = {};
     let fileType = "";
-
-    const isURL = (str) => {
-      try {
-        new URL(str);
-        return true;
-      } catch {
-        return false;
-      }
-    };
 
     if (isURL(banner)) {
       fileType = "video";
@@ -36,11 +27,11 @@ const createBanner = async (req, res) => {
       if (isImage && (!alt || alt.trim() === ""))
         return res.status(400).json({ message: "Alt text required for images" });
 
-      // ✅ Already uploaded by multer-s3
+      // ✅ File is already uploaded to Cloudinary by multer-storage-cloudinary
       fileType = isImage ? "image" : "video";
       bannerData = {
         filename: file.originalname,
-        filepath: file.location, // <-- S3 URL
+        filepath: file.path, // <-- Cloudinary secure_url
         iframe: null,
       };
     }
@@ -63,7 +54,6 @@ const createBanner = async (req, res) => {
     res.status(500).json({ message: `Error: ${error.message}` });
   }
 };
-
 const updateBanner = async (req, res) => {
   try {
     const { alt, heading, page, banner } = req.body;

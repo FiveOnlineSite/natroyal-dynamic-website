@@ -62,10 +62,10 @@ const handleDeleteAppContent = async (id, appName) => {
     <AdminLayout>
       <div className="pages-headers ">
         <h2>
-         Vinyl Applications
+         Vinyl Application Content
           <NavLink to="/admin/add/vinyl-application-content" className="theme-cta">
             <i className="las la-plus-circle"></i>
-            Add Vinyl Application
+            Add Vinyl Application Content
           </NavLink>
         </h2>
       </div>

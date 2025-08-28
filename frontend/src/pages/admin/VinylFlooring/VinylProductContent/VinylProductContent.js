@@ -5,24 +5,22 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
 
-const VinylProduct = () => {
+const VinylProductContent = () => {
+
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
-  const [yellowTitle, setYellowTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [VinylProduct, setVinylProduct] = useState([]);
- 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [VinylProductContent, setVinylProductContent] = useState("");
 
   useEffect(() => {
-    const fetchVinylProduct = async () => {
+    const fetchVinylProductContent = async () => {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
-        const response = await axios.get(`${apiUrl}/api/vinyl-product`);
-        const VinylProductData = response.data.vinylProducts;
+        const response = await axios.get(`${apiUrl}/api/vinyl-product-content`);
+        const VinylProductContentData = response.data.VinylProductContent;
 
-        setVinylProduct(VinylProductData);
-        console.log("Fetched name:", VinylProductData.name);
+        setVinylProductContent(VinylProductContentData);
+        console.log("Fetched name:", VinylProductContentData.name);
      } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -30,50 +28,44 @@ const VinylProduct = () => {
       }
     };
 
-    fetchVinylProduct();
+    fetchVinylProductContent();
   }, []);
 
+const handleDeleteAppContent = async (id, appName) => {
+  const confirmDelete = window.confirm(
+    `Are you sure you want to delete this "${appName}" product content?`
+  );
+  if (!confirmDelete) return;
 
+  try {
+    const access_token = localStorage.getItem("access_token");
+    const apiUrl = process.env.REACT_APP_API_URL;
 
-  const handleDeleteApplication = async (id, name) => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete this "${name}" product?`
+    await axios.delete(`${apiUrl}/api/vinyl-product-content/${id}`, {
+      headers: { Authorization: `Bearer ${access_token}` },
+    });
+
+    setVinylProductContent((prev) =>
+      prev.filter((item) => item._id !== id)
     );
-    if (!confirmDelete) return;
-
-    try {
-      const access_token = localStorage.getItem("access_token");
-      const apiUrl = process.env.REACT_APP_API_URL;
-
-      const response = await axios.delete(`${apiUrl}/api/vinyl-product/${id}`, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      });
-      setVinylProduct(null)
-console.log(response.data);
-       setVinylProduct(
-        VinylProduct.filter((VinylProduct) => VinylProduct._id !== id)
-      );
-       setTimeout(() => {
-        navigate("/admin/vinyl-products");
+    setTimeout(() => {
+        navigate("/admin/vinyl-product-content");
       }, 3000);
-    } catch (error) {
-      console.error("Error deleting product:", error);
-      setErrorMessage(
-        error.response?.data?.message || "Failed to delete product"
-      );
-    }
-  };
+  } catch (error) {
+    console.error("Error deleting product content:", error);
+    setErrorMessage(error.response?.data?.message || "Failed to delete product content");
+  }
+};
+
 
   return (
     <AdminLayout>
       <div className="pages-headers ">
         <h2>
-         Vinyl products
-          <NavLink to="/admin/add/vinyl-products" className="theme-cta">
+         Vinyl Product Contents
+          <NavLink to="/admin/add/vinyl-product-content" className="theme-cta">
             <i className="las la-plus-circle"></i>
-            Add Vinyl product
+            Add Vinyl Product Content
           </NavLink>
         </h2>
       </div>
@@ -84,42 +76,28 @@ console.log(response.data);
               <table id="example" className="table nowrap">
                 <thead>
                   <tr>
-                     <th>Applications</th>
-                    <th className="text-center">Name</th>
-                    <th className="text-center">Image</th>
-                    <th className="text-center">Alt</th>
+                    <th>Product</th>
+                    <th className="text-center">Yellow Name</th>
+                    <th className="text-center">Black Name</th>
+                     <th className="text-center">Content</th>
+                    
                     <th className="text-center">Edit</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {VinylProduct &&
-                    VinylProduct.map((product) => (
-                      <tr key={product._id}>
-                          <td> {product.applications.map((app) => (
-                          <div key={app._id}>{app.name}</div>
-                        ))}</td>
-                        <td className="text-center">{product.name}</td>
-
+                 {VinylProductContent.length > 0 ? (
+                  <>
+                    {VinylProductContent.map((item) => (
+                      <tr key={item._id}>
+                        <td>{item.product.name}</td>
+                        <td className="text-center">{item.yellow_title}</td>
+                        <td className="text-center">{item.black_title}</td>
+                        <td className="text-center">{item.content}</td>
                         <td className="text-center">
-                          {product.image[0]?.filepath && (
-                            <img
-                              src={product.image[0]?.filepath}
-                              alt={product.alt}
-                              style={{
-                                width: "100px",
-                                height: "100px",
-                              }}
-                              loading="lazy"
-                            />
-                          )}
-                        </td>
-                        <td className="text-center"> {product.alt}</td>
-                         <td className="text-center">
                           <Link
-                            to={`/admin/edit/vinyl-products/${product._id}`}
+                            to={`/admin/edit/vinyl-product-content/${item._id}`}
                             title="Edit"
                           >
-                            
                             <i className="las la-pencil-alt"></i>
                           </Link>
                         </td>
@@ -127,14 +105,24 @@ console.log(response.data);
                           <button
                             className="delete-btn"
                             onClick={() =>
-                              handleDeleteApplication(product._id, product.application.name)
+                              handleDeleteAppContent(item._id, item.product.name)
                             }
                           >
-                            <i className="las la-trash"></i>{" "}
+                            <i className="las la-trash"></i>
                           </button>
                         </td>
                       </tr>
                     ))}
+                  </>
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center">
+                      No data found.
+                    </td>
+                  </tr>
+                )}
+
+                   
                 </tbody>
               </table>
             </div>
@@ -145,5 +133,5 @@ console.log(response.data);
   );
 };
 
-export default VinylProduct;
+export default VinylProductContent;
 

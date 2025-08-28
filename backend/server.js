@@ -27,6 +27,17 @@ app.use((req, res, next) => {
   next();
 });
 
+// Increase body limit for large videos
+app.use(express.json({ limit: "200mb" }));
+app.use(express.urlencoded({ limit: "200mb", extended: true }));
+
+// Increase server timeout
+app.use((req, res, next) => {
+  req.setTimeout(10 * 60 * 1000); // 10 minutes
+  res.setTimeout(10 * 60 * 1000); // 10 minutes
+  next();
+});
+
 // app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 app.get("/api", (req, res) => {
