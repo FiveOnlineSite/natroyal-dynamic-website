@@ -397,12 +397,15 @@ main {
   border-radius: 5px;
   padding: 8px 12px 8px 12px;
 }
+<<<<<<< HEAD
 
 .theme-form select:focus{
   outline: none !important;
   box-shadow: none !important;
   border: 1px solid #d9d9d9 !important;
 }
+=======
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
 .theme-form-add {
   float: right;
   font-family: var(--primary-font);
@@ -510,9 +513,13 @@ body::-webkit-scrollbar-thumb:hover {
 #checkboxes label input {
   width: auto;
   margin-right: 10px;
+<<<<<<< HEAD
   padding: auto !important
 }
 
+=======
+}
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
 .login-content {
   width: 100%;
   background: var(--main-color);
@@ -684,6 +691,7 @@ align-items: center;
   width: auto !important;
 }
 
+<<<<<<< HEAD
 select {
   -webkit-appearance: auto !important;
   -moz-appearance: auto !important;
@@ -691,6 +699,8 @@ select {
 }
 
 
+=======
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
 @media only screen and (max-width: 1200px) {
   .sidebar {
     width: 70px;

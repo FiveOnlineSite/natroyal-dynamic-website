@@ -8,6 +8,21 @@ const createButton = async (req, res) => {
   try {
     const { installation_maintenance } = req.body;
 
+<<<<<<< HEAD
+=======
+    // const categoryDoc = await VinylProductModel.findOne({
+    //     "category._id": product_id,
+    //     });
+
+    //     const isValidCategory = categoryDoc?.category?.some(
+    //     (cat) => cat._id.toString() === product_id
+    //     );
+
+    //     if (!isValidCategory) {
+    //     return res.status(400).json({ message: "Invalid product_id." });
+    //     }
+
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
     const files = req.files;
 
     const techFile = files?.technical_specification?.[0];
@@ -39,11 +54,16 @@ const createButton = async (req, res) => {
         .json({ message: "Only PDF files are allowed for brochure." });
     }
 
+<<<<<<< HEAD
     try {
   fs.unlinkSync(techFile.path);
 } catch (err) {
   console.warn("Temp file not found (already removed):", err.message);
 }
+=======
+    fs.unlinkSync(path.resolve(techFile.path));
+
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
     const technicalData = {
       filename: techUpload.original_filename,
       filepath: techUpload.secure_url,
@@ -121,17 +141,25 @@ const updateButton = async (req, res) => {
         resource_type: "image",
       });
 
+<<<<<<< HEAD
   
+=======
+      fs.unlinkSync(path.resolve(techFile.path)); // Delete temp file
+
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
       updatedFields.technical_specification = {
         filename: techUpload.original_filename,
         filepath: techUpload.secure_url,
       };
+<<<<<<< HEAD
 
       try {
     fs.unlinkSync(techFile.path);
   } catch (err) {
     console.warn("Temp file already removed:", err.message);
   }
+=======
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
     } else {
       updatedFields.technical_specification =
         currentButton.technical_specification;

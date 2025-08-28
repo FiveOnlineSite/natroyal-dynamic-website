@@ -13,11 +13,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "@aws-sdk/client-s3": "^3.873.0",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.26.3",
     "@babel/register": "^7.25.9",
     "aws-sdk": "^2.1692.0",
+=======
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/register": "^7.25.9",
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.6.0",
     "cors": "^2.8.5",
@@ -27,7 +33,10 @@
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.2",
     "multer": "^1.4.5-lts.2",
+<<<<<<< HEAD
     "multer-s3": "^3.0.1",
+=======
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
     "nodemon": "^3.1.9",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

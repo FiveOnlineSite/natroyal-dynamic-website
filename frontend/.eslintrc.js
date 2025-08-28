@@ -68,8 +68,13 @@ module.exports = {
     "react/jsx-no-useless-fragment": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "react/jsx-no-target-blank": "off",
+<<<<<<< HEAD
     "no-confusing-arrow": "off",
     "function-paren-newline": "off",
+=======
+
+    // ✅ Rules from your error log
+>>>>>>> 675aa5d28d69229c64ae4cf3c6d451333337b16e
     "object-curly-spacing": "off",
     "jsx-quotes": "off",
     "react/jsx-indent": "off",
