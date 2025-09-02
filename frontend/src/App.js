@@ -82,6 +82,24 @@ import EditCoatedAppContent from "./pages/admin/CoatedFabrics/CoatedAppContent/E
 import CoatedProduct from "./pages/admin/CoatedFabrics/CoatedProduct/CoatedProduct";
 import AddCoatedProduct from "./pages/admin/CoatedFabrics/CoatedProduct/AddCoatedProduct";
 import EditCoatedProduct from "./pages/admin/CoatedFabrics/CoatedProduct/EditCoatedProduct";
+import SeatingApp from "./pages/admin/SeatingComponents/SeatingApp/SeatingApp";
+import AddSeatingApp from "./pages/admin/SeatingComponents/SeatingApp/AddSeatingApp";
+import EditSeatingApp from "./pages/admin/SeatingComponents/SeatingApp/EditSeatingApp";
+import SeatingAppContent from "./pages/admin/SeatingComponents/SeatingAppContent/SeatingAppContent";
+import AddSeatingAppContent from "./pages/admin/SeatingComponents/SeatingAppContent/AddSeatingAppContent";
+import EditSeatingAppContent from "./pages/admin/SeatingComponents/SeatingAppContent/EditSeatingAppContent";
+import SeatingProduct from "./pages/admin/SeatingComponents/SeatingProduct/SeatingProduct";
+import AddSeatingProduct from "./pages/admin/SeatingComponents/SeatingProduct/AddSeatingProduct";
+import EditSeatingProduct from "./pages/admin/SeatingComponents/SeatingProduct/EditSeatingProduct";
+import Textile from "./pages/admin/KnitFabrics/Textiles/Textile";
+import AddTextile from "./pages/admin/KnitFabrics/Textiles/AddTextile";
+import EditTextile from "./pages/admin/KnitFabrics/Textiles/EditTextile";
+import Tags from "./pages/admin/KnitFabrics/Tags/Tags";
+import AddTags from "./pages/admin/KnitFabrics/Tags/AddTags";
+import EditTags from "./pages/admin/KnitFabrics/Tags/EditTags";
+import MetaData from "./pages/admin/MetaData/MetaData";
+import EditMetaData from "./pages/admin/MetaData/EditMetaData";
+import AddMetaData from "./pages/admin/MetaData/AddMetaData";
 
 function App() {
   return (
@@ -239,6 +257,45 @@ function App() {
             path="edit/coated-products/:id"
             element={<EditCoatedProduct />}
           />
+
+          <Route path="seating-applications" element={<SeatingApp />} />
+          <Route path="add/seating-applications" element={<AddSeatingApp />} />
+          <Route
+            path="edit/seating-applications/:id"
+            element={<EditSeatingApp />}
+          />
+
+          <Route
+            path="seating-application-content"
+            element={<SeatingAppContent />}
+          />
+          <Route
+            path="add/seating-application-content"
+            element={<AddSeatingAppContent />}
+          />
+          <Route
+            path="edit/seating-application-content/:id"
+            element={<EditSeatingAppContent />}
+          />
+
+          <Route path="seating-products" element={<SeatingProduct />} />
+          <Route path="add/seating-products" element={<AddSeatingProduct />} />
+          <Route
+            path="edit/seating-products/:id"
+            element={<EditSeatingProduct />}
+          />
+
+          <Route path="textiles" element={<Textile />} />
+          <Route path="add/textiles" element={<AddTextile />} />
+          <Route path="edit/textiles/:id" element={<EditTextile />} />
+
+          <Route path="tags" element={<Tags />} />
+          <Route path="add/tags" element={<AddTags />} />
+          <Route path="edit/tags/:id" element={<EditTags />} />
+
+          <Route path="meta-data" element={<MetaData />} />
+          <Route path="add/meta-data" element={<AddMetaData />} />
+          <Route path="edit/meta-data/:id" element={<EditMetaData />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
