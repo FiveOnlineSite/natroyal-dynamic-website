@@ -5,36 +5,36 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
 
-const SeatingProduct = () => {
+const LvtFeature = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
-  const [yellowTitle, setYellowTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [SeatingProduct, setSeatingProduct] = useState([]);
+  const [CoatedFabricsApp, setCoatedFabricsApp] = useState([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const fetchSeatingProduct = async () => {
+    const fetchCoatedFabricsApp = async () => {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
-        const response = await axios.get(`${apiUrl}/api/coated-product`);
-        const SeatingProductData = response.data.SeatingProducts;
+        const response = await axios.get(`${apiUrl}/api/coated-application`);
+        const CoatedFabricsAppData = response.data.LvtFeature;
 
-        setSeatingProduct(SeatingProductData);
+        setCoatedFabricsApp(CoatedFabricsAppData);
+        console.log("Fetched name:", CoatedFabricsAppData.name);
       } catch (error) {
-        console.error("Error fetching product:", error);
+        console.error("Error fetching application:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchSeatingProduct();
+    fetchCoatedFabricsApp();
   }, []);
 
-  const handleDeleteProduct = async (id, name) => {
+  const handleDeleteApplication = async (id, name) => {
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete this "${name}" product?`
+      `Are you sure you want to delete this "${name}" application?`
     );
     if (!confirmDelete) return;
 
@@ -43,25 +43,22 @@ const SeatingProduct = () => {
       const apiUrl = process.env.REACT_APP_API_URL;
 
       const response = await axios.delete(
-        `${apiUrl}/api/coated-product/${id}`,
+        `${apiUrl}/api/coated-application/${id}`,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
         }
       );
-      setSeatingProduct(null);
       console.log(response.data);
-      setSeatingProduct(
-        SeatingProduct.filter((SeatingProduct) => SeatingProduct._id !== id)
-      );
+      setCoatedFabricsApp((prev) => prev.filter((app) => app._id !== id));
       setTimeout(() => {
-        navigate("/admin/coated-products");
+        navigate("/admin/coated-applications");
       }, 3000);
     } catch (error) {
-      console.error("Error deleting product:", error);
+      console.error("Error deleting application:", error);
       setErrorMessage(
-        error.response?.data?.message || "Failed to delete product"
+        error.response?.data?.message || "Failed to delete application"
       );
     }
   };
@@ -70,10 +67,10 @@ const SeatingProduct = () => {
     <AdminLayout>
       <div className="pages-headers ">
         <h2>
-          coated products
-          <NavLink to="/admin/add/coated-products" className="theme-cta">
+          Coated Applications
+          <NavLink to="/admin/add/coated-applications" className="theme-cta">
             <i className="las la-plus-circle"></i>
-            Add coated product
+            Add coated Application
           </NavLink>
         </h2>
       </div>
@@ -84,29 +81,24 @@ const SeatingProduct = () => {
               <table id="example" className="table nowrap">
                 <thead>
                   <tr>
-                    <th>Applications</th>
-                    <th className="text-center">Name</th>
+                    <th>Name</th>
                     <th className="text-center">Image</th>
                     <th className="text-center">Alt</th>
-                    <th className="text-center">Content</th>
-                    <th className="text-center">Button</th>
-                    <th className="text-center">Brochure</th>
 
                     <th className="text-center">Edit</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {SeatingProduct &&
-                    SeatingProduct.map((product) => (
-                      <tr key={product._id}>
-                        <td>{product.application.name}</td>
-                        <td className="text-center">{product.name}</td>
+                  {CoatedFabricsApp &&
+                    CoatedFabricsApp.map((app) => (
+                      <tr key={app._id}>
+                        <td>{app.name}</td>
 
                         <td className="text-center">
-                          {product.image[0]?.filepath && (
+                          {app.image[0]?.filepath && (
                             <img
-                              src={product.image[0]?.filepath}
-                              alt={product.alt}
+                              src={app.image[0]?.filepath}
+                              alt={app.alt}
                               style={{
                                 width: "100px",
                                 height: "100px",
@@ -115,23 +107,11 @@ const SeatingProduct = () => {
                             />
                           )}
                         </td>
-                        <td className="text-center"> {product.alt}</td>
-                        <td className="text-center"> {product.content}</td>
-                        <td className="text-center"> {product.button}</td>
+                        <td className="text-center"> {app.alt}</td>
 
                         <td className="text-center">
-                          {product.brochure?.filepath && (
-                            <a
-                              href={`${process.env.REACT_APP_API_URL}/${product.brochure[0].filepath}`}
-                              target="_blank"
-                            >
-                              📄 View PDF - {product.brochure[0].filename}
-                            </a>
-                          )}
-                        </td>
-                        <td className="text-center">
                           <Link
-                            to={`/admin/edit/coated-products/${product._id}`}
+                            to={`/admin/edit/coated-applications/${app._id}`}
                             title="Edit"
                           >
                             <i className="las la-pencil-alt"></i>
@@ -141,10 +121,7 @@ const SeatingProduct = () => {
                           <button
                             className="delete-btn"
                             onClick={() =>
-                              handleDeleteProduct(
-                                product._id,
-                                product.application.name
-                              )
+                              handleDeleteApplication(app._id, app.name)
                             }
                           >
                             <i className="las la-trash"></i>{" "}
@@ -162,4 +139,4 @@ const SeatingProduct = () => {
   );
 };
 
-export default SeatingProduct;
+export default LvtFeature;

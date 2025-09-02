@@ -3,7 +3,7 @@ import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 
-const AddCoatedFeature = () => {
+const AddLvtFeature = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [image, setImage] = useState({ file: "" });
@@ -138,4 +138,4 @@ const AddCoatedFeature = () => {
   );
 };
 
-export default AddCoatedFeature;
+export default AddLvtFeature;

@@ -15,10 +15,15 @@ const lvtFeaturesRoute = require("./features/lvtFeaturesRoute");
 const clientsRoute = require("./othercomponents/clientsRoute");
 const brochuresRoute = require("./othercomponents/brochuresRoute");
 const textilesRoute = require("./knitfabrics/textilesRoute");
+<<<<<<< HEAD
 const tagsRoute = require("./knitfabrics/tagsRoute");
 
 const coatedAppRoute = require("./coatedfabrics/coatedAppRoute");
 const coatedAppContentRoute = require("./coatedfabrics/coatedAppContentRoute");
+=======
+
+const coatedAppRoute = require("./coatedfabrics/coatedAppRoute");
+>>>>>>> 7ab5c423e640ff8598f50c29f4f5c184782989dd
 const coatedProductRoute = require("./coatedfabrics/coatedProductRoute");
 
 const seatingAppRoute = require("./seatingcomponents/seatingAppRoute");
@@ -63,12 +68,18 @@ module.exports = {
 
   clientsRoute,
   brochuresRoute,
+<<<<<<< HEAD
 
   textilesRoute,
   tagsRoute,
 
   coatedAppRoute,
   coatedAppContentRoute,
+=======
+  textilesRoute,
+
+  coatedAppRoute,
+>>>>>>> 7ab5c423e640ff8598f50c29f4f5c184782989dd
   coatedProductRoute,
 
   seatingAppRoute,

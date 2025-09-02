@@ -5,34 +5,37 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
 
-const SeatingProduct = () => {
+const CoatedFabricsProducts = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [yellowTitle, setYellowTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [SeatingProduct, setSeatingProduct] = useState([]);
-
+  const [CoatedFabricsProducts, setCoatedFabricsProducts] = useState([]);
+ 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const fetchSeatingProduct = async () => {
+    const fetchCoatedFabricsProducts = async () => {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
-        const response = await axios.get(`${apiUrl}/api/coated-product`);
-        const SeatingProductData = response.data.SeatingProducts;
+        const response = await axios.get(`${apiUrl}/api/vinyl-product`);
+        const CoatedFabricsProductsData = response.data.CoatedFabricsProductss;
 
-        setSeatingProduct(SeatingProductData);
-      } catch (error) {
+        setCoatedFabricsProducts(CoatedFabricsProductsData);
+        console.log("Fetched name:", CoatedFabricsProductsData.name);
+     } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchSeatingProduct();
+    fetchCoatedFabricsProducts();
   }, []);
 
-  const handleDeleteProduct = async (id, name) => {
+
+
+  const handleDeleteApplication = async (id, name) => {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete this "${name}" product?`
     );
@@ -42,21 +45,18 @@ const SeatingProduct = () => {
       const access_token = localStorage.getItem("access_token");
       const apiUrl = process.env.REACT_APP_API_URL;
 
-      const response = await axios.delete(
-        `${apiUrl}/api/coated-product/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
+      const response = await axios.delete(`${apiUrl}/api/vinyl-product/${id}`, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      });
+      setCoatedFabricsProducts(null)
+console.log(response.data);
+       setCoatedFabricsProducts(
+        CoatedFabricsProducts.filter((CoatedFabricsProducts) => CoatedFabricsProducts._id !== id)
       );
-      setSeatingProduct(null);
-      console.log(response.data);
-      setSeatingProduct(
-        SeatingProduct.filter((SeatingProduct) => SeatingProduct._id !== id)
-      );
-      setTimeout(() => {
-        navigate("/admin/coated-products");
+       setTimeout(() => {
+        navigate("/admin/vinyl-products");
       }, 3000);
     } catch (error) {
       console.error("Error deleting product:", error);
@@ -70,10 +70,10 @@ const SeatingProduct = () => {
     <AdminLayout>
       <div className="pages-headers ">
         <h2>
-          coated products
-          <NavLink to="/admin/add/coated-products" className="theme-cta">
+         Vinyl products
+          <NavLink to="/admin/add/vinyl-products" className="theme-cta">
             <i className="las la-plus-circle"></i>
-            Add coated product
+            Add Vinyl product
           </NavLink>
         </h2>
       </div>
@@ -84,22 +84,20 @@ const SeatingProduct = () => {
               <table id="example" className="table nowrap">
                 <thead>
                   <tr>
-                    <th>Applications</th>
+                     <th>Applications</th>
                     <th className="text-center">Name</th>
                     <th className="text-center">Image</th>
                     <th className="text-center">Alt</th>
-                    <th className="text-center">Content</th>
-                    <th className="text-center">Button</th>
-                    <th className="text-center">Brochure</th>
-
                     <th className="text-center">Edit</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {SeatingProduct &&
-                    SeatingProduct.map((product) => (
+                  {CoatedFabricsProducts &&
+                    CoatedFabricsProducts.map((product) => (
                       <tr key={product._id}>
-                        <td>{product.application.name}</td>
+                          <td> {product.applications.map((app) => (
+                          <div key={app._id}>{app.name}</div>
+                        ))}</td>
                         <td className="text-center">{product.name}</td>
 
                         <td className="text-center">
@@ -116,24 +114,12 @@ const SeatingProduct = () => {
                           )}
                         </td>
                         <td className="text-center"> {product.alt}</td>
-                        <td className="text-center"> {product.content}</td>
-                        <td className="text-center"> {product.button}</td>
-
-                        <td className="text-center">
-                          {product.brochure?.filepath && (
-                            <a
-                              href={`${process.env.REACT_APP_API_URL}/${product.brochure[0].filepath}`}
-                              target="_blank"
-                            >
-                              📄 View PDF - {product.brochure[0].filename}
-                            </a>
-                          )}
-                        </td>
-                        <td className="text-center">
+                         <td className="text-center">
                           <Link
-                            to={`/admin/edit/coated-products/${product._id}`}
+                            to={`/admin/edit/vinyl-products/${product._id}`}
                             title="Edit"
                           >
+                            
                             <i className="las la-pencil-alt"></i>
                           </Link>
                         </td>
@@ -141,10 +127,7 @@ const SeatingProduct = () => {
                           <button
                             className="delete-btn"
                             onClick={() =>
-                              handleDeleteProduct(
-                                product._id,
-                                product.application.name
-                              )
+                              handleDeleteApplication(product._id, product.application.name)
                             }
                           >
                             <i className="las la-trash"></i>{" "}
@@ -162,4 +145,5 @@ const SeatingProduct = () => {
   );
 };
 
-export default SeatingProduct;
+export default CoatedFabricsProducts;
+
