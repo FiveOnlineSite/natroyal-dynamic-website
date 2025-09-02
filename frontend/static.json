@@ -1,0 +1,16 @@
+{
+  "redirects": [
+    { "source": "/ja", "destination": "/", "status": 301 },
+    { "source": "/yqpzwnf", "destination": "/", "status": 301 },
+    { "source": "/yje2ollr", "destination": "/", "status": 301 },
+    { "source": "/n857tp51a3", "destination": "/", "status": 301 },
+    { "source": "/ee3f96bul", "destination": "/", "status": 301 },
+    { "source": "/wally.php", "destination": "/vinyl-flooring", "status": 301 },
+    { "source": "/accord.php", "destination": "/vinyl-flooring", "status": 301 },
+    { "source": "/elegant.php", "destination": "/vinyl-flooring", "status": 301 },
+    { "source": "/opera.php", "destination": "/opera", "status": 301 }
+  ],
+  "rewrites": [
+    { "source": "**", "destination": "/index.html" }
+  ]
+}

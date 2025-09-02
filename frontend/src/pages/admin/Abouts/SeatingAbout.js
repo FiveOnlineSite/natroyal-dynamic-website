@@ -1,0 +1,222 @@
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import axios from "axios";
+import Layout from "../../../components/AdminLayout";
+import { useNavigate } from "react-router-dom";
+import { Editor } from "@tinymce/tinymce-react";
+
+const SeatingAbout = () => {
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [yellowTitle, setYellowTitle] = useState("");
+  const [blackTitle, setBlackTitle] = useState("");
+  const [subtitle, setSubtitle] = useState("");
+  const [content, setContent] = useState("");
+  const [alt, setAlt] = useState("");
+  const [image, setImage] = useState({ file: "" });
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const fetchSeatingAbout = async () => {
+      try {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/api/seating-about`);
+        const SeatingAboutData = response.data.seatingAbout[0];
+
+        setYellowTitle(SeatingAboutData.yellow_title || "");
+        setBlackTitle(SeatingAboutData.black_title || "");
+        setSubtitle(SeatingAboutData.subtitle || "");
+        setContent(SeatingAboutData.content || "");
+        setAlt(SeatingAboutData.alt || "");
+        setImage(SeatingAboutData.image[0] || "");
+
+        console.log(SeatingAboutData);
+      } catch (error) {
+        console.error("Error fetching seating about data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSeatingAbout();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    const formDataToSend = new FormData();
+
+    formDataToSend.append("yellow_title", yellowTitle || "");
+    formDataToSend.append("black_title", blackTitle || "");
+    formDataToSend.append("subtitle", subtitle || "");
+    formDataToSend.append("content", content || "");
+
+    formDataToSend.append("image", image.file);
+    formDataToSend.append("alt", alt || "");
+
+    try {
+      const access_token = localStorage.getItem("access_token");
+      const apiUrl = process.env.REACT_APP_API_URL;
+
+      await axios.patch(
+        `${apiUrl}/api/seating-about`,
+        formDataToSend,
+
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/form-data",
+          },
+        }
+      );
+
+      setTimeout(() => {
+        navigate("/admin/seating-about");
+      }, 1000);
+    } catch (error) {
+      console.error("Error updating seating About data:", error);
+      setErrorMessage(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Layout>
+      <div className="theme-form-header">
+        <h2>Edit Seating Components About</h2>
+      </div>
+      <div className="form-white-bg">
+        <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Yellow Title</label>
+                <input
+                  type="text"
+                  name="yellow_title"
+                  value={yellowTitle}
+                  onChange={(e) => setYellowTitle(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Black Title</label>
+                <input
+                  type="text"
+                  name="black_title"
+                  value={blackTitle}
+                  onChange={(e) => setBlackTitle(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Subtitle</label>
+                <input
+                  type="text"
+                  name="subtitle"
+                  value={subtitle}
+                  onChange={(e) => setSubtitle(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Alt</label>
+                <input
+                  type="text"
+                  name="alt"
+                  value={alt}
+                  onChange={(e) => setAlt(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Image</label>
+
+                <input
+                  type="file"
+                  name="image"
+                  accept=".webp, .png, .jpg, .jpeg"
+                  onChange={(e) =>
+                    setImage({
+                      ...image,
+                      file: e.target.files[0],
+                    })
+                  }
+                />
+                {image.filepath && (
+                  <img
+                    className="form-profile"
+                    src={`${image.filepath}`}
+                    alt={`${alt}`}
+                    loading="lazy"
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Content</label>
+
+                <Editor
+                  apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
+                  // apiKey="4cfoeyqhz0nv3detfgli55jdylht31u9qyb3p4hv2ri3vaop"
+                  value={content}
+                  init={{
+                    height: 200,
+                    menubar: false,
+                    plugins: ["link", "lists", "code", "casechange"],
+                    toolbar:
+                      "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
+                    content_style: `   body {
+                        font-family: 'Jost', sans-serif;
+                        color:      color: #6d7175;
+                              }`,
+                  }}
+                  onEditorChange={(content) => setContent(content)}
+                />
+              </div>
+            </div>
+
+            {errorMessage && (
+              <div className="text-danger col-12 mt-2">{errorMessage}</div>
+            )}
+
+            <div className="col-12">
+              <div className="theme-form">
+                <button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <div className="d-flex align-items-center">
+                      <span
+                        className="spinner-border me-2"
+                        role="status"
+                      ></span>
+                      Save
+                    </div>
+                  ) : (
+                    "Save"
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </Layout>
+  );
+};
+
+export default SeatingAbout;
