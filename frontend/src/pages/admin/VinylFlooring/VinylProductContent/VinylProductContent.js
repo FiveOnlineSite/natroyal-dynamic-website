@@ -77,8 +77,13 @@ const handleDeleteAppContent = async (id, appName) => {
                 <thead>
                   <tr>
                     <th>Product</th>
+<<<<<<< HEAD
                     <th className="text-center">Title1</th>
                     <th className="text-center">Title2</th>
+=======
+                    <th className="text-center">Yellow Name</th>
+                    <th className="text-center">Black Name</th>
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                      <th className="text-center">Content</th>
                     
                     <th className="text-center">Edit</th>
@@ -90,8 +95,13 @@ const handleDeleteAppContent = async (id, appName) => {
                     {VinylProductContent.map((item) => (
                       <tr key={item._id}>
                         <td>{item.product.name}</td>
+<<<<<<< HEAD
                         <td className="text-center">{item.title1}</td>
                         <td className="text-center">{item.title2}</td>
+=======
+                        <td className="text-center">{item.yellow_title}</td>
+                        <td className="text-center">{item.black_title}</td>
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                         <td className="text-center">{item.content}</td>
                         <td className="text-center">
                           <Link

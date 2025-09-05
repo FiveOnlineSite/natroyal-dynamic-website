@@ -15,8 +15,11 @@ route.patch(
   vinylProductContentController.updateVinylProductContent
 );
 
+<<<<<<< HEAD
 route.get("/product/:name", vinylProductContentController.getVinylProductContentByProductName);
 
+=======
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 route.get("/:_id", vinylProductContentController.getVinylProductContent);
 
 route.get("/", vinylProductContentController.getVinylProductContents);

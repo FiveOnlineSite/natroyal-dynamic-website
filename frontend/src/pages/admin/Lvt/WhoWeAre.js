@@ -7,8 +7,13 @@ import { Editor } from "@tinymce/tinymce-react";
 const WhoWeAre = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+<<<<<<< HEAD
   const [title1, setTitle1] = useState("");
   const [title2, setTitle2] = useState("");
+=======
+  const [yellowTitle, setYellowTitle] = useState("");
+  const [blackTitle, setBlackTitle] = useState("");
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
   const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState("");
   const [alt, setAlt] = useState("");
@@ -24,8 +29,13 @@ const WhoWeAre = () => {
         const response = await axios.get(`${apiUrl}/api/who-we-are`);
         const WhoWeAreData = response.data.whoWeAre;
 
+<<<<<<< HEAD
         setTitle1(WhoWeAreData.title1 || "");
         setTitle2(WhoWeAreData.title2 || "");
+=======
+        setYellowTitle(WhoWeAreData.yellow_title || "");
+        setBlackTitle(WhoWeAreData.black_title || "");
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
         setSubtitle(WhoWeAreData.subtitle || "");
         setContent(WhoWeAreData.content || "");
         setAlt(WhoWeAreData.alt || "");
@@ -50,8 +60,13 @@ const WhoWeAre = () => {
 
     const formDataToSend = new FormData();
 
+<<<<<<< HEAD
     formDataToSend.append("title1", title1 || "");
     formDataToSend.append("title2", title2 || "");
+=======
+    formDataToSend.append("yellow_title", yellowTitle || "");
+    formDataToSend.append("black_title", blackTitle || "");
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     formDataToSend.append("subtitle", subtitle || "");
     formDataToSend.append("content", content || "");
 
@@ -95,24 +110,42 @@ const WhoWeAre = () => {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
+<<<<<<< HEAD
                 <label>Title1</label>
                 <input
                   type="text"
                   name="title1"
                   value={title1}
                   onChange={(e) => setTitle1(e.target.value)}
+=======
+                <label>Yellow Title</label>
+                <input
+                  type="text"
+                  name="yellow_title"
+                  value={yellowTitle}
+                  onChange={(e) => setYellowTitle(e.target.value)}
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                 />
               </div>
             </div>
 
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
+<<<<<<< HEAD
                 <label>Title2</label>
                 <input
                   type="text"
                   name="title2"
                   value={title2}
                   onChange={(e) => setTitle2(e.target.value)}
+=======
+                <label>Black Title</label>
+                <input
+                  type="text"
+                  name="black_title"
+                  value={blackTitle}
+                  onChange={(e) => setBlackTitle(e.target.value)}
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                 />
               </div>
             </div>

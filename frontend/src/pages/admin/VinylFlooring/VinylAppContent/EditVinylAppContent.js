@@ -15,8 +15,13 @@ const EditVinylAppContent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
+<<<<<<< HEAD
     title1: "",
     title2: "",
+=======
+    yellow_title: "",
+    black_title: "",
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     content: "",
     application: "",
   });
@@ -52,8 +57,13 @@ const EditVinylAppContent = () => {
         console.log("vinyl app data", vinylAppContentData);
 
         setFormData({
+<<<<<<< HEAD
           title1: vinylAppContentData.title1,
           title2: vinylAppContentData.title2,
+=======
+          yellow_title: vinylAppContentData.yellow_title,
+          black_title: vinylAppContentData.black_title,
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
           content: vinylAppContentData.content,
           application: vinylAppContentData.application?._id || "",
         });
@@ -89,8 +99,13 @@ const EditVinylAppContent = () => {
       await axios.patch(
         `${apiUrl}/api/vinyl-application-content/${id}`,
         {
+<<<<<<< HEAD
           title1: formData.title1,
           title2: formData.title2,
+=======
+          yellow_title: formData.yellow_title,
+          black_title: formData.black_title,
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
           content: formData.content,
           application: formData.application,
         },
@@ -146,12 +161,21 @@ const EditVinylAppContent = () => {
 
             <div className="col-lg-6">
               <div className="theme-form">
+<<<<<<< HEAD
                 <label>Title1</label>
                 <input
                   type="text"
                   required
                   name="title1"
                   value={formData.title1}
+=======
+                <label>Yellow Title</label>
+                <input
+                  type="text"
+                  required
+                  name="yellow_title"
+                  value={formData.yellow_title}
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                   onChange={handleChange}
                 />
               </div>
@@ -159,11 +183,19 @@ const EditVinylAppContent = () => {
 
             <div className="col-lg-6">
               <div className="theme-form">
+<<<<<<< HEAD
                 <label>Title2</label>
                 <input
                   type="text"
                   name="title2"
                   value={formData.title2}
+=======
+                <label>Black Title</label>
+                <input
+                  type="text"
+                  name="black_title"
+                  value={formData.black_title}
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                   onChange={handleChange}
                 />
               </div>

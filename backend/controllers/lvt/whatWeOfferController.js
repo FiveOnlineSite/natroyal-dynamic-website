@@ -5,7 +5,11 @@ const fs = require("fs");
 
 const createWhatWeOffer = async (req, res) => {
   try {
+<<<<<<< HEAD
     const { title1, title2, alt, subtitle, content, brochure, image } =
+=======
+    const { yellow_title, black_title, alt, subtitle, brochure, image } =
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
       req.body;
 
     const imageFile = req.files?.image?.[0];
@@ -35,6 +39,7 @@ const createWhatWeOffer = async (req, res) => {
       }
     }
 
+<<<<<<< HEAD
     const imageData = {
                   filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
                   filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${qrFile.key}` // keep "images/banners/..."
@@ -50,6 +55,27 @@ const createWhatWeOffer = async (req, res) => {
       title2,
       subtitle,
       content,
+=======
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+      folder: "what-we-offer/images",
+      resource_type: "image",
+    });
+
+    const imageData = {
+      filename: imageUpload.original_filename,
+      filepath: imageUpload.secure_url,
+    };
+
+    const brochureData = {
+      filename: brochureFile.filename,
+      filepath: path.join("uploads/offer_brochure", brochureFile.filename),
+    };
+
+    const newWhatWeOffer = new OfferModel({
+      yellow_title,
+      black_title,
+      subtitle,
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
       brochure: brochureData,
       image: imageData,
       alt: altText,
@@ -70,7 +96,11 @@ const createWhatWeOffer = async (req, res) => {
 
 const updateWhatWeOffer = async (req, res) => {
   try {
+<<<<<<< HEAD
     const { title1, title2, subtitle, content, alt } = req.body;
+=======
+    const { yellow_title, black_title, subtitle, alt } = req.body;
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     const currentWhatWeOffer = await OfferModel.findOne({});
 
     if (!currentWhatWeOffer) {
@@ -92,12 +122,24 @@ const updateWhatWeOffer = async (req, res) => {
           .json({ message: "Invalid file type for image." });
       }
 
+<<<<<<< HEAD
      
 
       updatedFields.image = [
         {
           filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
           filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageFile.key}`, // keep "images/banners/..."
+=======
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+        folder: "what-we-offer/images",
+        resource_type: "image",
+      });
+
+      updatedFields.image = [
+        {
+          filename: imageUpload.original_filename,
+          filepath: imageUpload.secure_url,
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
           alt: alt || currentWhatWeOffer.image?.[0]?.alt || "",
         },
       ];
@@ -114,19 +156,34 @@ const updateWhatWeOffer = async (req, res) => {
 
       updatedFields.brochure = [
         {
+<<<<<<< HEAD
           filename: path.basename(brochureFile.key), // "1756968423495-2.jpg"
           filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${brochureFile.key}`, // keep "images/banners/..."
          },
+=======
+          filename: brochureFile.filename,
+          filepath: path.join("uploads/offer_brochure", brochureFile.filename),
+        },
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
       ];
     }
 
     // Update text fields
+<<<<<<< HEAD
     if (typeof title1 !== "undefined")
       updatedFields.title1 = title1;
     if (typeof title2 !== "undefined")
       updatedFields.title2 = title2;
     if (typeof subtitle !== "undefined") updatedFields.subtitle = subtitle;
     if (typeof content !== "undefined") updatedFields.content = content;
+=======
+    if (typeof yellow_title !== "undefined")
+      updatedFields.yellow_title = yellow_title;
+    if (typeof black_title !== "undefined")
+      updatedFields.black_title = black_title;
+    if (typeof subtitle !== "undefined") updatedFields.subtitle = subtitle;
+
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     // Update the model
     const updatedWhatWeOffer = await OfferModel.findByIdAndUpdate(
       currentWhatWeOffer._id,

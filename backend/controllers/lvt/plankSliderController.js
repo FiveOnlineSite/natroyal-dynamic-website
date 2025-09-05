@@ -8,6 +8,10 @@ const createPlankSlider = async (req, res) => {
   try {
     const { name, code, alt, qr_alt, category_id } = req.body;
 
+<<<<<<< HEAD
+=======
+    // Check if category exists
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     const category = await PlankCategoryModel.findById(category_id);
     if (!category) {
       return res.status(404).json({ message: "Plank category not found." });
@@ -64,6 +68,7 @@ const createPlankSlider = async (req, res) => {
       }
     }
 
+<<<<<<< HEAD
     const imageData = {
             filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
             filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageFile.key}` // keep "images/banners/..."
@@ -73,6 +78,29 @@ const createPlankSlider = async (req, res) => {
             filename: path.basename(qrFile.key), // "1756968423495-2.jpg"
             filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${qrFile.key}` // keep "images/banners/..."
           };
+=======
+    // Upload files to Cloudinary
+    const [imageUpload, qrUpload] = await Promise.all([
+      cloudinary.uploader.upload(imageFile.path, {
+        folder: "planks/images",
+        resource_type: "image",
+      }),
+      cloudinary.uploader.upload(qrFile.path, {
+        folder: "planks/qr",
+        resource_type: "image",
+      }),
+    ]);
+
+    const imageData = {
+      filename: imageUpload.original_filename,
+      filepath: imageUpload.secure_url,
+    };
+
+    const qrData = {
+      filename: qrUpload.original_filename,
+      filepath: qrUpload.secure_url,
+    };
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 
     const newPlank = new PlankSliderModel({
       name,
@@ -140,10 +168,22 @@ const updatePlankSlider = async (req, res) => {
           .json({ message: "Invalid file type for image." });
       }
 
+<<<<<<< HEAD
       imageData = {
               filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
               filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageFile.key}` // keep "images/banners/..."
             };
+=======
+      const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+        folder: "planks/images",
+        resource_type: "image",
+      });
+
+      imageData = {
+        filename: imageUpload.original_filename,
+        filepath: imageUpload.secure_url,
+      };
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     }
 
     // Handle QR update
@@ -155,10 +195,22 @@ const updatePlankSlider = async (req, res) => {
           .json({ message: "Invalid file type for QR image." });
       }
 
+<<<<<<< HEAD
       qrData = {
               filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
               filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${qrFile.key}` // keep "images/banners/..."
             };
+=======
+      const qrUpload = await cloudinary.uploader.upload(qrFile.path, {
+        folder: "planks/qr",
+        resource_type: "image",
+      });
+
+      qrData = {
+        filename: qrUpload.original_filename,
+        filepath: qrUpload.secure_url,
+      };
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     }
 
     // Validation if files were never uploaded before

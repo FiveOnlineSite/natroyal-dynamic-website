@@ -2379,6 +2379,7 @@ body {
   min-height: 77px;
 }
 
+<<<<<<< HEAD
 .about-section .paragraph.about-content ul {
   list-style-type: disc !important;
   list-style-position: outside !important; /* force outside bullets */
@@ -2397,6 +2398,8 @@ ul li::before {
 } */
 
 
+=======
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 @keyframes smallScale {
   0% {
     transform: scale(1);

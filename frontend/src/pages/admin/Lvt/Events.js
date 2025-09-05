@@ -7,9 +7,15 @@ import { Editor } from "@tinymce/tinymce-react";
 const Events = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+<<<<<<< HEAD
   const [title1, setTitle1] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [title2, setTitle2] = useState("");
+=======
+  const [yellowTitle, setYellowTitle] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [blackTitle, setBlackTitle] = useState("");
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
   const [subtitle, setSubtitle] = useState("");
   const [events, setEvents] = useState([
     { youtube_url: "", youtube_thumbnail: null, alt: "" },
@@ -24,8 +30,13 @@ const Events = () => {
         const response = await axios.get(`${apiUrl}/api/events`);
         const EventsData = response.data.events[0];
 
+<<<<<<< HEAD
         setTitle1(EventsData.title1 || "");
         setTitle2(EventsData.title2 || "");
+=======
+        setYellowTitle(EventsData.yellow_title || "");
+        setBlackTitle(EventsData.black_title || "");
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
         setSubtitle(EventsData.subtitle || "");
         setEvents(EventsData.event || []);
 
@@ -61,8 +72,13 @@ const Events = () => {
       const apiUrl = process.env.REACT_APP_API_URL;
       const formData = new FormData();
 
+<<<<<<< HEAD
       formData.append("title1", title1);
       formData.append("title2", title2);
+=======
+      formData.append("yellow_title", yellowTitle);
+      formData.append("black_title", blackTitle);
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
       formData.append("subtitle", subtitle);
 
       const eventArray = events.map((event, index) => {
@@ -138,6 +154,7 @@ const Events = () => {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
+<<<<<<< HEAD
                 <label>Title1</label>
                 <input
                   type="text"
@@ -145,18 +162,36 @@ const Events = () => {
                   required
                   value={title1}
                   onChange={(e) => setTitle1(e.target.value)}
+=======
+                <label>Yellow Title</label>
+                <input
+                  type="text"
+                  name="yellow_title"
+                  required
+                  value={yellowTitle}
+                  onChange={(e) => setYellowTitle(e.target.value)}
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                 />
               </div>
             </div>
 
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
+<<<<<<< HEAD
                 <label>Title2</label>
                 <input
                   type="text"
                   name="title2"
                   value={title2}
                   onChange={(e) => setTitle2(e.target.value)}
+=======
+                <label>Black Title</label>
+                <input
+                  type="text"
+                  name="black_title"
+                  value={blackTitle}
+                  onChange={(e) => setBlackTitle(e.target.value)}
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                 />
               </div>
             </div>

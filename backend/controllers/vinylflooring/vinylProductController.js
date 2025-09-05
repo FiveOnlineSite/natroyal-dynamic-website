@@ -55,11 +55,22 @@ const createVinylProduct = async (req, res) => {
       if (!alt || !alt.trim())
         return res.status(400).json({ message: "Alt text is required." });
 
+<<<<<<< HEAD
       
       imageData =  {
                  filename: path.basename(file.key), // "1756968423495-2.jpg"
                  filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
                 }
+=======
+      const uploadResult = await cloudinary.uploader.upload(file.path, {
+        folder: "vinyl_products",
+      });
+      imageData = {
+        filename: uploadResult.original_filename,
+        filepath: uploadResult.secure_url,
+      };
+      fs.unlinkSync(file.path);
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     }
 
     const newVinylProduct = new VinylProductModel({
@@ -116,12 +127,27 @@ const updateVinylProduct = async (req, res) => {
           .status(400)
           .json({ message: `Unsupported file type: ${file.originalname}` });
       }
+<<<<<<< HEAD
       
       product.image = [
          {
                    filename: path.basename(file.key), // "1756968423495-2.jpg"
                    filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
                   }
+=======
+      const uploadResult = await cloudinary.uploader.upload(file.path, {
+        folder: "vinyl_products",
+        resource_type: "image",
+      });
+      try {
+        fs.unlinkSync(file.path);
+      } catch {}
+      product.image = [
+        {
+          filename: uploadResult.original_filename,
+          filepath: uploadResult.secure_url,
+        },
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
       ];
     }
 
@@ -152,6 +178,7 @@ const updateVinylProduct = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 const getVinylProductsByAppName = async (req, res) => {
   try {
     let appName = req.params.name
@@ -181,6 +208,8 @@ const getVinylProductsByAppName = async (req, res) => {
   }
 };
 
+=======
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 const getVinylProduct = async (req, res) => {
   try {
     const vinylProduct = await VinylProductModel.findById(req.params._id)
@@ -320,7 +349,10 @@ const deleteVinylProduct = async (req, res) => {
 module.exports = {
   createVinylProduct,
   updateVinylProduct,
+<<<<<<< HEAD
   getVinylProductsByAppName,
+=======
+>>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
   getVinylProduct,
   getVinylProducts,
   deleteVinylProduct,
