@@ -289,6 +289,7 @@ const deleteCoatedProduct = async (req, res) => {
 module.exports = {
   createCoatedProduct,
   updateCoatedProduct,
+  getCoatedProductByAppName,
   getCoatedProduct,
   getCoatedProducts,
   deleteCoatedProduct,
