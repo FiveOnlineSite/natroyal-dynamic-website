@@ -39,6 +39,8 @@ module.exports = {
     "object-curly-newline": "off",
     "padded-blocks": "off",
     "newline-after-import": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off",
     camelcase: "off",
     "no-unused-vars": "off",
     "no-underscore-dangle": "off",

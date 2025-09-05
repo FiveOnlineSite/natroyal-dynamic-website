@@ -2,10 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { Editor } from "@tinymce/tinymce-react";
-=======
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 
 const AddVinylApp = () => {
   const navigate = useNavigate();
@@ -111,7 +108,6 @@ const AddVinylApp = () => {
               </div>
             </div>
 
-<<<<<<< HEAD
              <div className="col-lg-6 col-md-6 col-sm-12 col-12">
                          <div className="theme-form">
                            <label>Content</label>
@@ -136,20 +132,6 @@ const AddVinylApp = () => {
                            />
                          </div>
                        </div>
-=======
-            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
-              <div className="theme-form">
-                <label>Content</label>
-                <input
-                  type="text"
-                  name="content"
-                  value={content}
-                  required
-                  onChange={(e) => setContent(e.target.value)}
-                />
-              </div>
-            </div>
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 
 
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">

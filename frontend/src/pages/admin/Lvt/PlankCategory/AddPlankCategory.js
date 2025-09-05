@@ -36,11 +36,7 @@ const AddPlankCategory = () => {
       });
 
       setTimeout(() => {
-<<<<<<< HEAD
         navigate("/admin/plank-category");
-=======
-        navigate("/admin/planks-category");
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
       }, 1000);
     } catch (error) {
       console.error("Error creating planks category:", error);

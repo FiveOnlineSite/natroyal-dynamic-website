@@ -2,27 +2,17 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import Layout from "../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
 import { Editor } from "@tinymce/tinymce-react";
-=======
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 
 const Offer = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
-<<<<<<< HEAD
   const [title1, setTitle1] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [title2, setTitle2] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState("");
 
-=======
-  const [yellowTitle, setYellowTitle] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [blackTitle, setBlackTitle] = useState("");
-  const [subtitle, setSubtitle] = useState("");
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
   const [alt, setAlt] = useState("");
   const [brochure, setBrochure] = useState({ file: "" });
   const [image, setImage] = useState({ file: "" });
@@ -35,17 +25,11 @@ const Offer = () => {
         const response = await axios.get(`${apiUrl}/api/what-we-offer`);
         const OfferData = response.data.whatWeOffer;
 
-<<<<<<< HEAD
         setTitle1(OfferData.title1 || "");
         setTitle2(OfferData.title2 || "");
         setSubtitle(OfferData.subtitle || "");
         setContent(OfferData.content || "");
 
-=======
-        setYellowTitle(OfferData.yellow_title || "");
-        setBlackTitle(OfferData.black_title || "");
-        setSubtitle(OfferData.subtitle || "");
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
         setAlt(OfferData.alt || "");
         setImage(OfferData.image || {});
         setBrochure(OfferData.brochure || {});
@@ -71,17 +55,11 @@ const Offer = () => {
       const apiUrl = process.env.REACT_APP_API_URL;
 
       const formData = new FormData();
-<<<<<<< HEAD
       formData.append("title1", title1);
       formData.append("title2", title2);
       formData.append("subtitle", subtitle);
       formData.append("content", content);
 
-=======
-      formData.append("yellow_title", yellowTitle);
-      formData.append("black_title", blackTitle);
-      formData.append("subtitle", subtitle);
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
       formData.append("alt", alt);
       // Only append brochure if a new file is selected
       if (brochure?.file) {
@@ -120,28 +98,18 @@ const Offer = () => {
           <div className="row">
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
-<<<<<<< HEAD
                 <label>Title1</label>
                 <input
                   type="text"
                   name="title1"
                   value={title1}
                   onChange={(e) => setTitle1(e.target.value)}
-=======
-                <label>Yellow Title</label>
-                <input
-                  type="text"
-                  name="yellow_title"
-                  value={yellowTitle}
-                  onChange={(e) => setYellowTitle(e.target.value)}
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                 />
               </div>
             </div>
 
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
-<<<<<<< HEAD
                 <label>Title2</label>
 
                 <input
@@ -149,15 +117,6 @@ const Offer = () => {
                   name="title2"
                   value={title2}
                   onChange={(e) => setTitle2(e.target.value)}
-=======
-                <label>Black Title</label>
-
-                <input
-                  type="text"
-                  name="black_title"
-                  value={blackTitle}
-                  onChange={(e) => setBlackTitle(e.target.value)}
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                 />
               </div>
             </div>
@@ -176,7 +135,6 @@ const Offer = () => {
             </div>
 
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
-<<<<<<< HEAD
                           <div className="theme-form">
                             <label>Content</label>
             
@@ -201,8 +159,6 @@ const Offer = () => {
                         </div>
 
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
-=======
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
               <div className="theme-form">
                 <label>Image</label>
                 <input
@@ -221,11 +177,7 @@ const Offer = () => {
                   <img
                     className="form-profile"
                     src={image[0].filepath}
-<<<<<<< HEAD
                     alt={alt}
-=======
-                    alt={image[0].alt || image[0].filename}
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                     loading="lazy"
                   />
                 )}
@@ -273,13 +225,7 @@ const Offer = () => {
                   //   </a>
 
                   <a
-<<<<<<< HEAD
                     href={`${brochure[0].filepath}`}
-=======
-                    href={`${
-                      process.env.REACT_APP_API_URL
-                    }/${brochure[0].filepath.replace(/\\/g, "/")}`}
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
                     target="_blank"
                     rel="noopener noreferrer"
                   >
