@@ -1,61 +1,76 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "../../components/Layout";
 import Banner from "../../components/Banner";
 import LocateUs from "../../components/LocateUs";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const ContactUs = () => {
 
   const location = useLocation();
       const currentPath = location.pathname;
 
-  useEffect(() => {
-    const fetchMetaTag = async () => {
-      // Canonical URL logic
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (linkCanonical) {
-        linkCanonical.setAttribute("href", canonicalUrl);
+    const formRef = useRef();
+  
+    const [phoneError, setPhoneError] = useState("");
+    const [successModal, setSuccessModal] = useState("");
+    const [loading, setLoading] = useState(false);
+  
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [message, setMessage] = useState("");
+  
+    // Validate phone number
+    const handlePhoneChange = (e) => {
+      const value = e.target.value.replace(/\D/g, ""); // only digits
+      setPhone(value);
+  
+      if (value.length !== 10) {
+        setPhoneError("Phone number must be 10 digits.");
       } else {
-        linkCanonical = document.createElement("link");
-        linkCanonical.rel = "canonical";
-        linkCanonical.href = canonicalUrl;
-        document.head.appendChild(linkCanonical);
+        setPhoneError("");
       }
-
-      // 💡 Set static meta tags BEFORE the fetch
-      const defaultMeta = {
-        title:
-          "Contact Natroyal Group | Leading Manufacturer of Luxury Vinyl Plank & Tile, PVC Flooring, Coated Fabrics, Faux Leather & Seating Components",
-        description:
-          "Connect with Natroyal Group – India’s leading manufacturer and exporter of Luxury Vinyl Plank & Tile, PVC vinyl flooring, coated fabrics, faux leather, knit fabrics, and seating components. Reach out for product inquiries, customer support, or business collaborations.",
-        keyword:
-          "Contact Natroyal Group, Natroyal customer care, Luxury Vinyl Tile manufacturer India, Luxury Vinyl Plank supplier, faux leather manufacturer India, coated fabrics supplier, PVC flooring exporter, seating components supplier, IATF 16949 certified manufacturer, knit fabric supplier India, vinyl tile support, Natroyal Ahmedabad contact",
-      };
-
-      // Add meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-      metaDescription.setAttribute("content", defaultMeta.description);
-
-      // Add meta keywords
-      let metaKeyword = document.querySelector('meta[name="keywords"]');
-      if (!metaKeyword) {
-        metaKeyword = document.createElement("meta");
-        metaKeyword.name = "keywords";
-        document.head.appendChild(metaKeyword);
-      }
-      metaKeyword.setAttribute("content", defaultMeta.keyword);
-
-      document.title = defaultMeta.title;
     };
-    console.log(document.querySelector('meta[name="description"]').content);
-    fetchMetaTag();
-  }, []);
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      if (phoneError) return;
+  
+      setLoading(true); // disable button
+  
+      try {
+        const currentPage = window.location.pathname;
+        const apiUrl = process.env.REACT_APP_API_URL;
+  
+        const response = await axios.post(
+          `${apiUrl}/api/contact`,
+          { name, email, phone, message, page: currentPage }
+        );
+  
+        console.log(response.data);
+  
+        // Show success message
+        setSuccessModal("Contact form submitted successfully!");
+  
+        // Clear form
+        setName("");
+        setEmail("");
+        setPhone("");
+        setMessage("");
+        formRef.current?.reset();
+      } catch (error) {
+        console.error("Error sending contact form:", error.message);
+  
+        // Show failure message
+        setSuccessModal("Failed to submit the form. Please try again.");
+      } finally {
+        setLoading(false); // re-enable button
+        // Hide message after 3 seconds
+        setTimeout(() => setSuccessModal(""), 3000);
+      }
+    };
 
   return (
     <Layout>
@@ -146,78 +161,81 @@ const ContactUs = () => {
                 <div className="col-lg-7">
                   <div className="connect-container">
                     <div className="get-started-form mt-4">
-                      <form>
-                        <div className="row">
-                          <div className="col-lg-12">
-                            <div className="mb-4">
-                              <label for="name" className="form-label">
-                                Name
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="name"
-                              />
-                            </div>
-                          </div>
+                    <form onSubmit={handleSubmit} ref={formRef}>
+                  <div className="row">
+                    <div className="col-lg-12 mb-4">
+                      <label htmlFor="name" className="form-label">Name</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                      />
+                    </div>
 
-                          <div className="col-lg-6">
-                            <div className="mb-4">
-                              <label for="phone" className="form-label">
-                                Phone
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                id="phone"
-                                required
-                              />
-                            </div>
-                          </div>
+                    <div className="col-lg-6 mb-4">
+                      <label htmlFor="phone" className="form-label">Phone</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="phone"
+                        value={phone}
+                        onChange={handlePhoneChange}
+                        maxLength="10"
+                        required
+                      />
+                      {phoneError && <small className="text-danger">{phoneError}</small>}
+                    </div>
 
-                          <div className="col-lg-6">
-                            <div className="mb-4">
-                              <label for="email" className="form-label">
-                                Email
-                              </label>
-                              <input
-                                type="email"
-                                className="form-control"
-                                id="email"
-                              />
-                            </div>
-                          </div>
+                    <div className="col-lg-6 mb-4">
+                      <label htmlFor="email" className="form-label">Email</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </div>
 
-                          <div className="col-lg-12">
-                            <div className="mb-4">
-                              <label for="message" className="form-label">
-                                Message
-                              </label>
-                              <textarea
-                                rows="2"
-                                className="form-control"
-                                id="message"
-                              ></textarea>
-                            </div>
-                          </div>
+                    <div className="col-lg-12 mb-4">
+                      <label htmlFor="message" className="form-label">Message</label>
+                      <textarea
+                        rows="2"
+                        className="form-control"
+                        id="message"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        required
+                      ></textarea>
+                    </div>
 
-                          <div className="col-lg-12">
-                            <div className="mb-4">
-                              <a
-                                href="#"
-                                className="custom-button no-border-btn ps-3"
-                              >
-                                Submit
-                                <img
-                                  src="/images/icons/arrow-up-right.png"
-                                  className="ps-2"
-                                  alt="arrow"
-                                />
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
+                    <div className="col-lg-12 mb-4">
+                      <button
+                        type="submit"
+                        className="custom-button no-border-btn ps-3"
+                        disabled={loading || phoneError}
+                      >
+                        {loading ? "Submitting..." : "Submit"}
+                        <img
+                          src="/images/icons/arrow-up-right.png"
+                          className="ps-2"
+                          alt="arrow"
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+                {/* Popup message */}
+                {successModal && (
+                  <div className={`alert ${successModal.includes("Failed") ? "alert-danger" : "alert-success"} mt-3`}>
+                    {successModal}
+                  </div>
+                )}
                     </div>
                   </div>
                 </div>

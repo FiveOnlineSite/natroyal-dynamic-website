@@ -28,33 +28,15 @@ const createDivision = async (req, res) => {
         message: `Invalid file type for image or logo at index ${i}.`,
       });
     }
-
-    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
-      folder: "division/images",
-      resource_type: "image",
-    });
-
-    const logoUpload = await cloudinary.uploader.upload(logoFile.path, {
-      folder: "division/logos",
-      resource_type: "image",
-    });
-
-    // Clean up
-    [imageFile, logoFile].forEach((file) => {
-      const filePath = path.resolve(file.path);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    });
-
     const imageData = {
-      filename: imageUpload.original_filename,
-      filepath: imageUpload.secure_url,
-    };
+                            filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
+                            filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageFile.key}` // keep "images/banners/..."
+                           }
 
     const logoData = {
-      filename: logoUpload.original_filename,
-      filepath: logoUpload.secure_url,
-    };
-
+                            filename: path.basename(logoFile.key), // "1756968423495-2.jpg"
+                            filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${logoFile.key}` // keep "images/banners/..."
+                           }
     const newDivision = new DivisionModel({
       alt,
       logo_alt,
@@ -117,18 +99,11 @@ const updateDivision = async (req, res) => {
         });
       }
 
-      const uploadResult = await cloudinary.uploader.upload(imageFile.path, {
-        folder: "division/images",
-        resource_type: "image",
-      });
-
-      fs.unlinkSync(path.resolve(imageFile.path));
-
       imageData = [
         {
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        },
+                                filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
+                                filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageFile.key}` // keep "images/banners/..."
+                               }
       ];
 
       updatedFields.image = imageData; 
@@ -145,18 +120,11 @@ const updateDivision = async (req, res) => {
         });
       }
 
-      const uploadResult = await cloudinary.uploader.upload(logoFile.path, {
-        folder: "division/logos",
-        resource_type: "image",
-      });
-
-      fs.unlinkSync(path.resolve(logoFile.path));
-
       logoData = [
         {
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        },
+                                filename: path.basename(logoFile.key), // "1756968423495-2.jpg"
+                                filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${logoFile.key}` // keep "images/banners/..."
+                               }
       ];
       updatedFields.logo = logoData;   
     } else {

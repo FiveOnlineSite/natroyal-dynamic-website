@@ -149,7 +149,7 @@ function App() {
           element={<CoatedApplications />}
         />
         <Route
-          path="/seating-components/applications/:category"
+          path="/seating-components/applications/:name"
           element={<SeatingApplications />}
         />
         

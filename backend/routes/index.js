@@ -13,7 +13,6 @@ const coatedFeaturesRoute = require("./features/coatedFeaturesRoute");
 const lvtFeaturesRoute = require("./features/lvtFeaturesRoute");
 
 const clientsRoute = require("./othercomponents/clientsRoute");
-const brochuresRoute = require("./othercomponents/brochuresRoute");
 const textilesRoute = require("./knitfabrics/textilesRoute");
 const tagsRoute = require("./knitfabrics/tagsRoute");
 
@@ -46,7 +45,7 @@ const whatWeOfferRoute = require("./lvt/whatWeOfferRoute");
 
 const divisionsRoute = require("./otherpages/divisionsRoute");
 const metaDataRoute = require("./otherpages/metaDataRoute");
-const uploadRoutes = require("./uploadRoutes");
+const contactRoute = require("./otherpages/contactRoute");
 
 module.exports = {
   authRoute,
@@ -64,7 +63,6 @@ module.exports = {
   lvtFeaturesRoute,
 
   clientsRoute,
-  brochuresRoute,
 
   textilesRoute,
   tagsRoute,
@@ -96,4 +94,5 @@ module.exports = {
 
   divisionsRoute,
   metaDataRoute,
+  contactRoute
 };

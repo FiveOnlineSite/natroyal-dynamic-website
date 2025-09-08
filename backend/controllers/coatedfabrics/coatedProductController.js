@@ -40,14 +40,11 @@ const createCoatedProduct = async (req, res) => {
         return res.status(400).json({ message: "Alt text is required." });
       }
 
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "coated_products",
-      });
+      
       imageData = {
-        filename: uploadResult.original_filename,
-        filepath: uploadResult.secure_url,
-      };
-      fs.unlinkSync(file.path);
+                  filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
+                  filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageFile.key}` // keep "images/banners/..."
+                 }
     }
 
     let brochureData = {};
@@ -61,12 +58,9 @@ const createCoatedProduct = async (req, res) => {
       }
 
       brochureData = {
-        filename: brochureFile.filename,
-        filepath: path.join(
-          "uploads/coated_products_brochures",
-          brochureFile.filename
-        ),
-      };
+                  filename: path.basename(brochureFile.key), // "1756968423495-2.jpg"
+                  filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${brochureFile.key}` // keep "images/banners/..."
+                 }
     } else {
       brochureData = { filename: "", filepath: "" }; // default empty
     }
@@ -115,25 +109,18 @@ const updateCoatedProduct = async (req, res) => {
     }
 
     if (req.files?.image?.[0]) {
-      const file = req.files.image[0];
-      const ext = path.extname(file.originalname).toLowerCase();
+      const imageFile = req.files.image[0];
+      const ext = path.extname(imageFile.originalname).toLowerCase();
       if (![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) {
         return res
           .status(400)
           .json({ message: `Unsupported file type: ${file.originalname}` });
       }
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "coated_products",
-        resource_type: "image",
-      });
-      try {
-        fs.unlinkSync(file.path);
-      } catch {}
       product.image = [
-        {
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        },
+          {
+                   filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
+                   filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageFile.key}` // keep "images/banners/..."
+                  }
       ];
     }
 
@@ -146,13 +133,10 @@ const updateCoatedProduct = async (req, res) => {
           .json({ message: "Only PDF files are allowed for brochure." });
       }
 
-      product.brochure = {
-        filename: brochureFile.filename,
-        filepath: path.join(
-          "uploads/coated_products_brochures",
-          brochureFile.filename
-        ),
-      };
+      product.brochure =    {
+                  filename: path.basename(brochureFile.key), // "1756968423495-2.jpg"
+                  filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${brochureFile.key}` // keep "images/banners/..."
+                 }
     }
 
     if (!req.files?.brochure?.[0] && !product.brochure) {
@@ -192,27 +176,35 @@ const updateCoatedProduct = async (req, res) => {
 
 const getCoatedProductByAppName = async (req, res) => {
   try {
-    let appName = req.params.name.replace(/-/g, " "); // "education" or "royal-star"
+    let appName = req.params.name || "";
+    appName = appName.toLowerCase();
 
-     const products = await VinylProductContentModel.find().populate("application");
+    const products = await CoatedProductsModel.find().populate("application", "name");
 
-    const productContent = products.filter(app =>
-      app.application?.name?.toLowerCase() === appName.toLowerCase()
+    const normalize = (str) =>
+      str?.toLowerCase().replace(/[-\s]+/g, "-"); // turn spaces and dashes into "-"
+
+
+    const product = products.filter(
+      (c) => normalize(c.application?.name) === normalize(appName)
     );
 
-    if (!productContent || productContent.length === 0) {
-      return res.status(404).json({ message: "No products found for this application" });
+    if (!product || product.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No products found for this application" });
     }
 
     res.status(200).json({
       message: "productContent fetched by product successfully",
-      productContent
+      product,
     });
   } catch (err) {
-    console.error("Error fetching vinyl productContent by product name:", err);
+    console.error("Error fetching coated productContent by product name:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 const getCoatedProduct = async (req, res) => {
   try {

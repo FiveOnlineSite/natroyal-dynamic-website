@@ -90,39 +90,66 @@ const VinylApp = () => {
         fetchVinylProductByAppName();
       }, [name]);
 
+      const [vinylAppWithProduct, setVinylAppWithProduct] = useState([])
+          
+                  useEffect(() => {
+                    const fetchAppWithProduct = async () => {
+                      try {
+                        const apiUrl = process.env.REACT_APP_API_URL;
+                        const response = await axios.get(`${apiUrl}/api/vinyl-application/app-product`);
+                        const vinylAppWithProduct = response.data.appWithProduct;
+                
+                        setVinylAppWithProduct(vinylAppWithProduct);
+                     } catch (error) {
+                        console.error("Error fetching application with product:", error);
+                      } 
+                    };
+                
+                    fetchAppWithProduct();
+                  }, []);
+        
+
   return (
     <Layout>
 
     <Banner page={currentPath}/>
 
-      {/* <section className="applications-section vinyl-applications-section">
-        <div className="container">
-          <div className="row">
-            <ul className="application-tabs d-lg-flex align-items-center justify-content-center d-none">
-              {applicationTabsData.map((tab, index) => (
-                <li key={index} className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href={tab.url}
-                    role="button"
-                  >
-                    {tab.category}
-                  </a>
-                  <ul className="dropdown-menu">
-                    {tab.items.map((item, itemIndex) => (
-                      <li key={itemIndex}>
-                        <a className="dropdown-item" href={item.url}>
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-              ))}
-            </ul>
+        <section className="applications-section vinyl-applications-section">
+          <div className="container">
+            <div className="row">
+              <ul className="application-tabs d-lg-flex align-items-center justify-content-center d-none">
+                {vinylAppWithProduct && vinylAppWithProduct.map((app) => (
+                  <li key={app._id} className="nav-item dropdown">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href={`/vinyl-flooring/applications/${app.name
+                              .toLowerCase()
+                              .replace(/[/\s]+/g, "-")}`} 
+                      role="button"
+                    >
+                      {app.name}
+                    </a>
+                    <ul className="dropdown-menu">
+                      {app.products && app.products.map((product) => (
+                        <li key={product._id}>
+                          <a 
+                            className="dropdown-item" 
+                            href={`/vinyl-flooring/products/${product.name
+                              .toLowerCase()
+                              .replace(/[/\s]+/g, "-")}`} 
+                          >
+                            {product.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        </div>
-      </section> */}
+        </section>
+
 
       <section className="vinyl-applications-section">
         {vinylAppContent && vinylAppContent.map((content) => (

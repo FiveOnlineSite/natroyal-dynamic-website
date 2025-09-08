@@ -8,7 +8,7 @@ const SeatingProductModel = require("../../models/seatingcomponents/seatingProdu
 
 const createSeatingAppContent = async (req, res) => {
   try {
-    const { yellow_title, black_title, content } = req.body;
+    const { title1, title2, content } = req.body;
 
     const { application } = req.body;
     console.log("application id", application, typeof application);
@@ -32,8 +32,8 @@ const createSeatingAppContent = async (req, res) => {
     }
 
     const newSeatingAppContent = new SeatingAppContentModel({
-      yellow_title,
-      black_title,
+      title1,
+      title2,
       content,
       application,
     });
@@ -54,7 +54,7 @@ const createSeatingAppContent = async (req, res) => {
 const updateSeatingAppContent = async (req, res) => {
   try {
     const { _id } = req.params;
-    const { yellow_title, black_title, content, application } = req.body;
+    const { title1, title2, content, application } = req.body;
 
     const currentSeatingAppContent = await SeatingAppContentModel.findById(_id);
     if (!currentSeatingAppContent) {
@@ -88,7 +88,7 @@ const updateSeatingAppContent = async (req, res) => {
       }
     }
 
-    const updatedFields = { yellow_title, black_title, content, application };
+    const updatedFields = { title1, title2, content, application };
 
     const updatedSeatingAppContent =
       await SeatingAppContentModel.findByIdAndUpdate(_id, updatedFields, {
@@ -105,6 +105,40 @@ const updateSeatingAppContent = async (req, res) => {
     });
   }
 };
+
+const getSeatingAppContentByAppName = async (req, res) => {
+  try {
+    let appName = req.params.name || "";
+    appName = appName.toLowerCase();
+
+    // fetch all with populated application
+    const contents = await SeatingAppContentModel.find().populate("application");
+
+    // normalize both DB name and URL param by replacing spaces & dashes with a common format
+    const normalize = (str) =>
+      str?.toLowerCase().replace(/[-\s]+/g, "-"); // turn spaces and dashes into "-"
+
+    const content = contents.filter(
+      (c) => normalize(c.application?.name) === normalize(appName)
+    );
+
+    if (!content || content.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No contents found for this application" });
+    }
+
+    res.status(200).json({
+      message: "productContent fetched by content successfully",
+      content,
+    });
+  } catch (err) {
+    console.error("Error fetching seating content by app name:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 
 const getSeatingAppContent = async (req, res) => {
   try {
@@ -180,6 +214,7 @@ const deleteSeatingAppContent = async (req, res) => {
 module.exports = {
   createSeatingAppContent,
   updateSeatingAppContent,
+  getSeatingAppContentByAppName,
   getSeatingAppContent,
   getSeatingAppContents,
   deleteSeatingAppContent,

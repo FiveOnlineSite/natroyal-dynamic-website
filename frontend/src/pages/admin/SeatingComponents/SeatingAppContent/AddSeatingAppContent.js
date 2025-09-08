@@ -2,15 +2,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
-import { Editor } from "@tinymce/tinymce-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const AddSeatingAppContent = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [applications, setApplications] = useState([]);
   const [application, setApplication] = useState("");
-  const [yellowTitle, setYellowTitle] = useState("");
-  const [blackTitle, setBlackTitle] = useState("");
+  const [title1, setTitle1] = useState("");
+  const [title2, setTitle2] = useState("");
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,8 +50,8 @@ const AddSeatingAppContent = () => {
         `${apiUrl}/api/seating-application-content`,
         {
           application,
-          yellow_title: yellowTitle,
-          black_title: blackTitle,
+          title1: title1,
+          title2: title2,
           content: plainContent,
         },
         {
@@ -102,11 +103,11 @@ const AddSeatingAppContent = () => {
             {/* Yellow Title */}
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
-                <label>Yellow Title</label>
+                <label>Title1</label>
                 <input
                   type="text"
-                  value={yellowTitle}
-                  onChange={(e) => setYellowTitle(e.target.value)}
+                  value={title1}
+                  onChange={(e) => setTitle1(e.target.value)}
                   required
                 />
               </div>
@@ -115,11 +116,11 @@ const AddSeatingAppContent = () => {
             {/* Black Title */}
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
-                <label>Black Title</label>
+                <label>Title2</label>
                 <input
                   type="text"
-                  value={blackTitle}
-                  onChange={(e) => setBlackTitle(e.target.value)}
+                  value={title2}
+                  onChange={(e) => setTitle2(e.target.value)}
                   required
                 />
               </div>
@@ -129,25 +130,23 @@ const AddSeatingAppContent = () => {
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Content</label>
-                <Editor
-                  apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
-                  value={content}
-                  init={{
-                    height: 200,
-                    menubar: false,
-                    forced_root_block: "",
-                    plugins: ["link", "lists", "code", "casechange"],
-                    toolbar:
-                      "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                    content_style: `
-                                              body {
-                                                font-family: 'Jost', sans-serif;
-                                                color: #6d7175;
-                                              }
-                                            `,
-                  }}
-                  onEditorChange={(newContent) => setContent(newContent)}
-                />
+                 <CKEditor
+                   editor={ClassicEditor}
+                   data={content}
+                   onChange={(event, editor) => {
+                                                                                                                                             const data = editor.getData();
+                                                                                                                                             setContent(data);
+                                                                                                                          }}
+                   config={{
+                                                                                                                                             toolbar: [
+                                                                                                                                               "heading", "|",
+                                                                                                                                               "bold", "italic", "underline", "link", "|",
+                                                                                                                                               "bulletedList", "numberedList", "|",
+                                                                                                                                               "undo", "redo", "codeBlock"
+                                                                                                                                             ],
+                                                                                                                                             height: 200,
+                                                                                                                                           }}
+                 />
               </div>
             </div>
 

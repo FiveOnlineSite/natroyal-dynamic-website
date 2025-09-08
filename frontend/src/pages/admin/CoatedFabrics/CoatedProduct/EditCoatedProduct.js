@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const EditCoatedProduct = () => {
   const { id } = useParams();
@@ -27,6 +29,7 @@ const EditCoatedProduct = () => {
     },
     button: "",
     application: "",
+    content: ""
   });
 
   useEffect(() => {
@@ -67,6 +70,7 @@ const EditCoatedProduct = () => {
             filepath: coatedProductData.brochure?.filepath || "",
             file: null, // nothing yet, only when uploading
           },
+          content: coatedProductData.content,
 
           button: coatedProductData.button,
           application: coatedProductData.application?._id || coatedProductData.application || "",
@@ -130,6 +134,8 @@ const EditCoatedProduct = () => {
 
       formDataToSend.append("name", formData.name || "");
       formDataToSend.append("alt", formData.alt || "");
+      formDataToSend.append("content", formData.content || "");
+
       if (isImage) {
         formDataToSend.append("image", formData.image.file);
       }
@@ -241,7 +247,6 @@ const EditCoatedProduct = () => {
                   type="text"
                   name="alt"
                   value={formData.button}
-                  required
                   onChange={handleChange}
                 />
               </div>
@@ -267,6 +272,29 @@ const EditCoatedProduct = () => {
                         ) : (
                           <span>No brochure</span>
                         )}
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Content</label>
+                 <CKEditor
+                   editor={ClassicEditor}
+                   data={formData.content}
+                   onChange={(event, editor) => {
+                                                                                                                                          const data = editor.getData();
+                                                                                                                                           setFormData((prev) => ({ ...prev, content: data }));
+                                                                                                                       }}
+                   config={{
+                                                                                                                                          toolbar: [
+                                                                                                                                            "heading", "|",
+                                                                                                                                            "bold", "italic", "underline", "link", "|",
+                                                                                                                                            "bulletedList", "numberedList", "|",
+                                                                                                                                            "undo", "redo", "codeBlock"
+                                                                                                                                          ],
+                                                                                                                                          height: 200,
+                                                                                                                                        }}
+                 />
               </div>
             </div>
 

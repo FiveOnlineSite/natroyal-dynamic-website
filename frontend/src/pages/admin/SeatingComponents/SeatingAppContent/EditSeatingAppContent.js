@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
-import { Editor } from "@tinymce/tinymce-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const EditSeatingAppContent = () => {
   const { id } = useParams();
@@ -15,8 +16,8 @@ const EditSeatingAppContent = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [formData, setFormData] = useState({
-    yellow_title: "",
-    black_title: "",
+    title1: "",
+    title2: "",
     content: "",
     application: "",
   });
@@ -52,8 +53,8 @@ const EditSeatingAppContent = () => {
         console.log("seating app data", seatingAppContentData);
 
         setFormData({
-          yellow_title: seatingAppContentData.yellow_title,
-          black_title: seatingAppContentData.black_title,
+          title1: seatingAppContentData.title1,
+          title2: seatingAppContentData.title2,
           content: seatingAppContentData.content,
           application: seatingAppContentData.application?._id || "",
         });
@@ -89,8 +90,8 @@ const EditSeatingAppContent = () => {
       await axios.patch(
         `${apiUrl}/api/seating-application-content/${id}`,
         {
-          yellow_title: formData.yellow_title,
-          black_title: formData.black_title,
+          title1: formData.title1,
+          title2: formData.title2,
           content: formData.content,
           application: formData.application,
         },
@@ -146,12 +147,12 @@ const EditSeatingAppContent = () => {
 
             <div className="col-lg-6">
               <div className="theme-form">
-                <label>Yellow Title</label>
+                <label>Title1</label>
                 <input
                   type="text"
                   required
-                  name="yellow_title"
-                  value={formData.yellow_title}
+                  name="title1"
+                  value={formData.title1}
                   onChange={handleChange}
                 />
               </div>
@@ -159,11 +160,11 @@ const EditSeatingAppContent = () => {
 
             <div className="col-lg-6">
               <div className="theme-form">
-                <label>Black Title</label>
+                <label>Title2</label>
                 <input
                   type="text"
-                  name="black_title"
-                  value={formData.black_title}
+                  name="title2"
+                  value={formData.title2}
                   onChange={handleChange}
                 />
               </div>
@@ -172,26 +173,23 @@ const EditSeatingAppContent = () => {
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Content</label>
-                <Editor
-                  apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
-                  value={formData.content}
-                  init={{
-                    height: 200,
-                    menubar: false,
-                    plugins: ["link", "lists", "code", "casechange"],
-                    toolbar:
-                      "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                    content_style: `
-                               body {
-                                 font-family: 'Jost', sans-serif;
-                                 color: #6d7175;
-                               }
-                             `,
-                  }}
-                  onEditorChange={(newContent) =>
-                    setFormData((prev) => ({ ...prev, content: newContent }))
-                  }
-                />
+               <CKEditor
+                 editor={ClassicEditor}
+                 data={formData.content}
+                 onChange={(event, editor) => {
+                                                                                                                                                         const data = editor.getData();
+                                                                                                                                                          setFormData((prev) => ({ ...prev, content: data }));
+                                                                                                                                      }}
+                 config={{
+                                                                                                                                                         toolbar: [
+                                                                                                                                                           "heading", "|",
+                                                                                                                                                           "bold", "italic", "underline", "link", "|",
+                                                                                                                                                           "bulletedList", "numberedList", "|",
+                                                                                                                                                           "undo", "redo", "codeBlock"
+                                                                                                                                                         ],
+                                                                                                                                                         height: 200,
+                                                                                                                                                       }}
+               />
               </div>
             </div>
 

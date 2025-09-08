@@ -2,25 +2,20 @@ const coatedAppController = require("../../controllers/coatedfabrics/coatedAppCo
 const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
-const multer = require("multer");
+const createUpload = require("../../utils/s3Uploads");
 
-const upload = multer({ dest: "uploads/coated_applications" });
+const uploadMedia = createUpload("coated-applications");
 
 route.post(
   "/",
-  upload.single("image"),
-  (req, res, next) => {
-    console.log("req.body:", req.body);
-    console.log("req.file:", req.file);
-    next();
-  },
+  uploadMedia.single("image"),
   adminMiddleware,
   coatedAppController.createCoatedApp
 );
 
 route.patch(
   "/:_id",
-  upload.single("image"),
+  uploadMedia.single("image"),
   adminMiddleware,
   coatedAppController.updateCoatedApp
 );

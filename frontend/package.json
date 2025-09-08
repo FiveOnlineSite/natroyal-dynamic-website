@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-alignment": "^46.0.3",
     "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-image": "^46.0.3",
     "@ckeditor/ckeditor5-react": "^11.0.0",
+    "@ckeditor/ckeditor5-upload": "^46.0.3",
     "@tinymce/tinymce-react": "^6.2.1",
     "axios": "^1.11.0",
     "bootstrap": "^5.3.3",

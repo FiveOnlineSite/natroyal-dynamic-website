@@ -15,12 +15,8 @@ route.patch(
   vinylAppContentController.updateVinylAppContent
 );
 
-<<<<<<< HEAD
 route.get("/application/:name", vinylAppContentController.getVinylAppContentByAppName);
 
-
-=======
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 route.get("/:_id", vinylAppContentController.getVinylAppContent);
 
 route.get("/", vinylAppContentController.getVinylAppContents);

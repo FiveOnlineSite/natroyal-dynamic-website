@@ -94,10 +94,10 @@ const Contact = () => {
                   {filteredContacts.length > 0 ? (
                     filteredContacts.map((contact) => (
                       <tr key={contact._id}>
-                        <td>{contact.name}</td>
+                        <td>{contact.page}</td>
+                        <td className="text-center">{contact.name}</td>
                         <td className="text-center">{contact.email}</td>
                         <td className="text-center">{contact.phone}</td>
-                        <td className="text-center">{contact.investor_type}</td>
                         <td className="text-center">{contact.message}</td>
                         <td className="text-center">
                           {new Date(contact.createdAt).toLocaleDateString(

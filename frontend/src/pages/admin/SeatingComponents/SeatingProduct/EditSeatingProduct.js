@@ -121,9 +121,8 @@ const EditSeatingProduct = () => {
       const apiUrl = process.env.REACT_APP_API_URL;
       const formDataToSend = new FormData();
 
-      if (formData.name) {
-        formDataToSend.append("name", formData.name);
-      }
+        formDataToSend.append("name", formData.name || "");
+  
       formDataToSend.append("alt", formData.alt || "");
       if (isImage) {
         formDataToSend.append("image", formData.image.file);

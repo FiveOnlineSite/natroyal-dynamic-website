@@ -51,35 +51,6 @@ const SeatingComponents = () => {
     ],
   };
 
-  const bannerData = [
-    // {
-    //   videoUrl: "/videos/1475160_People_Family_3840x2160.mp4",
-    //   // poster: "/images/banners/pexels-digitalbuggu-218535.png",
-    //   text: "Your Trusted Partner for Innovative and End-to-End Seating Solutions",
-    // },
-    {
-      // videoUrl: "/videos/vecteezy_large-room-in-tropical-style_2018008.mov",
-      image: "/images/banners/915ef78d-373e-4a98-a10e-b0d0287e6f98.jpg",
-      text: "Your Trusted Partner for Innovative and End-to-End Seating Solutions",
-    },
-
-    {
-      // videoUrl: "/videos/vecteezy_large-room-in-tropical-style_2018008.mov",
-      image: "/images/banners/pexels-ammy-k-106103999-12369543.png",
-      text: "Premium Coated Fabrics – Durable, Stylish, and Made to Last!",
-    },
-    {
-      // videoUrl: "/videos/1103522677-preview.mp4",
-      image: "/images/banners/pexels-la-son-211137-4004373.png",
-      text: " Comfort Meets Innovation – Explore Our Premium Seating Components!",
-    },
-    {
-      // videoUrl: "/videos/1103522677-preview.mp4",
-      image: "/images/banners/bigbannernew2.png",
-      text: "Where Softness Meets Strength – Premium Knitted Fabrics for Every Need!",
-    },
-  ];
-
   useEffect(() => {
     const fetchMetaTag = async () => {
       // Canonical URL logic
@@ -146,47 +117,53 @@ const SeatingComponents = () => {
         fetchSeatingAbout();
       }, []);
 
+      const [seatingAppTab, setSeatingAppTab] = useState([])
+                
+      useEffect(() => {
+        const fetchApp = async () => {
+          try {
+            const apiUrl = process.env.REACT_APP_API_URL;
+            const response = await axios.get(`${apiUrl}/api/seating-application`);
+            const seatingAppTab = response.data.seatingApp;
+                      
+            setSeatingAppTab(seatingAppTab);
+            } catch (error) {
+              console.error("Error fetching applications:", error);
+            } 
+          };
+                      
+        fetchApp();
+      }, []);
+
   return (
     <Layout>
 
     <LandingBanner page={currentPath}/>
 
-      <section className="applications-section">
-        <div className="container">
-          <div className="row">
-            <ul className="application-tabs d-flex align-items-center justify-content-center">
-              <li className="nav-item dropdown">
-                <NavLink
-                  className="nav-link"
-                  to="/seating-components/railway-metro"
-                >
-                  Railway/Metro
-                </NavLink>
-              </li>
-              <li className="nav-item dropdown">
-                <NavLink
-                  className="nav-link"
-                  to="/seating-components/driver-seats"
-                >
-                  Driver Seats
-                </NavLink>
-              </li>
-              <li className="nav-item dropdown">
-                <NavLink className="nav-link" to="/seating-components/bus">
-                  Bus
-                </NavLink>
-              </li>
-
-              <li className="nav-item dropdown">
-                <NavLink className="nav-link" to="/seating-components/cinema">
-                  Cinema
-                </NavLink>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
+       <section className="applications-section">
+                   <div className="container">
+                     <div className="row">
+                       
+                       <ul className="application-tabs d-flex align-items-center justify-content-center">
+                         {seatingAppTab && seatingAppTab.map((app) => (
+                         <li className="nav-item dropdown" key={app._id}>
+                           <NavLink 
+                             className="nav-link" 
+                             to={`/seating-components/applications/${app.name
+                             .toLowerCase()
+                             .replace(/[/\s]+/g, "-")}`} 
+                             end
+                           >
+                             {app.name}
+                           </NavLink>
+                         </li>
+                         
+                        ))}
+                       </ul>
+                     </div>
+                   </div>
+                 </section>
+                 
       <section className="seating-components-section">
         <div className="container">
           {seatingAbout && seatingAbout.map((about) => (
@@ -228,91 +205,30 @@ const SeatingComponents = () => {
           </div>
 
           <div className="row">
-            <div className="col-lg-6 mt-lg-0 mt-5">
-              <NavLink to="/seating-components/railway-metro">
+            {seatingAppTab && seatingAppTab.map((app) => (
+                <div className="col-lg-6 mt-lg-0 mt-5" key={app._id}>
+              <NavLink to={`/seating-components/applications/${app.name
+                  .toLowerCase()
+                  .replace(/[/\s]+/g, "-")}`}
+              >
+              {app.image?.[0]?.filepath && (
                 <img
                   // src="/images/seating/railway-metro.png"
-                  src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751355053/railway-metro_fzpded.png"
-                  alt="seating-application"
+                  src={app.image?.[0]?.filepath}
+                  alt={app.alt}
                   className="seating-img"
                 />
+              )}
 
-                <h4>Railway/Metro</h4>
+                <h4>{app.name}</h4>
 
-                <p className="paragraph gray-para mt-4">
-                  We specialize in manufacturing and supplying for the railways
-                  and metro seat segment. Offering complete solutions from
-                  design and proto sample development to testing, tooling, and
-                  production. Our end-to-end capabilities ensure precision,
-                  quality, and reliability at every stage.
-                </p>
+                <div className="paragraph gray-para mt-4" dangerouslySetInnerHTML={{__html: app.content}}>
+                </div>
               </NavLink>
             </div>
+            ))}
+          
 
-            <div className="col-lg-6 mt-lg-0 mt-5">
-              <NavLink to="/seating-components/driver-seats">
-                <img
-                  // src="/images/seating/natroyal vidhyjyot chair.jpg"
-                  src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751355052/natroyal_vidhyjyot_chair_tlzrf0.jpg"
-                  alt="seating-application"
-                  className="seating-img"
-                />
-
-                <h4>Driver Seats</h4>
-
-                <p className="paragraph gray-para mt-4">
-                  Engineered for performance and comfort, our Railway and Metro
-                  Driver Seats are built to meet the highest standards of fire
-                  safety, ergonomics, and durability. With features like
-                  adjustable lumbar support, shock absorption, and robust
-                  construction, these seats ensure lasting comfort for drivers
-                  on demanding routes.
-                </p>
-              </NavLink>
-            </div>
-
-            <div className="col-lg-6 mt-lg-5 mt-5">
-              <NavLink to="/seating-components/bus">
-                <img
-                  // src="/images/seating/Bus.jpg"
-                  src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751355040/Bus_odzjom.jpg"
-                  className="bus-img"
-                  alt="seating-application"
-                />
-
-                <h4>Bus</h4>
-
-                <p className="paragraph gray-para mt-4">
-                  We manufacture and supply seating solutions for the commercial
-                  vehicle and bus segment. Delivering complete solutions from
-                  design to production. Our expertise ensures superior comfort,
-                  durability, and performance.
-                </p>
-              </NavLink>
-            </div>
-
-            <div className="col-lg-6 mt-lg-5 mt-5">
-              <NavLink to="/seating-components/cinema">
-                <img
-                  // src="/images/seating/cinema-seats-still-life.png"
-                  src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751355038/cinema-seats-still-life_panill.png"
-                  alt="seating-application"
-                  className="bus-img"
-                />
-
-                <h4>Cinema</h4>
-
-                <p className="paragraph gray-para mt-4">
-                  We specialize in manufacturing and supplying for the assembled
-                  seat segment, catering to cinema and auditorium seating. From
-                  design and prototyping to testing, tooling, and production, we
-                  deliver end-to-end solutions. Our high-quality materials and
-                  precision engineering ensure durability and comfort. Trusted
-                  by industry leaders for seamless integration and on-time
-                  delivery.
-                </p>
-              </NavLink>
-            </div>
           </div>
         </div>
       </section>

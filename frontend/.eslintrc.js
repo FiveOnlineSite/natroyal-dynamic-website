@@ -41,6 +41,7 @@ module.exports = {
     "newline-after-import": "off",
     "import/no-named-as-default": "off",
     "import/no-named-as-default-member": "off",
+    "no-useless-escape": "off",
     camelcase: "off",
     "no-unused-vars": "off",
     "no-underscore-dangle": "off",

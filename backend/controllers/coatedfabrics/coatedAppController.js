@@ -30,15 +30,10 @@ const createCoatedApp = async (req, res) => {
       if (!alt || !alt.trim())
         return res.status(400).json({ message: "Alt text is required." });
 
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "coated_applications",
-      });
-
       imageData = {
-        filename: uploadResult.original_filename,
-        filepath: uploadResult.secure_url,
-      };
-      fs.unlinkSync(file.path);
+            filename: path.basename(file.key), // "1756968423495-2.jpg"
+            filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+           }
     }
 
     const newCoatedApplication = new CoatedApplicationModel({
@@ -92,18 +87,12 @@ const updateCoatedApp = async (req, res) => {
           .status(400)
           .json({ message: `Unsupported file type: ${file.originalname}` });
       }
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "coated_applications",
-        resource_type: "image",
-      });
-      try {
-        fs.unlinkSync(file.path);
-      } catch {}
+      
       coatedApplication.image = [
-        {
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        },
+       {
+            filename: path.basename(file.key), // "1756968423495-2.jpg"
+            filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+           }
       ];
     }
 
@@ -120,8 +109,7 @@ const updateCoatedApp = async (req, res) => {
   } catch (error) {
     // full log in backend
     res.status(500).json({
-      message: "Error updating vinyl coated application",
-      error: error.message || error.toString(),
+      message: `Error updating coated application: ${error.message}`,
     });
   }
 };

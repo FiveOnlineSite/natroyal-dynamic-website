@@ -5,6 +5,7 @@ import Clients from "../../components/Clients";
 import { NavLink, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import MetaDataComponent from "../../components/MetaDataComponent";
 
 const AboutUs = () => {
 
@@ -12,59 +13,6 @@ const AboutUs = () => {
 
   const location = useLocation();
     const currentPath = location.pathname;
-
-  const bannerData = {
-    breadcrumbs: [
-      { label: "Home", path: "/", active: false },
-      { label: "About Us", path: null, active: true },
-    ],
-  };
-
-  useEffect(() => {
-    const fetchMetaTag = async () => {
-      // Canonical URL logic
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (linkCanonical) {
-        linkCanonical.setAttribute("href", canonicalUrl);
-      } else {
-        linkCanonical = document.createElement("link");
-        linkCanonical.rel = "canonical";
-        linkCanonical.href = canonicalUrl;
-        document.head.appendChild(linkCanonical);
-      }
-
-      // 💡 Set static meta tags BEFORE the fetch
-      const defaultMeta = {
-        title:
-          "About Natroyal Group | 70+ Years in LVT, Vinyl Flooring, Coated & Knit Fabrics",
-        description:
-          "Discover Natroyal Group’s 70+ year journey in manufacturing premium flooring, coated fabrics, knit fabrics, and seating solutions. Trusted by global industries since 1954.",
-      };
-
-      // Add meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-      metaDescription.setAttribute("content", defaultMeta.description);
-
-      // Add meta keywords
-      let metaKeyword = document.querySelector('meta[name="keywords"]');
-      if (!metaKeyword) {
-        metaKeyword = document.createElement("meta");
-        metaKeyword.name = "keywords";
-        document.head.appendChild(metaKeyword);
-      }
-      metaKeyword.setAttribute("content", defaultMeta.keyword);
-
-      document.title = defaultMeta.title;
-    };
-    console.log(document.querySelector('meta[name="description"]').content);
-    fetchMetaTag();
-  }, []);
 
    useEffect(() => {
     const fetchAbout = async () => {
@@ -84,6 +32,7 @@ const AboutUs = () => {
 
   return (
     <Layout>
+        <MetaDataComponent />
       <Banner page={currentPath} />
 
       <section className="about-section">

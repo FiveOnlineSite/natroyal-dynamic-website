@@ -15,6 +15,8 @@ route.patch(
   coatedAppContentController.updateCoatedAppContent
 );
 
+route.get("/application/:name", coatedAppContentController.getCoatedAppContentByAppName);
+
 route.get("/:_id", coatedAppContentController.getCoatedAppContent);
 
 route.get("/", coatedAppContentController.getCoatedAppContents);

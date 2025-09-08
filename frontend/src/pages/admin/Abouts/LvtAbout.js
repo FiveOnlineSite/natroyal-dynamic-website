@@ -2,7 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import Layout from "../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
-import { Editor } from "@tinymce/tinymce-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const LvtAbout = () => {
   const navigate = useNavigate();
@@ -171,23 +172,23 @@ const LvtAbout = () => {
               <div className="theme-form">
                 <label>Content</label>
 
-                <Editor
-                  apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
-                  // apiKey="4cfoeyqhz0nv3detfgli55jdylht31u9qyb3p4hv2ri3vaop"
-                  value={content}
-                  init={{
-                    height: 200,
-                    menubar: false,
-                    plugins: ["link", "lists", "code", "casechange"],
-                    toolbar:
-                      "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                    content_style: `   body {
-                        font-family: 'Jost', sans-serif;
-                        color:      color: #6d7175;
-                              }`,
-                  }}
-                  onEditorChange={(content) => setContent(content)}
-                />
+                 <CKEditor
+                   editor={ClassicEditor}
+                   data={content}
+                   onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setContent(data);
+                   }}
+                   config={{
+                                      toolbar: [
+                                        "heading", "|",
+                                        "bold", "italic", "underline", "link", "|",
+                                        "bulletedList", "numberedList", "|",
+                                        "undo", "redo", "codeBlock"
+                                      ],
+                                      height: 200,
+                                    }}
+                 />
               </div>
             </div>
 

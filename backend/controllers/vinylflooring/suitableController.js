@@ -149,9 +149,37 @@ const updateSuitable = async (req, res) => {
   }
 };
 
-const getSuitableProductbyAppName = async (req, res) => {
-  
-}
+const getSuitableByAppName = async (req, res) => {
+  try {
+    const appName = req.params.name.toLowerCase();
+
+    const application = await VinylApplicationModel.findOne({
+      name: { $regex: appName.replace(/-/g, " "), $options: "i" },
+    });
+
+    if (!application) {
+      return res.status(404).json({ message: "application not found" });
+    }
+
+    const suitable = await SuitableModel.find({
+      application: application._id,
+    }).populate("application", "name");
+
+    if (!suitable.length) {
+      return res.status(404).json({ message: "suitable content not found" });
+    }
+
+    return res.json({
+      message: "suitable content fetched successfully by app name",
+      suitable,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: `Error in fetching suitable content by app name: ${error.message}`,
+    });
+  }
+};
 
 const getSuitable = async (req, res) => {
  try {
@@ -227,6 +255,7 @@ const deleteSuitable = async (req, res) => {
 module.exports = {
   createSuitable,
   updateSuitable,
+  getSuitableByAppName,
   getSuitable,
   getSuitables,
   deleteSuitable,

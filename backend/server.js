@@ -59,7 +59,6 @@ app.use("/api/coated-feature", Route.coatedFeaturesRoute);
 app.use("/api/lvt-feature", Route.lvtFeaturesRoute);
 
 app.use("/api/clients", Route.clientsRoute);
-app.use("/api/brochure", Route.brochuresRoute);
 
 app.use("/api/coated-application", Route.coatedAppRoute);
 app.use("/api/coated-application-content", Route.coatedAppContentRoute);
@@ -93,6 +92,7 @@ app.use("/api/what-we-offer", Route.whatWeOfferRoute);
 
 app.use("/api/division", Route.divisionsRoute);
 app.use("/api/meta-data", Route.metaDataRoute);
+app.use("/api/contact", Route.contactRoute);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

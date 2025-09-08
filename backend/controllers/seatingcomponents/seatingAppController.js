@@ -30,15 +30,10 @@ const createSeatingApp = async (req, res) => {
       if (!alt || !alt.trim())
         return res.status(400).json({ message: "Alt text is required." });
 
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "seating_applications",
-      });
-
       imageData = {
-        filename: uploadResult.original_filename,
-        filepath: uploadResult.secure_url,
-      };
-      fs.unlinkSync(file.path);
+                              filename: path.basename(file.key), // "1756968423495-2.jpg"
+                              filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                             }
     }
 
     const newSeatingApplication = new SeatingAppModel({
@@ -93,18 +88,11 @@ const updateSeatingApp = async (req, res) => {
           .status(400)
           .json({ message: `Unsupported file type: ${file.originalname}` });
       }
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "seating_applications",
-        resource_type: "image",
-      });
-      try {
-        fs.unlinkSync(file.path);
-      } catch {}
       seatingApplication.image = [
-        {
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        },
+       {
+                               filename: path.basename(file.key), // "1756968423495-2.jpg"
+                               filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                              }
       ];
     }
 

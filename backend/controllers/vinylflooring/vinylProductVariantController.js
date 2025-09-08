@@ -22,17 +22,10 @@ const createVinylProductVariant = async (req, res) => {
       return res.status(400).json({ message: "Product not found" });
     }
 
-<<<<<<< HEAD
     let imageData = null;
 
     if (req.file) {
          const file = req.file;
-=======
-    let imageData = [];
-
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
         const extname = path.extname(file.originalname).toLowerCase();
         const isImage = [".webp", ".jpg", ".jpeg", ".png"].includes(extname);
         if (!isImage) {
@@ -43,7 +36,6 @@ const createVinylProductVariant = async (req, res) => {
           return res.status(400).json({ message: "Alt text is required." });
         }
 
-<<<<<<< HEAD
            imageData = {
                    filename: path.basename(file.key), // "1756968423495-2.jpg"
                    filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
@@ -51,26 +43,6 @@ const createVinylProductVariant = async (req, res) => {
 
       }
       
-=======
-        console.log("Uploading file to Cloudinary:", req.file?.path || req.body?.image);
-
-
-        const uploadResult = await cloudinary.uploader.upload(file.path, {
-          folder: "vinyl_product_variants",
-        });
-        console.log("Cloudinary upload result:", uploadResult);
-
-
-        imageData.push({
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        });
-
-        fs.unlinkSync(file.path); // remove local file
-      }
-    }
-
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     const newVinylProductVariant = new VinylProductVariantModel({
       image: imageData,
       alt,
@@ -100,10 +72,6 @@ const createVinylProductVariant = async (req, res) => {
 }
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 const updateVinylProductVariant = async (req, res) => {
   try {
     const { alt, name, product } = req.body;
@@ -124,20 +92,13 @@ const updateVinylProductVariant = async (req, res) => {
       return res.status(404).json({ message: "Product variant not found" });
     }
 
-<<<<<<< HEAD
    if (req.files?.image?.[0]) {
   const file = req.files.image[0];
-=======
-    if (req.files && req.files.length > 0) {
-  const images = [];
-  for (const file of req.files) {
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
     const ext = path.extname(file.originalname).toLowerCase();
     if (![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) {
       return res.status(400).json({ message: `Unsupported file type: ${file.originalname}` });
     }
 
-<<<<<<< HEAD
     productVariant.image=[
        {
           filename: path.basename(file.key), // "1756968423495-2.jpg"
@@ -163,31 +124,6 @@ const updateVinylProductVariant = async (req, res) => {
 
       productVariant.product = product;
     }
-=======
-    const uploadResult = await cloudinary.uploader.upload(file.path, {
-      folder: "vinyl_product_variants",
-      resource_type: "image",
-    });
-
-     console.log("Cloudinary upload result:", uploadResult);
-
-    try { fs.unlinkSync(file.path); } catch {}
-
-    images.push({
-      filename: uploadResult.original_filename,
-      filepath: uploadResult.secure_url,
-    });
-  }
-
-  productVariant.image = images; // overwrite existing images
-}
-
-
-    // update text fields
-    if (alt !== undefined) productVariant.alt = alt;
-    if (name !== undefined) productVariant.name = name;
-    if (product !== undefined) productVariant.product = product;
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 
     await productVariant.save();
 
@@ -205,15 +141,18 @@ const updateVinylProductVariant = async (req, res) => {
 }
 };
 
-<<<<<<< HEAD
 const getVinylProductVariantsByProductName = async (req, res) => {
   try {
-    let productName = req.params.name.replace(/-/g, " "); ; // "education" or "royal-star"
+    let productName = req.params.name || "";
 
-     const variants = await VinylProductVariantModel.find().populate("product");
+    // Normalizer → "Royal Star", "royal-star", "ROYAL_star" → "royal-star"
+    const normalize = (str) =>
+      str?.toLowerCase().replace(/[-_\s]+/g, "-");
+
+    const variants = await VinylProductVariantModel.find().populate("product");
 
     const productVariant = variants.filter(variant =>
-      variant.product?.name?.toLowerCase() === productName.toLowerCase()
+      normalize(variant.product?.name) === normalize(productName)
     );
 
     if (!productVariant || productVariant.length === 0) {
@@ -230,8 +169,6 @@ const getVinylProductVariantsByProductName = async (req, res) => {
   }
 };
 
-=======
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
 const getVinylProductVariant = async (req, res) => {
   try {
   
@@ -308,10 +245,7 @@ const deleteProductVariant = async (req, res) => {
 module.exports = {
   createVinylProductVariant,
   updateVinylProductVariant,
-<<<<<<< HEAD
   getVinylProductVariantsByProductName,
-=======
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
   getVinylProductVariant,
   getVinylProductVariants,
   deleteProductVariant,

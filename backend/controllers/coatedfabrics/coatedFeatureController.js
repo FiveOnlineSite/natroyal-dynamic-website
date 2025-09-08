@@ -28,15 +28,11 @@ const createCoatedFeature = async (req, res) => {
       if (!alt || !alt.trim())
         return res.status(400).json({ message: "Alt text is required." });
 
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "coated_feature_icon",
-      });
 
       iconData = {
-        filename: uploadResult.original_filename,
-        filepath: uploadResult.secure_url,
-      };
-      fs.unlinkSync(file.path);
+                        filename: path.basename(file.key), // "1756968423495-2.jpg"
+                        filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                       }
     }
 
     const newFeature = new CoatedFeatureModel({
@@ -153,28 +149,12 @@ const updateCoatedFeature = async (req, res) => {
         });
       }
 
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "coated_features_icons",
-        resource_type: "image",
-      });
 
-      const filePath = path.resolve(file.path);
-
-      try {
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-          console.log("Temp file deleted:", filePath);
-        } else {
-          console.warn("File not found for deletion:", filePath);
-        }
-      } catch (err) {
-        console.error("Error deleting temp file:", err.message);
-      }
 
       const iconData = {
-        filename: uploadResult.original_filename,
-        filepath: uploadResult.secure_url,
-      };
+                        filename: path.basename(file.key), // "1756968423495-2.jpg"
+                        filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                       }
 
       updatedFields.icon = iconData;
     } else {

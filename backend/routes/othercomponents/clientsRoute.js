@@ -2,20 +2,20 @@ const clientsController = require("../../controllers/othercomponents/clientsCont
 const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
-const multer = require("multer");
+const createUpload = require("../../utils/s3Uploads");
 
-const upload = multer({ dest: "uploads/client_logos" });
+const uploadMedia = createUpload("clients");
 
 route.post(
   "/",
-  upload.single("logo"),
+  uploadMedia.single("logo"),
   adminMiddleware,
   clientsController.createClient
 );
 
 route.patch(
   "/:_id",
-  upload.single("logo"),
+  uploadMedia.single("logo"),
   adminMiddleware,
   clientsController.updateClient
 );

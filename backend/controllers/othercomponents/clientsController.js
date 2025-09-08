@@ -26,28 +26,10 @@ const createClient = async (req, res) => {
       });
     }
 
-    const uploadResult = await cloudinary.uploader.upload(file.path, {
-      folder: "clients_logo",
-      resource_type: "image",
-    });
-
-    const filePath = path.resolve(file.path);
-
-    try {
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-        console.log("Temp file deleted:", filePath);
-      } else {
-        console.warn("File not found for deletion:", filePath);
-      }
-    } catch (err) {
-      console.error("Error deleting temp file:", err.message);
-    }
-
     logoData = {
-      filename: uploadResult.original_filename,
-      filepath: uploadResult.secure_url,
-    };
+                  filename: path.basename(file.key), // "1756968423495-2.jpg"
+                  filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                };
 
     const newClient = new clientsModel({
       logo: logoData,
@@ -93,28 +75,11 @@ const updateClient = async (req, res) => {
         });
       }
 
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "clients_logo",
-        resource_type: "image",
-      });
+      const logoData =  {
+                  filename: path.basename(file.key), // "1756968423495-2.jpg"
+                  filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                };
 
-      const filePath = path.resolve(file.path);
-
-      try {
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath);
-          console.log("Temp file deleted:", filePath);
-        } else {
-          console.warn("File not found for deletion:", filePath);
-        }
-      } catch (err) {
-        console.error("Error deleting temp file:", err.message);
-      }
-
-      const logoData = {
-        filename: uploadResult.original_filename,
-        filepath: uploadResult.secure_url,
-      };
 
       updatedFields.logo = logoData;
     } else {

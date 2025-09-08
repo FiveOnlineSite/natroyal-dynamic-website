@@ -6,59 +6,12 @@ import ConnectSection from "../../components/ConnectSection";
 import LandingBanner from "../../components/LandingBanner";
 import axios from "axios";
 import { useState } from "react";
+import MetaDataComponent from "../../components/MetaDataComponent";
 
 const CoatedFabrics = () => {
 
   const location = useLocation();
       const currentPath = location.pathname;
-
-  useEffect(() => {
-    const fetchMetaTag = async () => {
-      // Canonical URL logic
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (linkCanonical) {
-        linkCanonical.setAttribute("href", canonicalUrl);
-      } else {
-        linkCanonical = document.createElement("link");
-        linkCanonical.rel = "canonical";
-        linkCanonical.href = canonicalUrl;
-        document.head.appendChild(linkCanonical);
-      }
-
-      // 💡 Set static meta tags BEFORE the fetch
-      const defaultMeta = {
-        title:
-          "Faux Leather & Artificial Leather Manufacturer | Premium Coated Fabrics for Automotive & Upholstery – Natroyal",
-        description:
-          "Discover premium faux leather, artificial leather, and coated fabrics for automotive, marine, furniture, and contract upholstery. Natroyal is a trusted supplier to clients in India, USA, and UK. Durable, stylish, and sustainable solutions.",
-        keyword:
-          "faux leather manufacturer, artificial leather supplier, coated fabric manufacturer India, synthetic leather, PVC leather, PU leather, marine vinyl fabric, automotive upholstery material, leatherette fabric, faux leather for car seats, artificial leather rolls, contract upholstery fabric, vinyl coated textiles, eco-friendly leather substitute",
-      };
-
-      // Add meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-      metaDescription.setAttribute("content", defaultMeta.description);
-
-      // Add meta keywords
-      let metaKeyword = document.querySelector('meta[name="keywords"]');
-      if (!metaKeyword) {
-        metaKeyword = document.createElement("meta");
-        metaKeyword.name = "keywords";
-        document.head.appendChild(metaKeyword);
-      }
-      metaKeyword.setAttribute("content", defaultMeta.keyword);
-
-      document.title = defaultMeta.title;
-    };
-    console.log(document.querySelector('meta[name="description"]').content);
-    fetchMetaTag();
-  }, []);
 
   const [coatedApp, setCoatedApp] = useState([])
 
@@ -101,7 +54,7 @@ const CoatedFabrics = () => {
 
   return (
     <Layout>
-
+         <MetaDataComponent/>
     <LandingBanner page={currentPath}/>
 
       <section className="applications-section">

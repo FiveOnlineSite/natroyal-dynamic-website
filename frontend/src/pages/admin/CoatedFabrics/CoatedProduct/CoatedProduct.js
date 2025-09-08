@@ -128,7 +128,7 @@ const CoatedProduct = () => {
                        <td className="text-center">
                         {product.brochure?.filepath && product.brochure.filepath.trim() !== "" ? (
                           <a
-                            href={`${process.env.REACT_APP_API_URL}/${product.brochure.filepath}`}
+                            href={`${product.brochure.filepath}`}
                             target="_blank"
                             rel="noopener noreferrer"
                           >

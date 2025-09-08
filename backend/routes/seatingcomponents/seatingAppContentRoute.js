@@ -15,6 +15,8 @@ route.patch(
   seatingAppContentController.updateSeatingAppContent
 );
 
+route.get("/application/:name", seatingAppContentController.getSeatingAppContentByAppName);
+
 route.get("/:_id", seatingAppContentController.getSeatingAppContent);
 
 route.get("/", seatingAppContentController.getSeatingAppContents);

@@ -99,27 +99,35 @@ const updateVinylAppContent = async (req, res) => {
 
 const getVinylAppContentByAppName = async (req, res) => {
   try {
-    let appName = req.params.name; // "education" or "royal-star"
+    let appName = req.params.name || "";
 
-     const contents = await VinylAppContentModel.find().populate("application");
+    // Normalizer → converts "royal star" / "Royal-Star" → "royal-star"
+    const normalize = (str) =>
+      str?.toLowerCase().replace(/[-\s]+/g, "-");
 
-    const appContent = contents.filter(content =>
-      content.application?.name?.toLowerCase() === appName.toLowerCase()
+    const contents = await VinylAppContentModel.find().populate("application");
+
+    // compare normalized names
+    const appContent = contents.filter(
+      (content) => normalize(content.application?.name) === normalize(appName)
     );
 
     if (!appContent || appContent.length === 0) {
-      return res.status(404).json({ message: "No appContent found for this application" });
+      return res
+        .status(404)
+        .json({ message: "No appContent found for this application" });
     }
 
     res.status(200).json({
       message: "appContent fetched by application successfully",
-      appContent
+      appContent,
     });
   } catch (err) {
     console.error("Error fetching vinyl appContent by application name:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 const getVinylAppContent = async (req, res) => {
   try {

@@ -3,10 +3,13 @@ const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
 
+const createUpload = require("../../utils/s3Uploads");
+
+const uploadMedia = createUpload("coated-products");
 
 route.post(
   "/",
-  upload.fields([
+  uploadMedia.fields([
     { name: "image", maxCount: 1 },
     { name: "brochure", maxCount: 1 },
   ]),
@@ -16,7 +19,7 @@ route.post(
 
 route.patch(
   "/:_id",
-  upload.fields([
+  uploadMedia.fields([
     { name: "image", maxCount: 1 },
     { name: "brochure", maxCount: 1 },
   ]),

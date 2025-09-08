@@ -74,6 +74,25 @@ const updateTag = async (req, res) => {
   }
 };
 
+const getTagsWithTextile = async (req, res) => {
+  try {
+    const tags = await TagsModel.find()
+      .populate("textile") // populate textile content
+      .exec();
+
+    res.status(200).json({
+      message: "Tags with textiles fetched successfully",
+      count: tags.length,
+      tags,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching tags with textiles",
+      error: error.message,
+    });
+  }
+};
+
 const getTag = async (req, res) => {
   try {
     const tag = await TagsModel.findById(req.params._id).populate("textile", "title");
@@ -141,6 +160,7 @@ const deleteTag = async (req, res) => {
 module.exports = {
   createTag,
   updateTag,
+  getTagsWithTextile,
   getTag,
   getTags,
   deleteTag,

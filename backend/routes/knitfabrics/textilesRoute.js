@@ -2,23 +2,25 @@ const textilesController = require("../../controllers/knitfabrics/textilesContro
 const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
-const multer = require("multer");
+const createUpload = require("../../utils/s3Uploads");
 
-const upload = multer({ dest: "uploads/textiles" });
+const uploadMedia = createUpload("textiles");
 
 route.post(
   "/",
-  upload.single("image"),
+  uploadMedia.single("image"),
   adminMiddleware,
   textilesController.createTextile
 );
 
 route.patch(
   "/:_id",
-  upload.single("image"),
+  uploadMedia.single("image"),
   adminMiddleware,
   textilesController.updateTextile
 );
+
+route.get("/with-tags", textilesController.getTextilesWithTags);
 
 route.get("/:_id", textilesController.getTextile);
 

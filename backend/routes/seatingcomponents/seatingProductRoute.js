@@ -2,23 +2,27 @@ const seatingProductController = require("../../controllers/seatingcomponents/se
 const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
-const multer = require("multer");
+const createUpload = require("../../utils/s3Uploads");
 
-const upload = multer({ dest: "uploads/seating_products" });
+const uploadMedia = createUpload("seating-products");
 
 route.post(
   "/",
-  upload.single("image"),
+  uploadMedia.single("image"),
   adminMiddleware,
   seatingProductController.createSeatingProduct
 );
 
 route.patch(
   "/:_id",
-  upload.single("image"),
+  uploadMedia.single("image"),
   adminMiddleware,
   seatingProductController.updateSeatingProduct
 );
+
+route.get("/application/:name", seatingProductController.getSeatingProductByAppName);
+
+route.get("/app-product", seatingProductController.getSeatingAppAndProduct);
 
 route.get("/:_id", seatingProductController.getSeatingProduct);
 

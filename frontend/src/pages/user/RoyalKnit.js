@@ -51,131 +51,7 @@ const RoyalKnit = () => {
     );
   };
 
-  const bannerSettings = {
-    dots: false,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 600,
-        settings: {
-          arrows: false,
-          dots: true,
-        },
-      },
-    ],
-  };
 
-  const bannerData = [
-    {
-      // videoUrl: "/videos/1103522677-preview.mp4",
-      image: "/images/banners/Frame 1.png",
-      text: "Where Softness Meets Strength – Premium Knitted Fabrics for Every Need!",
-    },
-  ];
-
-  const textilesData = [
-    {
-      // image: "/images/sliders/HF 2.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365820/HF_2_mopzv6.png",
-      name: "Headliner Fabrics",
-      text: "Our brushed and flat knit headliner ranges are available in more than 30 colors to complement most modern automotive interiors.",
-      tags: [
-        "More than 30 colors",
-        "Low VOC",
-        "Flame Retardant Properties",
-        "OE Grade",
-      ],
-    },
-    {
-      // image: "/images/sliders/Lamination Fabric.jpg",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365825/Lamination_Fabric_y8jw3g.jpg",
-      name: "Automotive Lamination Fabrics",
-      text: "High-performance lamination fabrics designed and engineered specifically for the unique requirements of vehicle interiors.",
-      tags: ["Scrim Fabric", "Automotive Scrim Fabric", "Lamination Fabrics"],
-    },
-    {
-      // image: "/images/sliders/Products For Lamination (2).png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365845/Products_For_Lamination_2_qsogxb.png",
-      name: "High Tenacity Fabrics",
-      text: "Developed for special applications like automotive & footwear.",
-      tags: ["Superior Tensile", "High Tear Resistance"],
-    },
-    {
-      // image: "/images/sliders/Products For Coating 2.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365841/Products_For_Coating_2_qpy1um.png",
-      name: "Anti – Bacterial Fabrics",
-      text: "Antimicrobial-treated textiles designed for healthcare and automotive.",
-      tags: ["Prevents Mold and Mildew Growth", "Medical & Healthcare Use"],
-    },
-    {
-      // image: "/images/sliders/fire.jpg",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365811/fire_ksyfqz.jpg",
-      name: "Fire Retardant Fabrics",
-      text: "These fabrics are engineered to resist ignition and prevent flames from spreading, making them essential for automotive and industrial applications.",
-      tags: [
-        "Fire Compliance",
-        "FMVSS 302",
-        "Automotive & Mass Transport Norms",
-      ],
-    },
-    {
-      // image: "/images/sliders/image 2 (1).png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365822/image_2_1_uggyvt.png",
-      name: "Water Repellent Fabrics",
-      text: "Innovative fabrics designed for maximum water resistance.",
-      tags: [
-        "Resistance to rains & spills",
-        "Maintains Softness & Flexibility ",
-        "Ideal for Automotive & Marine Use",
-      ],
-    },
-    {
-      // image: "/images/sliders/Recycled Fabric.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365848/Recycled_Fabric_f5azrx.png",
-      name: "Recycled Fabrics",
-      text: " Made from 100% recycled PET bottles. Meets global certification standards for quality, safety, and performance.",
-      tags: ["Reduces Lower Carbon Footprint", "100% Recycled"],
-    },
-    {
-      // image: "/images/sliders/leaflet 15_04.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365831/leaflet_15_04_u4upmz.png",
-      name: "Warp Knitted Fabrics",
-      lamination_coating: {
-        lamination_text: "GSM ranging from 20 to 70 ",
-        coating_text: "GSM ranging from 90 to 210",
-      },
-      tags: ["Dimensional Stability", "High Tensile Strength", "Upto 3 bar"],
-    },
-
-    {
-      // image: "/images/sliders/leaflet 15_03.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751365829/leaflet_15_03_p2jiml.png",
-      name: "Circular Knitted Fabrics (Single Jersey & Interlock)",
-      lamination_coating: {
-        lamination_text: "GSM ranging from 30 to 50",
-        coating_text: "GSM ranging from 40 to 300",
-      },
-      tags: [
-        "Excellent Stretch & Recovery",
-        "Seamless Comfort",
-        "Versatile Structures",
-      ],
-    },
-  ];
 
   const textilesSettings = {
     dots: false,
@@ -436,7 +312,7 @@ const RoyalKnit = () => {
               </h2>
             </div>
 
-            <TextilesSlider settings={textilesSettings} slides={textilesData} />
+            <TextilesSlider settings={textilesSettings} />
           </div>
         </div>
       </section>

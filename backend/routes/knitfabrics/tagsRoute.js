@@ -7,6 +7,8 @@ route.post("/", adminMiddleware, tagsController.createTag);
 
 route.patch("/:_id", adminMiddleware, tagsController.updateTag);
 
+route.get("/textiles", tagsController.getTagsWithTextile);
+
 route.get("/:_id", tagsController.getTag);
 
 route.get("/", tagsController.getTags);

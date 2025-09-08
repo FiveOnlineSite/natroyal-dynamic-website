@@ -2,20 +2,20 @@ const seatingAppController = require("../../controllers/seatingcomponents/seatin
 const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
-const multer = require("multer");
+const createUpload = require("../../utils/s3Uploads");
 
-const upload = multer({ dest: "uploads/seating_applications" });
+const uploadMedia = createUpload("seating-applications");
 
 route.post(
   "/",
-  upload.single("image"),
+  uploadMedia.single("image"),
   adminMiddleware,
   seatingAppController.createSeatingApp
 );
 
 route.patch(
   "/:_id",
-  upload.single("image"),
+  uploadMedia.single("image"),
   adminMiddleware,
   seatingAppController.updateSeatingApp
 );

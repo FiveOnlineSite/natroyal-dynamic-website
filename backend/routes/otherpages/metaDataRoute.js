@@ -9,7 +9,7 @@ route.patch("/:_id", adminMiddleware, metaDataController.updateMetaData);
 
 route.get("/by-id/:_id", metaDataController.getMetaDataById);
 
-route.get("/by-page/:page", metaDataController.getMetaDataByPage);
+route.get("/by-page/*", metaDataController.getMetaDataByPage);
 
 route.get("/", metaDataController.getAllMetaDatas);
 

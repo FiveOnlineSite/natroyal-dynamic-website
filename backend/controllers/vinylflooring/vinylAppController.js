@@ -23,8 +23,8 @@ const createVinylApp = async (req, res) => {
     let iconData = {};
 
     if (req.files && req.files.image && req.files.image[0]) {
-      const file = req.files.image[0];
-      const extname = path.extname(file.originalname).toLowerCase();
+      const imageFile = req.files.image[0];
+      const extname = path.extname(imageFile.originalname).toLowerCase();
       const isImage = [".webp", ".jpg", ".jpeg", ".png"].includes(extname);
 
       if (!isImage) {
@@ -45,8 +45,8 @@ const createVinylApp = async (req, res) => {
 
     // Handle icon upload
     if (req.files && req.files.icon && req.files.icon[0]) {
-      const file = req.files.icon[0];
-      const extname = path.extname(file.originalname).toLowerCase();
+      const iconFile = req.files.icon[0];
+      const extname = path.extname(iconFile.originalname).toLowerCase();
       const isImage = [".webp", ".jpg", ".jpeg", ".png"].includes(extname);
 
       if (!isImage) {
@@ -172,15 +172,40 @@ const updateVinylApp = async (req, res) => {
   }
 };
 
+const getVinylAppAndProduct = async (req, res) => {
+  try {
+
+    const appWithProduct = await VinylApplicationModel.find().populate("products name");
+
+    if (!appWithProduct) {
+      return res.status(404).json({ message: "Vinyl application and product not found" });
+    }
+
+    return res.status(200).json({
+      message: "application and product fetched successfully.",
+      appWithProduct,
+    });
+  } catch (err) {
+    console.error("Error fetching vinyl application and product:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const getVinylAppByName = async (req, res) => {
   try {
-    let name = req.params.name;
-    // Convert "royal-star" → "Royal Star"
-    name = name.replace(/-/g, " ");
+    let name = req.params.name || "";
 
-    const application = await VinylApplicationModel.findOne({
-      name: new RegExp(`^${name}$`, "i"), // case-insensitive
-    });
+    // normalize param (convert "royal-star" → "royal-star")
+    const normalize = (str) =>
+      str?.toLowerCase().replace(/[-\s]+/g, "-"); 
+
+    // fetch all applications
+    const applications = await VinylApplicationModel.find();
+
+    // find the one that matches after normalization
+    const application = applications.find(
+      (c) => normalize(c?.name) === normalize(name)
+    );
 
     if (!application) {
       return res.status(404).json({ message: "Vinyl application not found" });
@@ -304,6 +329,7 @@ const deleteVinylApp = async (req, res) => {
 module.exports = {
   createVinylApp,
   updateVinylApp,
+  getVinylAppAndProduct,
   getVinylAppByName,
   getVinylApp,
   getAllVinylApps,

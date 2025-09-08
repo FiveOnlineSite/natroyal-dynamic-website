@@ -80,8 +80,8 @@ const SeatingAppContent = () => {
                 <thead>
                   <tr>
                     <th>Application</th>
-                    <th className="text-center">Yellow Name</th>
-                    <th className="text-center">Black Name</th>
+                    <th className="text-center">Title1</th>
+                    <th className="text-center">Title@</th>
                     <th className="text-center">Content</th>
 
                     <th className="text-center">Edit</th>
@@ -93,8 +93,8 @@ const SeatingAppContent = () => {
                       {SeatingAppContent.map((item) => (
                         <tr key={item._id}>
                           <td>{item.application.name}</td>
-                          <td className="text-center">{item.yellow_title}</td>
-                          <td className="text-center">{item.black_title}</td>
+                          <td className="text-center">{item.title1}</td>
+                          <td className="text-center">{item.title2}</td>
                           <td className="text-center">{item.content}</td>
                           <td className="text-center">
                             <Link

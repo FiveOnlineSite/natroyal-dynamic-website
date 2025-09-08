@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const SeatingAppContentSchema = new mongoose.Schema({
-  yellow_title: {
+  title1: {
     type: String,
   },
-  black_title: {
+  title2: {
     type: String,
   },
   content: {

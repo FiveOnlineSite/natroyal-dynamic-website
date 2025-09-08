@@ -47,20 +47,10 @@ const createTextile = async (req, res) => {
       });
     }
 
-    const uploadResult = await cloudinary.uploader.upload(file.path, {
-      folder: "textiles",
-      resource_type: "image",
-    });
-
-    const filePath = path.resolve(file.path);
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
-
     imageData = {
-      filename: uploadResult.original_filename,
-      filepath: uploadResult.secure_url,
-    };
+                            filename: path.basename(file.key), // "1756968423495-2.jpg"
+                            filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                           }
 
     const newTextile = new TextilesModel({
       image: imageData,
@@ -106,7 +96,7 @@ const updateTextile = async (req, res) => {
           }
         }
 
-     const updatedFields = {}; // ✅ Declare early
+     const updatedFields = {}; 
 
     const file = req.file;
 
@@ -144,18 +134,10 @@ if (hasContent) {
         });
       }
 
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "textiles",
-        resource_type: "image",
-      });
-
-      const filePath = path.resolve(file.path);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-
       updatedFields.image = {
-        filename: uploadResult.original_filename,
-        filepath: uploadResult.secure_url,
-      };
+                              filename: path.basename(file.key), // "1756968423495-2.jpg"
+                              filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                             }
     } else {
       updatedFields.image = currentTextile.image;
     }
@@ -183,6 +165,33 @@ if (hasContent) {
     });
   }
 };
+
+const getTextilesWithTags = async (req, res) => {
+  try {
+    const textiles = await TextilesModel.aggregate([
+      {
+        $lookup: {
+          from: "tags", // collection name in MongoDB
+          localField: "_id",
+          foreignField: "textile",
+          as: "tags",
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      message: "Textiles with tags fetched successfully",
+      count: textiles.length,
+      textiles,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching textiles with tags",
+      error: error.message,
+    });
+  }
+};
+
 
 const getTextile = async (req, res) => {
   try {
@@ -258,6 +267,7 @@ const deleteTextile = async (req, res) => {
 module.exports = {
   createTextile,
   updateTextile,
+  getTextilesWithTags,
   getTextile,
   getTextiles,
   deleteTextile,

@@ -2,20 +2,20 @@ const coatedFeaturesController = require("../../controllers/coatedfabrics/coated
 const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
-const multer = require("multer");
+const createUpload = require("../../utils/s3Uploads");
 
-const upload = multer({ dest: "uploads/coated_features_icons" });
+const uploadMedia = createUpload("coated-features");
 
 route.post(
   "/",
-  upload.single("icon"),
+  uploadMedia.single("icon"),
   adminMiddleware,
   coatedFeaturesController.createCoatedFeature
 );
 
 route.patch(
   "/:_id",
-  upload.single("icon"),
+  uploadMedia.single("icon"),
   adminMiddleware,
   coatedFeaturesController.updateCoatedFeature
 );

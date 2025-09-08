@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { Editor } from "@tinymce/tinymce-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const EditDivision = () => {
     const { id } = useParams();
@@ -198,25 +198,22 @@ const EditDivision = () => {
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
                          <div className="theme-form">
                            <label>Content</label>
-                           <Editor
-                             apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
-                             value={formData.content}
-                             init={{
-                               height: 200,
-                               menubar: false,
-                               plugins: ["link", "lists", "code", "casechange"],
-                               toolbar:
-                                 "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                               content_style: `
-                                          body {
-                                            font-family: 'Jost', sans-serif;
-                                            color: #6d7175;
-                                          }
-                                        `,
-                             }}
-                             onEditorChange={(newContent) =>
-                               setFormData((prev) => ({ ...prev, content: newContent }))
-                             }
+                           <CKEditor
+                             editor={ClassicEditor}
+                             data={formData.content}
+                             onChange={(event, editor) => {
+                                                                                                                                                                                   const data = editor.getData();
+                                                                                                                                                                                    setFormData((prev) => ({ ...prev, content: data }));
+                                                                                                                                                                }}
+                             config={{
+                                                                                                                                                                                   toolbar: [
+                                                                                                                                                                                     "heading", "|",
+                                                                                                                                                                                     "bold", "italic", "underline", "link", "|",
+                                                                                                                                                                                     "bulletedList", "numberedList", "|",
+                                                                                                                                                                                     "undo", "redo", "codeBlock"
+                                                                                                                                                                                   ],
+                                                                                                                                                                                   height: 200,
+                                                                                                                                                                                 }}
                            />
                          </div>
                        </div>

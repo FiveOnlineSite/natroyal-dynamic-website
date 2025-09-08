@@ -57,7 +57,7 @@ const AddSeatingProduct = () => {
       const formData = new FormData();
 
       formData.append("application", application);
-      formData.append("name", name);
+      formData.append("name", name || "");
       formData.append("alt", alt);
 
       if (image.file) {

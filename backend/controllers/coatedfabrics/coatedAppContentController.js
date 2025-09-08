@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const createCoatedAppContent = async (req, res) => {
   try {
-    const { yellow_title, black_title, content } = req.body;
+    const { title1, title2, content } = req.body;
 
     const { application } = req.body;
     console.log("application id", application, typeof application);
@@ -24,8 +24,8 @@ const createCoatedAppContent = async (req, res) => {
     }
 
     const newCoatedAppContent = new CoatedAppContentModel({
-      yellow_title,
-      black_title,
+      title1,
+      title2,
       content,
       application,
     });
@@ -46,7 +46,7 @@ const createCoatedAppContent = async (req, res) => {
 const updateCoatedAppContent = async (req, res) => {
   try {
     const { _id } = req.params;
-    const { yellow_title, black_title, content, application } = req.body;
+    const { title1, title2, content, application } = req.body;
 
     const currentCoatedAppContent = await CoatedAppContentModel.findById(_id);
     if (!currentCoatedAppContent) {
@@ -78,7 +78,7 @@ const updateCoatedAppContent = async (req, res) => {
       }
     }
 
-    const updatedFields = { yellow_title, black_title, content, application };
+    const updatedFields = { title1, title2, content, application };
 
     const updatedCoatedAppContent =
       await CoatedAppContentModel.findByIdAndUpdate(_id, updatedFields, {
@@ -93,6 +93,34 @@ const updateCoatedAppContent = async (req, res) => {
     return res.status(500).json({
       message: `Error in updating CoatedAppContent content due to ${error.message}`,
     });
+  }
+};
+
+const getCoatedAppContentByAppName = async (req, res) => {
+  try {
+    let appName = req.params.name || ""; // "education" or "royal-star"
+     appName = appName.toLowerCase();
+
+     const contents = await CoatedAppContentModel.find().populate("application", "name");
+
+     const normalize = (str) =>
+           str?.toLowerCase().replace(/[-\s]+/g, "-"); // turn spaces and dashes into "-"
+     
+     const appContent = contents.filter(
+      (c) => normalize(c.application?.name) === normalize(appName)
+    );
+
+    if (!appContent || appContent.length === 0) {
+      return res.status(404).json({ message: "No appContent found for this app" });
+    }
+
+    res.status(200).json({
+      message: "appContent fetched by app successfully",
+      appContent
+    });
+  } catch (err) {
+    console.error("Error fetching coated appContent by app name:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -171,6 +199,7 @@ const deleteCoatedAppContent = async (req, res) => {
 module.exports = {
   createCoatedAppContent,
   updateCoatedAppContent,
+  getCoatedAppContentByAppName,
   getCoatedAppContent,
   getCoatedAppContents,
   deleteCoatedAppContent,

@@ -41,14 +41,11 @@ const createSeatingProduct = async (req, res) => {
         return res.status(400).json({ message: "Alt text is required." });
       }
 
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "seating_products",
-      });
+      
       imageData = {
-        filename: uploadResult.original_filename,
-        filepath: uploadResult.secure_url,
-      };
-      fs.unlinkSync(file.path);
+                              filename: path.basename(file.key), // "1756968423495-2.jpg"
+                              filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                             }
     }
 
     const newSeatingProduct = new SeatingProductModel({
@@ -80,19 +77,25 @@ const updateSeatingProduct = async (req, res) => {
 
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // 🔹 Only check duplicates if name is provided
-    if (name && name.trim()) {
-      const duplicate = await SeatingProductModel.findOne({
-        name: name.trim(),
-        _id: { $ne: productId },
-      });
-      if (duplicate) {
-        return res
-          .status(400)
-          .json({ message: "Another product with this name already exists." });
-      }
-      product.name = name.trim(); // update name only if provided
+   if (name !== undefined) {
+  if (name.trim() === "") {
+    // User cleared the field → set it to empty
+    product.name = "";
+  } else {
+    // Check duplicate only if not empty
+    const duplicate = await SeatingProductModel.findOne({
+      name: name.trim(),
+      _id: { $ne: productId },
+    });
+    if (duplicate) {
+      return res
+        .status(400)
+        .json({ message: "Another product with this name already exists." });
     }
+    product.name = name.trim();
+  }
+}
+
 
     // Handle image upload...
     if (req.file) {
@@ -103,18 +106,12 @@ const updateSeatingProduct = async (req, res) => {
           .status(400)
           .json({ message: `Unsupported file type: ${file.originalname}` });
       }
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "seating_products",
-        resource_type: "image",
-      });
-      try {
-        fs.unlinkSync(file.path);
-      } catch {}
+      
       product.image = [
         {
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        },
+                                filename: path.basename(file.key), // "1756968423495-2.jpg"
+                                filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                               }
       ];
     }
 
@@ -190,6 +187,56 @@ const updateSeatingProduct = async (req, res) => {
   }
 };
 
+const getSeatingAppAndProduct = async (req, res) => {
+  try {
+
+    const appWithProduct = await SeatingProductModel.find().populate("application", "name");
+
+    if (!appWithProduct) {
+      return res.status(404).json({ message: "seating application and product not found" });
+    }
+
+    return res.status(200).json({
+      message: "application and product fetched successfully.",
+      appWithProduct,
+    });
+  } catch (err) {
+    console.error("Error fetching seating application and product:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getSeatingProductByAppName = async (req, res) => {
+  try {
+    let appName = req.params.name || "";
+
+     appName = appName.toLowerCase();
+
+    // fetch all with populated application
+    const products = await SeatingProductModel.find().populate("application");
+
+    // normalize both DB name and URL param by replacing spaces & dashes with a common format
+    const normalize = (str) =>
+      str?.toLowerCase().replace(/[-\s]+/g, "-"); // turn spaces and dashes into "-"
+
+    const product = products.filter(
+      (c) => normalize(c.application?.name) === normalize(appName)
+    );
+    if (!product.length) {
+      return res.status(404).json({
+        message: `No products found for application: ${req.params.name}`,
+      });
+    }
+
+    res.status(200).json({
+      message: "Product content fetched successfully",
+      product,
+    });
+  } catch (err) {
+    console.error("Error fetching seating product by app name:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 const getSeatingProduct = async (req, res) => {
   try {
@@ -276,6 +323,8 @@ const deleteSeatingProduct = async (req, res) => {
 module.exports = {
   createSeatingProduct,
   updateSeatingProduct,
+  getSeatingAppAndProduct,
+  getSeatingProductByAppName,
   getSeatingProduct,
   getSeatingProducts,
   deleteSeatingProduct,

@@ -2,7 +2,6 @@ const buttonsController = require("../../controllers/vinylflooring/buttonsContro
 const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
-<<<<<<< HEAD
 const createUpload = require("../../utils/s3Uploads");
 
 const uploadMedia = createUpload("vinyl-buttons");
@@ -10,30 +9,6 @@ const uploadMedia = createUpload("vinyl-buttons");
 route.post(
   "/",
   uploadMedia.fields([
-=======
-const multer = require("multer");
-const path = require("path");
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    if (file.fieldname === "brochure") {
-      cb(null, "uploads/vinyl_brochures"); 
-    } else {
-      cb(null, "uploads/temp"); 
-    }
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
-
-const upload = multer({ storage });
-
-route.post(
-  "/",
-  upload.fields([
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
   { name: "technical_specification", maxCount: 1 },
   { name: "brochure", maxCount: 1 }
     ]),
@@ -43,11 +18,7 @@ route.post(
 
 route.patch( 
     "/",
-<<<<<<< HEAD
 uploadMedia.fields([
-=======
-upload.fields([
->>>>>>> 721728c22a7a9d42ff6a0a1641aae72537001e60
   { name: "technical_specification", maxCount: 1 },
   { name: "brochure", maxCount: 1 }
     ]),

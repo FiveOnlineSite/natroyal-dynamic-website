@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
-import { Editor } from "@tinymce/tinymce-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 
 const AddTextile = () => {
   const navigate = useNavigate();
@@ -133,23 +135,22 @@ const AddTextile = () => {
                                       <div className="theme-form">
                                         <label>Content</label>
                         
-                                        <Editor 
-                                          disabled={laminationContent.trim() || coatingContent.trim()}
-                                          apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
-                                          // apiKey="4cfoeyqhz0nv3detfgli55jdylht31u9qyb3p4hv2ri3vaop"
-                                          value={content}
-                                          init={{
-                                            height: 200,
-                                            menubar: false,
-                                            plugins: ["link", "lists", "code", "casechange"],
-                                            toolbar:
-                                              "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                                            content_style: `   body {
-                                                font-family: 'Jost', sans-serif;
-                                                color:      color: #6d7175;
-                                                      }`,
-                                          }}
-                                          onEditorChange={(content) => setContent(content)}
+                                        <CKEditor
+                                          editor={ClassicEditor}
+                                          data={content}
+                                          onChange={(event, editor) => {
+                                                                                                                                                                                     const data = editor.getData();
+                                                                                                                                                                                     setContent(data);
+                                                                                                                                                                  }}
+                                          config={{
+                                                                                                                                                                                     toolbar: [
+                                                                                                                                                                                       "heading", "|",
+                                                                                                                                                                                       "bold", "italic", "underline", "link", "|",
+                                                                                                                                                                                       "bulletedList", "numberedList", "|",
+                                                                                                                                                                                       "undo", "redo", "codeBlock"
+                                                                                                                                                                                     ],
+                                                                                                                                                                                     height: 200,
+                                                                                                                                                                                   }}
                                         />
                                       </div>
                                     </div>
@@ -159,23 +160,22 @@ const AddTextile = () => {
                                       <div className="theme-form">
                                         <label>Lamination Content</label>
                         
-                                        <Editor
-                                          apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
-                                          disabled={content.trim()} 
-                                           // apiKey="4cfoeyqhz0nv3detfgli55jdylht31u9qyb3p4hv2ri3vaop"
-                                          value={laminationContent}
-                                          init={{
-                                            height: 200,
-                                            menubar: false,
-                                            plugins: ["link", "lists", "code", "casechange"],
-                                            toolbar:
-                                              "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                                            content_style: `   body {
-                                                font-family: 'Jost', sans-serif;
-                                                color:      color: #6d7175;
-                                                      }`,
-                                          }}
-                                          onEditorChange={(newContent) => setLaminationContent(newContent)} 
+                                        <CKEditor
+                                          editor={ClassicEditor}
+                                          data={laminationContent}
+                                          onChange={(event, editor) => {
+                                                                                                                                                                                     const data = editor.getData();
+                                                                                                                                                                                     setLaminationContent(data);
+                                                                                                                                                                  }}
+                                          config={{
+                                                                                                                                                                                     toolbar: [
+                                                                                                                                                                                       "heading", "|",
+                                                                                                                                                                                       "bold", "italic", "underline", "link", "|",
+                                                                                                                                                                                       "bulletedList", "numberedList", "|",
+                                                                                                                                                                                       "undo", "redo", "codeBlock"
+                                                                                                                                                                                     ],
+                                                                                                                                                                                     height: 200,
+                                                                                                                                                                                   }}
                                         />
                                       </div>
                                     </div>
@@ -184,23 +184,22 @@ const AddTextile = () => {
                                       <div className="theme-form">
                                         <label>Coating Content</label>
                         
-                                        <Editor
-                                          apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
-                                          disabled={content.trim()} 
-                                           // apiKey="4cfoeyqhz0nv3detfgli55jdylht31u9qyb3p4hv2ri3vaop"
-                                          value={coatingContent}
-                                          init={{
-                                            height: 200,
-                                            menubar: false,
-                                            plugins: ["link", "lists", "code", "casechange"],
-                                            toolbar:
-                                              "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                                            content_style: `   body {
-                                                font-family: 'Jost', sans-serif;
-                                                color:      color: #6d7175;
-                                                      }`,
-                                          }}
-                                          onEditorChange={(newContent) => setCoatingContent(newContent)}
+                                        <CKEditor
+                                          editor={ClassicEditor}
+                                          data={coatingContent}
+                                          onChange={(event, editor) => {
+                                                                                                                                                                                     const data = editor.getData();
+                                                                                                                                                                                     setCoatingContent(data);
+                                                                                                                                                                  }}
+                                          config={{
+                                                                                                                                                                                     toolbar: [
+                                                                                                                                                                                       "heading", "|",
+                                                                                                                                                                                       "bold", "italic", "underline", "link", "|",
+                                                                                                                                                                                       "bulletedList", "numberedList", "|",
+                                                                                                                                                                                       "undo", "redo", "codeBlock"
+                                                                                                                                                                                     ],
+                                                                                                                                                                                     height: 200,
+                                                                                                                                                                                   }}
                                         />
                                       </div>
                                     </div>

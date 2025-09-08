@@ -2,13 +2,13 @@ const divisionsController = require("../../controllers/otherpages/divisionsContr
 const express = require("express");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const route = express.Router();
-const multer = require("multer");
+const createUpload = require("../../utils/s3Uploads");
 
-const upload = multer({ dest: "uploads/divisions" });
+const uploadMedia = createUpload("divisions");
 
 route.post(
   "/",
-  upload.fields([
+  uploadMedia.fields([
     { name: "image", maxCount: 10 },
     { name: "logo", maxCount: 10 },
   ]),
@@ -18,7 +18,7 @@ route.post(
 
 route.patch(
   "/:_id",
-  upload.fields([
+  uploadMedia.fields([
     { name: "image", maxCount: 10 },
     { name: "logo", maxCount: 10 },
   ]),
