@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../../components/AdminLayout";
-import { Editor } from "@tinymce/tinymce-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const Buttons = () => {
   const navigate = useNavigate();
@@ -131,25 +132,22 @@ const [brochure, setBrochure] = useState({
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
                           <div className="theme-form">
                             <label>Installation Maintenance</label>
-                            <Editor
-                              apiKey={process.env.REACT_APP_TINY_CLOUD_API_KEY}
-                              value={installationMaintenance}
-                              init={{
-                                height: 200,
-                                menubar: false,
-                                forced_root_block: "",
-                                plugins: ["link", "lists", "code", "casechange"],
-                                toolbar:
-                                  "undo redo | formatselect | fontsize | bold italic underline | alignleft aligncenter alignright | bullist numlist outdent indent | code",
-                                content_style: `
-                                                          body {
-                                                            font-family: 'Jost', sans-serif;
-                                                            color:
-                                                             #6d7175;
-                                                          }
-                                                        `,
-                              }}
-                              onEditorChange={(newContent) => setInstallationMaintenance(newContent)}
+                            <CKEditor
+                              editor={ClassicEditor}
+                              data={installationMaintenance}
+                              onChange={(event, editor) => {
+                                                                  const data = editor.getData();
+                                                                  setInstallationMaintenance(data);
+                                               }}
+                              config={{
+                                                                  toolbar: [
+                                                                    "heading", "|",
+                                                                    "bold", "italic", "underline", "link", "|",
+                                                                    "bulletedList", "numberedList", "|",
+                                                                    "undo", "redo", "codeBlock"
+                                                                  ],
+                                                                  height: 200,
+                                                                }}
                             />
                           </div>
                         </div>
