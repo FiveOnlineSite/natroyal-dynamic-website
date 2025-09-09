@@ -38,7 +38,7 @@ const Home = () => {
     dots: false,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -319,37 +319,11 @@ const Home = () => {
         <section className="about-us-section" id="about">
           <div className="container">
             <div className="row align-items-center justify-content-center">
-              {/* <div className="col-lg-6 about-img-div">
-              <div className="border-box-1"></div>
-              <div className="border-box-2"></div>
-              <img
-                src="/images/banners/beautiful-woman-using-laptop.png"
-                alt="about-img"
-              />
-              <img
-                src="/images/banners/interior-view-boat.png"
-                alt="about-img"
-              />
-
-              <img
-                src="/images/banners/pexels-ammy-k-106103999-9552475.png"
-                alt="about-img"
-              />
-              <img
-                src="/images/banners/pexels-karolina-grabowska-6276068.png"
-                alt="about-img"
-              />
-            </div> */}
+             
               <div className="col-lg-12 mt-lg-0 mt-5">
                 <h6 className="subtitle">
                   About Us <span></span>
                 </h6>
-                {/* <h2 className="title">
-                  {" "}
-                  <span className="yellow-title">Natroyal Group:</span> Leaders
-                  in Coated Fabrics, Flooring, Knit Fabrics, and Seating
-                  Components
-                </h2> */}
 
                 <h2 className="title">
                   {" "}
@@ -362,11 +336,7 @@ const Home = () => {
                 <div className="row mt-3">
                   <div className="col-lg-10">
                     <p className="paragraph">
-                      {/* Since 1954, Natroyal Group has been a leader in
-                      manufacturing and exporting Luxury Vinyl Plank & Tile, PVC
-                      vinyl flooring, coated fabrics, knit fabrics, and seating
-                      components—earning trust through decades of expertise and
-                      innovation. */}
+                      
                       Natroyal Group has been at the forefront of material
                       innovation, offering high-performance solutions in
                       synthetic leather, knit fabrics, and PVC vinyl flooring
@@ -374,30 +344,7 @@ const Home = () => {
                     </p>
                   </div>
 
-                  {/* <div className="col-lg-6">
-                  <div className="row justify-content-around">
-                    <div className="col-lg-6 experience mb-lg-0 mb-4">
-                      <h2>60+</h2>
-                      <p>
-                        Years <br /> Experience
-                      </p>
-                    </div>
-
-                    <div className="col-lg-6 mt-lg-0 mt-3 d-flex align-items-center">
-                      <NavLink
-                        to="/about-us"
-                        className="custom-button border-btn"
-                      >
-                        Read More
-                        <img
-                          src="/images/icons/arrow-up-right.png"
-                          className="ps-2"
-                          alt="arrow"
-                        />
-                      </NavLink>
-                    </div>
-                  </div>
-                </div> */}
+                  
                 </div>
               </div>
             </div>
@@ -545,95 +492,6 @@ const Home = () => {
             </div>
           </div>
           <div className="row products-row mt-4">
-            {/* <div className="col-lg-3 col-md-6 col-12">
-              <div className="image-container">
-                <img
-                  src="/images/banners/image 55.png"
-                  alt="product-image"
-                  className="w-100 product-image"
-                />
-                <a href="#" className="overlay-text">
-                  <div className="overlay-title">
-                    <h6>Coated Fabric</h6>
-                    <div>
-                      <img src="/images/icons/arrow-up-right.png" />
-                    </div>
-                  </div>
-                  <p>
-                    Our PVC Vinyl Flooring offers durability for sectors like
-                    Education, Healthcare, Retail, and more
-                  </p>
-                </a>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6 col-12 mt-lg-0 mt-md-0 mt-5">
-              <div className="image-container">
-                <img
-                  src="/images/banners/Mask group (8).png"
-                  alt="product-image"
-                  className="w-100 product-image"
-                />
-                <a href="#" className="overlay-text">
-                  <div className="overlay-title">
-                    <h6>Coated Fabric</h6>
-                    <div>
-                      <img src="/images/icons/arrow-up-right.png" />
-                    </div>
-                  </div>
-                  <p>
-                    Our PVC Vinyl Flooring offers durability for sectors like
-                    Education, Healthcare, Retail, and more
-                  </p>
-                </a>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6 col-12 mt-lg-0 mt-5">
-              <div className="image-container">
-                <img
-                  src="/images/banners/Mask group (9).png"
-                  alt="product-image"
-                  className="w-100 product-image"
-                />
-
-                <a href="#" className="overlay-text">
-                  <div className="overlay-title">
-                    <h6>Coated Fabric</h6>
-                    <div>
-                      <img src="/images/icons/arrow-up-right.png" />
-                    </div>
-                  </div>
-                  <p>
-                    Our PVC Vinyl Flooring offers durability for sectors like
-                    Education, Healthcare, Retail, and more
-                  </p>
-                </a>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6 col-12 mt-lg-0 mt-5">
-              <div className="image-container">
-                <img
-                  src="/images/banners/Mask group (8).png"
-                  alt="product-image"
-                  className="w-100 product-image"
-                />
-                <a href="#" className="overlay-text">
-                  <div className="overlay-title">
-                    <h6>Coated Fabric</h6>
-                    <div>
-                      <img src="/images/icons/arrow-up-right.png" />
-                    </div>
-                  </div>
-                  <p>
-                    Our PVC Vinyl Flooring offers durability for sectors like
-                    Education, Healthcare, Retail, and more
-                  </p>
-                </a>
-              </div>
-            </div> */}
-
             <SectionSlider
               settings={productsSettings}
               slides={productsData}
@@ -643,142 +501,6 @@ const Home = () => {
             ></SectionSlider>
           </div>
         </section>
-
-        {/* <section className="subdivision-section">
-        <div className="container">
-          <div className="subdivision-div">
-            <h6 className="subtitle text-center">
-              Applications <span></span>
-            </h6>
-            <h2 className="title new-title text-center">Our Subdivision</h2>
-
-            <p className="paragraph">
-              Natroyal Group offers versatile product solutions for various
-              industries and applications
-            </p>
-          </div>
-
-          <div className="row mt-4">
-            <SectionSlider
-              settings={subdivisionSettings}
-              slides={subdivisionData}
-              products={false}
-              subdivision={true}
-              clients={false}
-            ></SectionSlider>
-          </div>
-        </div>
-      </section> */}
-
-        {/* <section className="map-section">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-5">
-              <h6 className="subtitle text-center">
-                We Are Set At <span></span>
-              </h6>
-              <h2 className="title new-title">Nationwide & Beyond</h2>
-
-              <p className="paragraph">
-                With a presence in 10+ countries, we are trusted globally for
-                delivering exceptional quality, innovative solutions, and
-                unmatched reliability.
-              </p>
-
-              <div className="map-tabs">
-                <button
-                  className={`tab-link ${
-                    activeTab === "pan-india" ? "active" : ""
-                  }`}
-                  onClick={() => setActiveTab("pan-india")}
-                >
-                  Pan India <i className="lni lni-arrow-angular-top-right"></i>
-                </button>
-                <button
-                  className={`tab-link ${
-                    activeTab === "other-countries" ? "active" : ""
-                  }`}
-                  onClick={() => setActiveTab("other-countries")}
-                >
-                  Other Countries{" "}
-                  <i className="lni lni-arrow-angular-top-right"></i>
-                </button>
-              </div>
-            </div>
-            <div className="col-lg-7">
-              <div className="tab-content">
-                {activeTab === "pan-india" && (
-                  <div
-                    className={`tab-pane ${
-                      activeTab === "pan-india" ? "show active" : ""
-                    }`}
-                  >
-                    <div className="row">
-                      <div className="col-lg-12 indian-map-col">
-                        <div
-                          className="single-map-container india-map"
-                          data-aos="fade-left"
-                          data-aos-duration="1500"
-                        >
-                          <img
-                            src="/images/maps/indian-map.png"
-                            alt="pan-india"
-                          />
-                          <div
-                            className="location-div"
-                            style={{ position: "absolute" }}
-                          >
-                            <div className="map-pin-container">
-                              <div className="map-pin"></div>
-                              <div className="map-div">
-                                <h6>Mumbai</h6>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === "other-countries" && (
-                  <div
-                    className={`tab-pane ${
-                      activeTab === "other-countries" ? "show active" : ""
-                    }`}
-                  >
-                    <div className="row">
-                      <div className="col-lg-12 global-map-col">
-                        <div
-                          className="single-map-container world-map"
-                          data-aos="fade-left"
-                          data-aos-duration="1500"
-                        >
-                          <img
-                            src="/images/maps/The_World_map 1.png"
-                            alt="other-countries"
-                          />
-                          <div
-                            className="location-div"
-                            style={{ position: "absolute" }}
-                          >
-                            <div className="map-pin-container">
-                              <div className="map-pin"></div>
-                              <div className="map-div">
-                                <h6>Africa</h6>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
 
         <section className="map-section" id="global">
           <div className="container">
