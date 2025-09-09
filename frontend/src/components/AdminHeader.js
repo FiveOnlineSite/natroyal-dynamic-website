@@ -14,7 +14,7 @@ const AdminHeader = () => {
           <img
             width={"30px"}
             height={"30px"}
-            src="/images/icons/profile.png"
+            src="/images/icons/admin.jpg"
             alt=""
           />
           {/* <img src="src/img/user-icon-img.png" width="40px" height="40px" /> */}

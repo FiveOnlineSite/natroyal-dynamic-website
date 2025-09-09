@@ -9,6 +9,18 @@ const createTextile = async (req, res) => {
     let { title, content, alt, lamination_content, coating_content, tags } =
       req.body;
 
+
+      
+          const duplicate = await TextilesModel.findOne({
+            title: title.trim(),
+            _id: { $ne: req.params._id },
+          });
+          if (duplicate) {
+            return res
+              .status(400)
+              .json({ message: "Another product with this title already exists." });
+          }
+          
     // Validate exclusive condition
     const hasContent = content && content.trim() !== "";
     const hasLamination =
@@ -84,7 +96,6 @@ const updateTextile = async (req, res) => {
       return res.status(404).json({ message: "Textile content not found." });
     }
 
-    if (title) {
           const duplicate = await TextilesModel.findOne({
             title: title.trim(),
             _id: { $ne: req.params._id },
@@ -94,8 +105,6 @@ const updateTextile = async (req, res) => {
               .status(400)
               .json({ message: "Another product with this title already exists." });
           }
-        }
-
      const updatedFields = {}; 
 
     const file = req.file;

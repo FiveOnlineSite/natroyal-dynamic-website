@@ -208,7 +208,7 @@ const EditTextile = () => {
                                     
                                                     <CKEditor
                                                       editor={ClassicEditor}
-                                                      data={formData.content}
+                                                      data={formData.content || ""}
                                                       onChange={(event, editor) => {
                                                                                                                                                                                                              const data = editor.getData();
                                                                                                                                                                                                               setFormData((prev) => ({ ...prev, content: data }));
@@ -233,10 +233,10 @@ const EditTextile = () => {
                                     
                                                     <CKEditor
                                                       editor={ClassicEditor}
-                                                      data={formData.lamination_content}
+                                                      data={formData.lamination_content || ""}
                                                       onChange={(event, editor) => {
                                                                                                                                                                                                              const data = editor.getData();
-                                                                                                                                                                                                              setFormData((prev) => ({ ...prev, content: data }));
+                                                                                                                                                                                                              setFormData((prev) => ({ ...prev, lamination_content: data }));
                                                                                                                                                                                           }}
                                                       config={{
                                                                                                                                                                                                              toolbar: [
@@ -257,10 +257,10 @@ const EditTextile = () => {
                                     
                                                     <CKEditor
                                                       editor={ClassicEditor}
-                                                      data={formData.coating_content}
+                                                      data={formData.coating_content || ""}
                                                       onChange={(event, editor) => {
                                                                                                                                                                                                              const data = editor.getData();
-                                                                                                                                                                                                              setFormData((prev) => ({ ...prev, content: data }));
+                                                                                                                                                                                                              setFormData((prev) => ({ ...prev, coating_content: data }));
                                                                                                                                                                                           }}
                                                       config={{
                                                                                                                                                                                                              toolbar: [

@@ -174,22 +174,30 @@ const VinylApp = () => {
       <section className="application-types-section">
         <div className="container">
           <div className="row">
-            {vinylProduct && vinylProduct.map((product) => (
-              <div className="col-lg-2 col-md-6 col-12 mt-4" key={product._id}>
-                <NavLink to={`/vinyl-flooring/products/${product.name.toLowerCase().replace(/\s+/g, "-")}`}>
-                  <div className="single-application-div">
-                    {product.image?.[0]?.filepath && (
-                   <div className="single-application-img">
-                      <img src={product.image?.[0]?.filepath} alt={product.alt} />
-                    </div>
-                    )}
+            {vinylProduct && vinylProduct.map((product) => {
+              // condition for LVT
+              const productHref =
+                product.name.toLowerCase() === "lvt"
+                  ? "/lvt-flooring"
+                  : `/vinyl-flooring/products/${product.name.toLowerCase().replace(/\s+/g, "-")}`;
 
-                    <h4>{product.name}</h4>
-                  </div>
-                </NavLink>
-              </div>
-            ))}
+              return (
+                <div className="col-lg-2 col-md-6 col-12 mt-4" key={product._id}>
+                  <NavLink to={productHref}>
+                    <div className="single-application-div">
+                      {product.image?.[0]?.filepath && (
+                        <div className="single-application-img">
+                          <img src={product.image?.[0]?.filepath} alt={product.alt} />
+                        </div>
+                      )}
+                      <h4>{product.name}</h4>
+                    </div>
+                  </NavLink>
+                </div>
+              );
+            })}
           </div>
+
         </div>
       </section>
 
