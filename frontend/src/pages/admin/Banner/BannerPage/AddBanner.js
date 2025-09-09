@@ -12,6 +12,25 @@ const AddBanner = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+const [allPages, setAllPages] = useState([])
+
+useEffect(() => {
+  const fetchAllPages = async () => {
+      try {
+        const apiUrl = process.env.REACT_APP_API_URL;
+        const response = await axios.get(
+          `${apiUrl}/api/banner/all-pages`
+        );
+        const pagesData = response.data.pages;
+        setAllPages(pagesData);
+
+      } catch (error) {
+        console.error("Error fetching all pages:", error);
+      } 
+    }
+
+    fetchAllPages();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,18 +143,34 @@ setValidationError("")
               </div>
             </div>
 
-            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+           <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Page</label>
-                <input
-                  type="text"
+                <select
                   name="page"
                   required
                   value={page}
                   onChange={(e) => setPage(e.target.value)}
-                />
+                >
+                  <option value="" disabled>
+                    Select a Page
+                  </option>
+
+                  {/* Static pages */}
+                  <option value="/about-us">About Us</option>
+                  <option value="/our-divisions">Our Divisions</option>
+                  <option value="/contact-us">Contact Us</option>
+
+                  {/* Dynamic pages from API */}
+                  {allPages.map((p, idx) => (
+                    <option key={idx} value={p.url}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
+
 
             {errorMessage && (
               <div className="error-message text-danger mt-2">

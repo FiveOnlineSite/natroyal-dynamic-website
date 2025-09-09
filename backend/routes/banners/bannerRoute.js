@@ -21,6 +21,8 @@ route.patch(
   bannerController.updateBanner
 );
 
+route.get("/all-pages", bannerController.getPagesForBanner);
+
 route.get("/page/*", bannerController.getBannerByPage);
 
 route.get("/:_id", bannerController.getBanner);

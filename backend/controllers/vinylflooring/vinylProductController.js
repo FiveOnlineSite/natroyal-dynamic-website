@@ -188,7 +188,7 @@ const getVinylProductsByAppName = async (req, res) => {
 
     // Normalizer → converts "Royal Star", "royal-star", "ROYAL_star" → "royal-star"
     const normalize = (str) =>
-      str?.toLowerCase().replace(/[-_\s]+/g, "-");
+      str?.toLowerCase().replace(/[-_\s]+/g, "-").replace(/\//g, "-");
 
     const products = await VinylProductModel.find()
       .populate("applications")

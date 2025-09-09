@@ -190,7 +190,7 @@ const VinylnnerApplication = () => {
                       className="nav-link dropdown-toggle"
                       href={`/vinyl-flooring/applications/${app.name
                               .toLowerCase()
-                              .replace(/[/\s]+/g, "-")}`} 
+                              .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
                       role="button"
                     >
                       {app.name}
@@ -202,7 +202,7 @@ const VinylnnerApplication = () => {
                             className="dropdown-item" 
                             href={`/vinyl-flooring/products/${product.name
                               .toLowerCase()
-                              .replace(/[/\s]+/g, "-")}`} 
+                              .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
                           >
                             {product.name}
                           </a>
@@ -286,7 +286,7 @@ const VinylnnerApplication = () => {
                           >
                             <NavLink to={`/vinyl-flooring/applications/${suitable.application.name
                               .toLowerCase()
-                              .replace(/[/\s]+/g, "-")}`} 
+                              .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
                             >
                               <div className="suitable-div">
                                 <div className="suitable-img-div">

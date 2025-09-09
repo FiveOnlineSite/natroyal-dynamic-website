@@ -80,34 +80,19 @@ const AdminSidebar = () => {
             l
           />
 
-          <SidebarAccordion
+          {/* <SidebarAccordion
             title="About"
             iconClass="las la-home"
             isOpen={openAccordion === "abouts"}
             toggleOpen={() => handleAccordionToggle("abouts")}
             links={[
               {
-                to: "/admin/lvt-about",
-                linkIcon: "las la-home",
-                label: "Lvt About",
-              },
-              {
-                to: "/admin/seating-about",
-                linkIcon: "las la-home",
-                label: "Seating components About",
-              },
-              {
-                to: "/admin/knit-about",
-                linkIcon: "las la-home",
-                label: "Knit Fabrics About",
-              },
-              {
                 to: "/admin/about",
                 linkIcon: "las la-home",
                 label: "About",
               },
             ]}
-          />
+          /> */}
 
           <SidebarAccordion
             title="LVT Flooring"
@@ -115,6 +100,11 @@ const AdminSidebar = () => {
             isOpen={openAccordion === "lvt"}
             toggleOpen={() => handleAccordionToggle("lvt")}
             links={[
+              {
+                to: "/admin/lvt-about",
+                linkIcon: "las la-home",
+                label: "About",
+              },
               {
                 to: "/admin/events",
                 linkIcon: "las la-home",
@@ -159,6 +149,7 @@ const AdminSidebar = () => {
             isOpen={openAccordion === "vinyl"}
             toggleOpen={() => handleAccordionToggle("vinyl")}
             links={[
+              
               {
                 to: "/admin/vinyl-applications",
                 linkIcon: "las la-home",
@@ -235,6 +226,11 @@ const AdminSidebar = () => {
             toggleOpen={() => handleAccordionToggle("seating")}
             links={[
               {
+                to: "/admin/seating-about",
+                linkIcon: "las la-home",
+                label: "About",
+              },
+              {
                 to: "/admin/seating-applications",
                 linkIcon: "las la-home",
                 label: "Applications",
@@ -259,6 +255,11 @@ const AdminSidebar = () => {
             toggleOpen={() => handleAccordionToggle("knit")}
             links={[
               {
+                to: "/admin/knit-about",
+                linkIcon: "las la-home",
+                label: "About",
+              },
+              {
                 to: "/admin/textiles",
                 linkIcon: "las la-home",
                 label: "Textiles",
@@ -270,6 +271,12 @@ const AdminSidebar = () => {
               },
             ]}
           />
+
+          <li>
+            <NavLink to="/admin/about" title="About">
+              <span className="las la-cogs"></span> <span>About</span>
+            </NavLink>
+          </li>
 
            <li>
             <NavLink to="/admin/division" title="Divisions">

@@ -1,7 +1,12 @@
 const bannerModel = require("../../models/banners/bannerModel");
-const cloudinary = require("../../utils/cloudinary");
+const VinylApplicationModel = require("../../models/vinylflooring/vinylAppModel")
+const CoatedApplicationModel = require("../../models/coatedfabrics/coatedAppModel")
+const SeatingApplicationModel = require("../../models/seatingcomponents/seatingAppModel")
+const VinylProductModel = require("../../models/vinylflooring/vinylProductModel")
+const CoatedProductModel = require("../../models/coatedfabrics/coatedProductModel")
+const SeatingProductModel = require("../../models/seatingcomponents/seatingProductModel")
+
 const path = require("path");
-const fs = require("fs");
 
 const createBanner = async (req, res) => {
   try {
@@ -170,17 +175,13 @@ const updateBanner = async (req, res) => {
 
 const getBannerByPage = async (req, res) => {
   try {
-    let page = req.params[0]; // capture everything after /page/
-    
+    let page = decodeURIComponent(req.params[0]);
+
     if (!page.startsWith("/")) {
       page = `/${page}`;
     }
 
-    // Try to match the closest parent (e.g. "/vinyl-flooring")
-    const baseSegment = page.split("/")[1];
-    const banner = await bannerModel.findOne({
-      page: { $regex: `^/${baseSegment}` } 
-    });
+    const banner = await bannerModel.findOne({ page });
 
     if (!banner) {
       return res.status(404).json({ message: "No banner found for this page" });
@@ -192,6 +193,84 @@ const getBannerByPage = async (req, res) => {
   }
 };
 
+
+const getPagesForBanner = async (req, res) => {
+  try {
+    const vinylApps = await VinylApplicationModel.find().select("name");
+    const coatedApps = await CoatedApplicationModel.find().select("name");
+    const seatingApps = await SeatingApplicationModel.find().select("name");
+    const vinylProducts = await VinylProductModel.find().select("name");
+
+    const slugify = (str) => {
+      if (!str || typeof str !== "string") return "";
+      return str
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/\//g, "-"); 
+    };
+
+    const safePage = (label, url) => ({
+      label: label || "Untitled Page",
+      url: url && typeof url === "string" && url.trim() !== "" ? url : "#",
+    });
+
+    const vinylPages = vinylApps
+      .filter(app => app?.name)
+      .map(app =>
+        safePage(
+          `Vinyl Application - ${app.name}`,
+          `/vinyl-flooring/applications/${slugify(app.name)}`
+        )
+      );
+
+    const coatedPages = coatedApps
+      .filter(app => app?.name)
+      .map(app =>
+        safePage(
+          `Coated Application - ${app.name}`,
+          `/coated-fabrics/applications/${slugify(app.name)}`
+        )
+      );
+
+    const seatingPages = seatingApps
+      .filter(app => app?.name)
+      .map(app =>
+        safePage(
+          `Seating Application - ${app.name}`,
+          `/seating-components/applications/${slugify(app.name)}`
+        )
+      );
+
+    const vinylProductPages = vinylProducts
+      .filter(prod => prod?.name)
+      .map(prod =>
+        safePage(
+          `Vinyl Product - ${prod.name}`,
+          prod.name === "LVT"
+            ? "/lvt-flooring"
+            : `/vinyl-flooring/products/${slugify(prod.name)}`
+        )
+      );
+
+    const pages = [
+      ...vinylPages,
+      ...coatedPages,
+      ...seatingPages,
+      ...vinylProductPages,
+    ];
+
+    res.status(200).json({
+      message: "Pages fetched succesfully",
+      pages
+    });
+  } catch (error) {
+    console.error("Error in getPagesForBanner:", error);
+    res
+      .status(500)
+      .json({ message: "Error fetching pages", error: error.message });
+  }
+};
 
 
 const getBanner = async (req, res) => {
@@ -265,6 +344,7 @@ const deleteBanner = async (req, res) => {
 module.exports = {
   createBanner,
   updateBanner,
+  getPagesForBanner,
   getBannerByPage,
   getBanner,
   getBanners,

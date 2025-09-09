@@ -65,7 +65,7 @@ const LandingBanner = () => {
   return (
     <AdminLayout>
       <div className="pages-headers ">
-        <h2>
+        <h2 className="d-none">
           Landing Banner
           <NavLink to="/admin/add/landing-banner" className="theme-cta">
             <i className="las la-plus-circle"></i>

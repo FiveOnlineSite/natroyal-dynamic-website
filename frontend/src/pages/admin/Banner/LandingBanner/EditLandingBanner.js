@@ -224,12 +224,24 @@ const [validationError, setValidationError] = useState("");
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Page</label>
-                <input
-                  type="text"
+                <select
                   name="page"
+                  required
                   value={formData.page}
                   onChange={handleChange}
-                />
+                  disabled
+                >
+                  <option value="" disabled>
+                    Select a Page
+                  </option>
+
+                  <option value="/vinyl-flooring">Vinyl Flooring</option>
+                  <option value="/lvt-flooring">LVT</option>
+                  <option value="/coated-fabrics">Coated Fabrics</option>
+                  <option value="/seating-components">Seating Components</option>
+                  <option value="/knit-fabrics">Knit Fabrics</option>
+
+                </select>
               </div>
             </div>
 

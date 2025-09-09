@@ -235,7 +235,7 @@ const getSeatingProductByAppName = async (req, res) => {
 
     // normalize both DB name and URL param by replacing spaces & dashes with a common format
     const normalize = (str) =>
-      str?.toLowerCase().replace(/[-\s]+/g, "-"); // turn spaces and dashes into "-"
+      str?.toLowerCase().replace(/[-\s]+/g, "-").replace(/\//g, "-"); // turn spaces and dashes into "-"
 
     const product = products.filter(
       (c) => normalize(c.application?.name) === normalize(appName)

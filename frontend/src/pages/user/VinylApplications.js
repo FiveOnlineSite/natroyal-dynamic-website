@@ -124,7 +124,7 @@ const VinylApp = () => {
                       className="nav-link dropdown-toggle"
                       href={`/vinyl-flooring/applications/${app.name
                               .toLowerCase()
-                              .replace(/[/\s]+/g, "-")}`} 
+                              .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
                       role="button"
                     >
                       {app.name}
@@ -136,7 +136,7 @@ const VinylApp = () => {
                             className="dropdown-item" 
                             href={`/vinyl-flooring/products/${product.name
                               .toLowerCase()
-                              .replace(/[/\s]+/g, "-")}`} 
+                              .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
                           >
                             {product.name}
                           </a>
@@ -179,7 +179,7 @@ const VinylApp = () => {
               const productHref =
                 product.name.toLowerCase() === "lvt"
                   ? "/lvt-flooring"
-                  : `/vinyl-flooring/products/${product.name.toLowerCase().replace(/\s+/g, "-")}`;
+                  : `/vinyl-flooring/products/${product.name.toLowerCase().replace(/\s+/g, "-").replace(/\//g, "-")}`;
 
               return (
                 <div className="col-lg-2 col-md-6 col-12 mt-4" key={product._id}>

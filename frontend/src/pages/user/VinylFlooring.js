@@ -91,7 +91,7 @@ const VinylFlooring = () => {
                       className="nav-link dropdown-toggle"
                       href={`/vinyl-flooring/applications/${app.name
                               .toLowerCase()
-                              .replace(/[/\s]+/g, "-")}`} 
+                              .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
                       role="button"
                     >
                       {app.name}
@@ -104,6 +104,7 @@ const VinylFlooring = () => {
                             href={`/vinyl-flooring/products/${product.name
                               .toLowerCase()
                               .replace(/[/\s]+/g, "-")}`} 
+                            end 
                           >
                             {product.name}
                           </a>
@@ -132,7 +133,7 @@ const VinylFlooring = () => {
             {vinylApp &&
                     vinylApp.map((application) => (
             <div className="col-lg-6 mt-5 px-3">
-              <NavLink to={`/vinyl-flooring/applications/${application.name.toLowerCase().replace(/\s+/g, "-")}`}>
+              <NavLink to={`/vinyl-flooring/applications/${application.name.toLowerCase().replace(/\s+/g, "-").replace(/\//g, "-")}`} end>
                 {
                   application.image?.[0]?.filepath && (
                     <img

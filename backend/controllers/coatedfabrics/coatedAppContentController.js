@@ -104,7 +104,7 @@ const getCoatedAppContentByAppName = async (req, res) => {
      const contents = await CoatedAppContentModel.find().populate("application", "name");
 
      const normalize = (str) =>
-           str?.toLowerCase().replace(/[-\s]+/g, "-"); // turn spaces and dashes into "-"
+           str?.toLowerCase().replace(/[-\s]+/g, "-").replace(/\//g, "-"); // turn spaces and dashes into "-"
      
      const appContent = contents.filter(
       (c) => normalize(c.application?.name) === normalize(appName)

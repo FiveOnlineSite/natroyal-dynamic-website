@@ -22,6 +22,26 @@ const [validationError, setValidationError] = useState("");
     page: "",
   });
 
+  const [allPages, setAllPages] = useState([])
+  
+  useEffect(() => {
+    const fetchAllPages = async () => {
+        try {
+          const apiUrl = process.env.REACT_APP_API_URL;
+          const response = await axios.get(
+            `${apiUrl}/api/banner/all-pages`
+          );
+          const pagesData = response.data.pages;
+          setAllPages(pagesData);
+  
+        } catch (error) {
+          console.error("Error fetching all pages:", error);
+        } 
+      }
+  
+      fetchAllPages();
+    }, []);
+
   useEffect(() => {
     const fetchBanner = async () => {
       try {
@@ -192,16 +212,23 @@ const handleSubmit = async (e) => {
                 />
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
-              <div className="theme-form">
-                <label>Page</label>
-                <input
-                  type="text"
-                  name="page"
-                  value={formData.page}
-                  onChange={handleChange}
-                />
-              </div>
+             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+            <div className="theme-form">
+              <label>Page</label>
+              <select
+                name="page"
+                value={formData.page}
+                disabled 
+                onChange={handleChange}
+              >
+                <option value="">Select a Page</option>
+                {allPages.map((page, index) => (
+                  <option key={index} value={page.url}>
+                    {page.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             </div>
 
             <div className="col-lg-12 col-md-12 col-sm-12 col-12">

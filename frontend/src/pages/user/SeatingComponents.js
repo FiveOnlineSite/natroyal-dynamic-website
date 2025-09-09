@@ -151,7 +151,7 @@ const SeatingComponents = () => {
                              className="nav-link" 
                              to={`/seating-components/applications/${app.name
                              .toLowerCase()
-                             .replace(/[/\s]+/g, "-")}`} 
+                             .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
                              end
                            >
                              {app.name}
@@ -209,7 +209,7 @@ const SeatingComponents = () => {
                 <div className="col-lg-6 mt-lg-0 mt-5" key={app._id}>
               <NavLink to={`/seating-components/applications/${app.name
                   .toLowerCase()
-                  .replace(/[/\s]+/g, "-")}`}
+                  .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`}
               >
               {app.image?.[0]?.filepath && (
                 <img

@@ -120,7 +120,7 @@ const location = useLocation()
                        className="nav-link" 
                        to={`/seating-components/applications/${app.name
                        .toLowerCase()
-                       .replace(/[/\s]+/g, "-")}`} 
+                       .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
                        end
                      >
                        {app.name}

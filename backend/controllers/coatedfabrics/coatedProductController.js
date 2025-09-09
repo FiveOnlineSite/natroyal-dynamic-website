@@ -182,7 +182,7 @@ const getCoatedProductByAppName = async (req, res) => {
     const products = await CoatedProductsModel.find().populate("application", "name");
 
     const normalize = (str) =>
-      str?.toLowerCase().replace(/[-\s]+/g, "-"); // turn spaces and dashes into "-"
+      str?.toLowerCase().replace(/[-\s]+/g, "-").replace(/\//g, "-"); // turn spaces and dashes into "-"
 
 
     const product = products.filter(
