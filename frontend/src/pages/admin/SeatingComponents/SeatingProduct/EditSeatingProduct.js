@@ -61,11 +61,11 @@ const EditSeatingProduct = () => {
         });
 
          const totalDetailsResponse = await axios.get(
-          `${apiUrl}/api/seating-product`
+          `${apiUrl}/api/seating-product/application/${seatingProductData.application?._id}`
         );
         const totalCount = totalDetailsResponse.data.productCount;
         setTotalSeatingProduct(totalCount);
-        console.log("Count", totalCount);
+                console.log("Count", totalCount);
       } catch (error) {
         console.error("Error fetching seating product:", error);
       } finally {

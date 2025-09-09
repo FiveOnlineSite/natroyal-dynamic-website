@@ -20,7 +20,9 @@ route.patch(
   seatingProductController.updateSeatingProduct
 );
 
-route.get("/application/:name", seatingProductController.getSeatingProductByAppName);
+route.get("/application/:_id", seatingProductController.getSeatingProductsByAppId)
+
+route.get("/application/by-name/:name", seatingProductController.getSeatingProductByAppName);
 
 route.get("/app-product", seatingProductController.getSeatingAppAndProduct);
 

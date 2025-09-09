@@ -96,7 +96,6 @@ const updateSeatingProduct = async (req, res) => {
   }
 }
 
-
     // Handle image upload...
     if (req.file) {
       const file = req.file;
@@ -116,50 +115,47 @@ const updateSeatingProduct = async (req, res) => {
     }
 
      if (sequence && sequence !== product.sequence) {
-      const seatingProduct = await SeatingProductModel.find().sort({ sequence: 1 });
+        // Get products only from the same application
+        const seatingProducts = await SeatingProductModel.find({ application: product.application }).sort({ sequence: 1 });
 
-      let updateOperations = [];
-      let maxsequence = seatingProduct.length;
+        let updateOperations = [];
+        let maxSequence = seatingProducts.length;
 
-      if (sequence > maxsequence) {
-        return res.status(400).json({
-          message: `Invalid sequence. The sequence cannot be greater than ${maxsequence}.`,
-        });
-      }
-
-      seatingProduct.forEach((seatingProduct) => {
-        if (seatingProduct._id.toString() !== product._id.toString()) {
-          if (seatingProduct.sequence >= sequence && seatingProduct.sequence < product.sequence) {
-            updateOperations.push({
-              updateOne: {
-                filter: { _id: seatingProduct._id },
-                update: { $inc: { sequence: 1 } },
-              },
-            });
-          } else if (
-            seatingProduct.sequence > product.sequence &&
-            seatingProduct.sequence <= sequence
-          ) {
-            updateOperations.push({
-              updateOne: {
-                filter: { _id: seatingProduct._id },
-                update: { $inc: { sequence: -1 } },
-              },
-            });
-          }
+        if (sequence > maxSequence) {
+          return res.status(400).json({
+            message: `Invalid sequence. The sequence cannot be greater than ${maxSequence} for this application.`,
+          });
         }
-      });
 
-      if (updateOperations.length > 0) {
-        await SeatingProductModel.bulkWrite(updateOperations);
-      }
-
-      if (sequence && sequence !== seatingProduct.sequence) {
-        await SeatingProductModel.findByIdAndUpdate(req.params._id, {
-          sequence,
+        seatingProducts.forEach((sp) => {
+          if (sp._id.toString() !== product._id.toString()) {
+            if (sp.sequence >= sequence && sp.sequence < product.sequence) {
+              updateOperations.push({
+                updateOne: {
+                  filter: { _id: sp._id },
+                  update: { $inc: { sequence: 1 } },
+                },
+              });
+            } else if (sp.sequence > product.sequence && sp.sequence <= sequence) {
+              updateOperations.push({
+                updateOne: {
+                  filter: { _id: sp._id },
+                  update: { $inc: { sequence: -1 } },
+                },
+              });
+            }
+          }
         });
+
+        if (updateOperations.length > 0) {
+          await SeatingProductModel.bulkWrite(updateOperations);
+        }
+
+        if (sequence && sequence !== product.sequence) {
+          product.sequence = sequence;
+        }
       }
-    }
+
 
     if (alt !== undefined) product.alt = alt;
 
@@ -184,6 +180,28 @@ const updateSeatingProduct = async (req, res) => {
     res
       .status(500)
       .json({ message: `Error updating seating product: ${error.message}` });
+  }
+};
+
+const getSeatingProductsByAppId = async (req, res) => {
+  try {
+    const applicationId = req.params._id; // take directly from params
+
+    if (!mongoose.Types.ObjectId.isValid(applicationId)) {
+      return res.status(400).json({ message: "Invalid application ID" });
+    }
+
+    const products = await SeatingProductModel.find({ application: applicationId });
+
+    res.status(200).json({
+      message: "Fetched products by application ID",
+      products,
+      productCount: products.length,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: `Error in fetching product by application ID: ${error.message}`,
+    });
   }
 };
 
@@ -323,6 +341,7 @@ const deleteSeatingProduct = async (req, res) => {
 module.exports = {
   createSeatingProduct,
   updateSeatingProduct,
+  getSeatingProductsByAppId,
   getSeatingAppAndProduct,
   getSeatingProductByAppName,
   getSeatingProduct,

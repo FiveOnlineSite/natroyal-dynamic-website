@@ -75,7 +75,7 @@ const location = useLocation()
       const fetchSeatingProductByApp = async () => {
         try {
           const apiUrl = process.env.REACT_APP_API_URL;
-          const response = await axios.get(`${apiUrl}/api/seating-product/application/${name}`);
+          const response = await axios.get(`${apiUrl}/api/seating-product/application/by-name/${name}`);
           const seatingProductByApp = response.data.product;
                 
           setSeatingProductByApp(seatingProductByApp);
