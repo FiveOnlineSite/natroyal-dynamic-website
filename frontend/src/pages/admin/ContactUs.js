@@ -3,6 +3,7 @@ import AdminLayout from "../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const Contact = () => {
   const [contact, setContact] = useState([]);
@@ -55,6 +56,8 @@ const Contact = () => {
       });
 
       setContact((prev) => prev.filter((contact) => contact._id !== id));
+              toast.success("Contact deleted successfully!");
+
     } catch (error) {
       console.error("Error deleting contact:", error);
     }

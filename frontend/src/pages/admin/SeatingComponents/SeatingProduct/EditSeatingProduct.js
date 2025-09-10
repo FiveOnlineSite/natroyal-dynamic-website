@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditSeatingProduct = () => {
   const { id } = useParams();
@@ -66,6 +67,7 @@ const EditSeatingProduct = () => {
         const totalCount = totalDetailsResponse.data.productCount;
         setTotalSeatingProduct(totalCount);
                 console.log("Count", totalCount);
+                
       } catch (error) {
         console.error("Error fetching seating product:", error);
       } finally {
@@ -140,9 +142,14 @@ const EditSeatingProduct = () => {
       setTimeout(() => {
         navigate("/admin/seating-products");
       }, 1000);
+      
+              toast.success("Seating component product updated successfully!");
+      
     } catch (error) {
       console.error("Error updating seating product:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+              toast.error("Failed to update seating component product");
+      
     } finally {
       setIsSubmitting(false);
     }

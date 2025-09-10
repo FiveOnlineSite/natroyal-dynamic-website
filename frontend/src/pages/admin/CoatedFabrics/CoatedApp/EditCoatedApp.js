@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditCoatedApp = () => {
   const { id } = useParams();
@@ -120,9 +121,13 @@ const EditCoatedApp = () => {
       setTimeout(() => {
         navigate("/admin/coated-applications");
       }, 1000);
+      toast.success("Coated fabrics application updated successfully!");
+      
     } catch (error) {
       console.error("Error adding coated applications:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to update coated fabrics application");
+      
     } finally {
       setIsSubmitting(false);
     }

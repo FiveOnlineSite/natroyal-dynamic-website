@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditVinylProduct = () => {
     const { id } = useParams();
@@ -142,9 +143,14 @@ const handleCheckboxChange = (id) => {
       setTimeout(() => {
         navigate("/admin/vinyl-products");
       }, 1000);
+              toast.success("Vinyl flooring product updated successfully!");
+
     } catch (error) {
       console.error("Error adding vinyl products:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+
+              toast.success("Failed to update vinyl flooring product");
+      
     } finally {
       setIsSubmitting(false);
     }

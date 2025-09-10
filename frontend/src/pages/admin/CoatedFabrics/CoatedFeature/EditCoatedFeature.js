@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditCoatedFeature = () => {
   const { id } = useParams();
@@ -110,9 +111,14 @@ const EditCoatedFeature = () => {
       setTimeout(() => {
         navigate("/admin/coated-features");
       }, 1000);
+
+      toast.success("Coated fabrics feature updated successfully!");
+      
     } catch (error) {
       console.error("Error adding coated features:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to update coated fabrics feature");
+      
     } finally {
       setIsSubmitting(false);
     }

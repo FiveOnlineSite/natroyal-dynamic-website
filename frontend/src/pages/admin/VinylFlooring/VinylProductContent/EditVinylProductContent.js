@@ -4,6 +4,7 @@ import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 
 const EditVinylProductContent = () => {
@@ -106,9 +107,15 @@ useEffect(() => {
       setTimeout(() => {
         navigate("/admin/vinyl-product-content");
       }, 1000);
+
+              toast.success("Vinyl flooring product updated successfully!");
+
     } catch (error) {
       console.error("Error adding vinyl product contents:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+
+              toast.error("Failed to update vinyl flooring product");
+
     } finally {
       setIsSubmitting(false);
     }

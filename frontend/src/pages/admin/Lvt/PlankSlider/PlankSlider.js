@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../../components/AdminLayout";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const PlankSlider = () => {
   const [plankSlider, setPlankSlider] = useState([]);
@@ -60,8 +61,12 @@ const PlankSlider = () => {
       setTimeout(() => {
         navigate("/admin/plank-slider");
       }, 3000);
+      toast.success("Plank slider deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting Plank Sliders:", error);
+      toast.error("Failed to delete plank slider");
+      
     }
   };
 

@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const SeatingProduct = () => {
   const navigate = useNavigate();
@@ -58,11 +59,17 @@ const SeatingProduct = () => {
       setTimeout(() => {
         navigate("/admin/seating-products");
       }, 3000);
+
+              toast.success("Seating component product deleted successfully!");
+
     } catch (error) {
       console.error("Error deleting product:", error);
       setErrorMessage(
         error.response?.data?.message || "Failed to delete product"
       );
+
+              toast.error("Failed to delete seating component product");
+
     }
   };
 

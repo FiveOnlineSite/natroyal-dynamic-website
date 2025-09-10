@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const VinylApp = () => {
   const navigate = useNavigate();
@@ -64,11 +65,17 @@ const VinylApp = () => {
 
           setVinylApp(vinylApp.filter((app) => app._id !== id));
           navigate("/admin/vinyl-applications");
+
+                  toast.success("Vinyl flooring application deleted successfully!");
+
         } catch (forceError) {
           console.error("Error force deleting application:", forceError);
           setErrorMessage(
             forceError.response?.data?.message || "Failed to delete application"
           );
+
+                  toast.error("Failed to delete vinyl flooring application");
+
         }
       }
     } else {

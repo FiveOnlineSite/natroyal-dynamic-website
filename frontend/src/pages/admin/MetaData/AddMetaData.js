@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Layout from "../../../components/AdminLayout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddMetaData = () => {
   const [page, setPage] = useState("");
@@ -36,21 +37,18 @@ const AddMetaData = () => {
           Authorization: `Bearer ${access_token}`,
         },
       });
-      // const response = await axios.post("/api/team/createteam", formData, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // });
-
       console.log(response.data);
-      // setTimeout(() => {
       navigate("/admin/meta-data");
-      // }, 2000);
+
+      toast.success("Meta data added successfully!");
+      
     } catch (error) {
       console.error("Error creating meta data:", error);
       setErrorMessage(
         ` ${error.response?.data?.message}` || "An error occurred"
       );
+      toast.error("Failed to add meta data");
+      
     }
   };
 

@@ -4,7 +4,7 @@ import Layout from "../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import { toast } from "react-toastify";
 
 const About = () => {
   const navigate = useNavigate();
@@ -85,12 +85,13 @@ const About = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      toast.success("About content updated successfully!");
       setTimeout(() => {
         navigate("/admin/about");
       }, 1000);
     } catch (error) {
       console.error("Error updating about:", error);
+       toast.error(error.response?.data?.message || "Failed to update about content");
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {
       setIsSubmitting(false);

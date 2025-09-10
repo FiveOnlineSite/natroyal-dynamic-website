@@ -4,6 +4,7 @@ import Layout from "../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 const SeatingAbout = () => {
   const navigate = useNavigate();
@@ -74,11 +75,14 @@ const SeatingAbout = () => {
           },
         }
       );
+      toast.success("Seating about content updated successfully!");
 
       setTimeout(() => {
         navigate("/admin/seating-about");
       }, 1000);
     } catch (error) {
+                   toast.error(error.response?.data?.message || "Failed to update Seating about content");
+      
       console.error("Error updating seating About data:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {

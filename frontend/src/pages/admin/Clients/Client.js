@@ -4,6 +4,7 @@ import Layout from "../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const Client = () => {
   const navigate = useNavigate();
@@ -55,11 +56,15 @@ const Client = () => {
       setTimeout(() => {
         navigate("/admin/clients");
       }, 3000);
+      toast.success("Client deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting clients:", error);
       setErrorMessage(
         error.response?.data?.message || "Failed to delete clients"
       );
+      toast.error("Failed to delete client");
+      
     }
   };
 

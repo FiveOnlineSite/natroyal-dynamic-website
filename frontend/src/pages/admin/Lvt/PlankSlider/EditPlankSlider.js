@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const EditPlankSlider = () => {
   const { id } = useParams();
@@ -166,9 +167,13 @@ const EditPlankSlider = () => {
       setTimeout(() => {
         navigate("/admin/plank-slider");
       }, 1000);
+      toast.success("Plank slider updated successfully!");
+      
     } catch (error) {
       console.error("Error updating plank Slider:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to update plank slider");
+      
     } finally {
       setIsSubmitting(false);
     }

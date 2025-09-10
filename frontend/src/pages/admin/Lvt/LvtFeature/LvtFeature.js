@@ -4,13 +4,13 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const LvtFeature = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [lvtFeature, setLvtFeature] = useState([]);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -55,8 +55,12 @@ const LvtFeature = () => {
       setTimeout(() => {
         navigate("/admin/lvt-features");
       }, 3000);
+      toast.success("LVT feature deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting lvt feature:", error);
+      toast.error("Failed to delete LVT feature");
+      
       setErrorMessage(
         error.response?.data?.message || "Failed to delete featurelication"
       );

@@ -3,6 +3,7 @@ import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
+import { toast } from "react-toastify";
 
 const AddTags = () => {
   const navigate = useNavigate();
@@ -57,9 +58,14 @@ const AddTags = () => {
       setTimeout(() => {
         navigate("/admin/tags");
       }, 1000);
+
+      toast.success("Tag created successfully!");
+      
     } catch (error) {
       console.error("Error adding tag:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to a create tag");
+      
     } finally {
       setIsSubmitting(false);
     }

@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const VinylProductVariant = () => {
   const navigate = useNavigate();
@@ -56,11 +57,16 @@ console.log(response.data);
        setTimeout(() => {
         navigate("/admin/vinyl-product-variants");
       }, 3000);
+
+              toast.success("Vinyl flooring product variant deleted successfully!");
+
     } catch (error) {
       console.error("Error deleting product variant:", error);
       setErrorMessage(
         error.response?.data?.message || "Failed to delete product variant"
       );
+              toast.error("Failed to delete vinyl flooring product variant");
+
     }
   };
 

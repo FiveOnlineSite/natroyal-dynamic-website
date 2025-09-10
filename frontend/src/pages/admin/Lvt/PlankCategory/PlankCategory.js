@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../../components/AdminLayout";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const PlankCategory = () => {
   const [plankCategory, setPlankCategory] = useState([]);
@@ -55,8 +56,12 @@ const PlankCategory = () => {
       setTimeout(() => {
         navigate("/admin/plank-category");
       }, 3000);
+      toast.success("Plank category deleted successfully!");
+
     } catch (error) {
       console.error("Error deleting plank category:", error);
+      toast.error("Failed to delete plank category");
+      
     }
   };
   return (

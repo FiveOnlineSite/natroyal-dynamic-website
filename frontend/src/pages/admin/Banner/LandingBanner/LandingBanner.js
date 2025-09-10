@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../../components/AdminLayout";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const LandingBanner = () => {
   const [landingBanner, setLandingBanner] = useState([]);
+  const [bannerCount, setBannerCount] = useState(0);
 
   const navigate = useNavigate();
 
@@ -21,6 +23,7 @@ const LandingBanner = () => {
         });
 
         setLandingBanner(response.data.banners);
+         setBannerCount(response.data?.count || 0);
         // console.log(response.data.news);
         console.log("filepath", response.data.banners.banner[0].filepath);
         // setLandingBanner(response.data.LandingBanner);
@@ -58,19 +61,25 @@ const LandingBanner = () => {
       setTimeout(() => {
         navigate("/admin/landing-banner");
       }, 3000);
+                                toast.success("Landing banner deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting landing banner:", error);
+                                toast.error("Failed to delete landing banner");
+      
     }
   };
   return (
     <AdminLayout>
       <div className="pages-headers ">
-        <h2 className="d-none">
+        <h2>
           Landing Banner
-          <NavLink to="/admin/add/landing-banner" className="theme-cta">
+         {bannerCount < 5 && (
+          <NavLink to="/admin/add/landing-banner" className="theme-cta ms-2">
             <i className="las la-plus-circle"></i>
             Add Landing Banner
           </NavLink>
+        )}
         </h2>
       </div>
       <div className="row mobilerows">

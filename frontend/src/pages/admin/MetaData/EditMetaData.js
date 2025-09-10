@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../components/AdminLayout";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditMetaData = () => {
   const { id } = useParams();
@@ -81,11 +82,15 @@ const EditMetaData = () => {
       console.log(response.data);
 
       navigate("/admin/meta-data");
+      toast.success("Meta data updated successfully!");
+      
     } catch (error) {
       console.error("Error updating meta data:", error);
       setErrorMessage(
         `${error.response?.data?.message}` || "An error occurred"
       );
+      toast.error("Failed to update meta data");
+      
     }
   };
 

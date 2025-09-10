@@ -4,6 +4,7 @@ import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 const EditCoatedAppContent = () => {
   const { id } = useParams();
@@ -106,9 +107,12 @@ const EditCoatedAppContent = () => {
       setTimeout(() => {
         navigate("/admin/coated-application-content");
       }, 1000);
+      toast.success("Coated fabrics application content created successfully!");
     } catch (error) {
       console.error("Error adding coated application contents:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to create coated fabrics application content");
+      
     } finally {
       setIsSubmitting(false);
     }

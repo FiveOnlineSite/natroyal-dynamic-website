@@ -3,6 +3,7 @@ import axios from "axios";
 import AdminLayout from "../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
+import { toast } from "react-toastify";
 
 const AddClient = () => {
   const navigate = useNavigate();
@@ -48,9 +49,13 @@ const AddClient = () => {
       });
 
       navigate("/admin/clients");
+      toast.success("Client created successfully!");
+      
     } catch (error) {
       console.error("Error adding seating application:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to create client");
+      
     } finally {
       setIsSubmitting(false);
     }

@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const CoatedFeature = () => {
   const navigate = useNavigate();
@@ -55,11 +56,15 @@ const CoatedFeature = () => {
       setTimeout(() => {
         navigate("/admin/coated-features");
       }, 3000);
+
+      toast.success("Coated fabrics feature deleted successfully!");
+
     } catch (error) {
       console.error("Error deleting coated feature:", error);
       setErrorMessage(
         error.response?.data?.message || "Failed to delete coated feature"
       );
+      toast.error("Failed to delete coated fabrics feature");
     }
   };
 

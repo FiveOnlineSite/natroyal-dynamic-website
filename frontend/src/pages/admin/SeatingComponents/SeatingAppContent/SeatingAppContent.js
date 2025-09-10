@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const SeatingAppContent = () => {
   const navigate = useNavigate();
@@ -50,11 +51,16 @@ const SeatingAppContent = () => {
       setTimeout(() => {
         navigate("/admin/seating-application-content");
       }, 3000);
+
+              toast.success("Seating application content deleted successfully!");
+
     } catch (error) {
-      console.error("Error deleting seating application:", error);
+      console.error("Error deleting seating component application content:", error);
       setErrorMessage(
-        error.response?.data?.message || "Failed to delete seating application"
+        error.response?.data?.message || "Failed to delete seating application content"
       );
+              toast.error("Failed to delete seating component application content");
+      
     }
   };
 

@@ -4,6 +4,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Home from "./pages/user/Home";
 import AboutUs from "./pages/user/AboutUs";
@@ -121,6 +123,8 @@ import EditClient from "./pages/admin/Clients/EditClient";
 function App() {
   return (
     <Router>
+      <ToastContainer position="top-right" style={{ marginTop: "70px" }} autoClose={3000} />
+
       <ScrollToSection />
       <FloatingWhatsapp />
       <Routes>

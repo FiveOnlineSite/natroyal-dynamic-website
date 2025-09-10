@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddVinylProductVariant = () => {
   const navigate = useNavigate();
@@ -73,9 +74,14 @@ const AddVinylProductVariant = () => {
       });
 
       navigate("/admin/vinyl-product-variants");
+
+              toast.success("Vinyl product variant created successfully!");
+
     } catch (error) {
       console.error("Error adding vinyl product variant:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+              toast.error("Failed to create vinyl product variant");
+
     } finally {
       setIsSubmitting(false);
     }

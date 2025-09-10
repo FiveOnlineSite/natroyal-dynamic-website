@@ -4,6 +4,7 @@ import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 const AddCoatedProduct = () => {
   const navigate = useNavigate();
@@ -94,9 +95,15 @@ const AddCoatedProduct = () => {
       });
 
       navigate("/admin/coated-products");
+
+      toast.success("Coated fabrics product created successfully!");
+      
     } catch (error) {
       console.error("Error adding coated product:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+
+      toast.error("Failed to create coated fabrics product");
+      
     } finally {
       setIsSubmitting(false);
     }

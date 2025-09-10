@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditLvtFeature = () => {
   const { id } = useParams();
@@ -110,8 +111,12 @@ const EditLvtFeature = () => {
       setTimeout(() => {
         navigate("/admin/lvt-features");
       }, 1000);
+      toast.success("LVT feature updated successfully!");
+      
     } catch (error) {
       console.error("Error updating lvt feature:", error);
+      toast.error("Failed to update LVT feature");
+      
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {
       setIsSubmitting(false);

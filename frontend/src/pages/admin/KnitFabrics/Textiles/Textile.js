@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const Textile = () => {
   const navigate = useNavigate();
@@ -55,11 +56,16 @@ const Textile = () => {
       setTimeout(() => {
         navigate("/admin/textiles");
       }, 3000);
+
+      toast.success("Textile deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting textiles:", error);
       setErrorMessage(
         error.response?.data?.message || "Failed to delete textiles"
       );
+      toast.error("Failed to delete textile");
+      
     }
   };
 

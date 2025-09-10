@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const VinylAppContent = () => {
 
@@ -51,9 +52,14 @@ const handleDeleteAppContent = async (id, appName) => {
     setTimeout(() => {
         navigate("/admin/vinyl-application-content");
       }, 3000);
+
+              toast.success("Vinyl flooring application content deleted successfully!");
+
   } catch (error) {
     console.error("Error deleting application:", error);
     setErrorMessage(error.response?.data?.message || "Failed to delete application");
+            toast.error("Failed to delete vinyl flooring application content");
+    
   }
 };
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import AdminLayout from "../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
+import { toast } from "react-toastify";
 
 const EditClient = () => {
   const { id } = useParams();
@@ -109,9 +110,13 @@ const EditClient = () => {
       setTimeout(() => {
         navigate("/admin/clients");
       }, 1000);
+      toast.success("Client updated successfully!");
+      
     } catch (error) {
       console.error("Error updating clients:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to update client");
+      
     } finally {
       setIsSubmitting(false);
     }

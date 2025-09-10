@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddHomeBanner = () => {
   const [banner, setBanner] = useState({ file: "" });
@@ -66,8 +67,12 @@ setValidationError("")
       });
 
       navigate("/admin/home-banner");
+              toast.success("Home banner created successfully!");
+
     } catch (error) {
       console.error("Error creating home banner:", error);
+              toast.error("Failed to create home banner");
+
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {
       setIsSubmitting(false);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddCoatedFeature = () => {
   const navigate = useNavigate();
@@ -48,9 +49,13 @@ const AddCoatedFeature = () => {
       });
 
       navigate("/admin/coated-features");
+      toast.success("Coated fabrics feature created successfully!");
+      
     } catch (error) {
       console.error("Error adding coated feature:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Coated fabrics feature created successfully!");
+      
     } finally {
       setIsSubmitting(false);
     }

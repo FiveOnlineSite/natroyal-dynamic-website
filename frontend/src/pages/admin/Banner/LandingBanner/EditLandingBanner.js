@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditLandingBanner = () => {
   const { id } = useParams();
@@ -128,8 +129,12 @@ const [validationError, setValidationError] = useState("");
 
       console.log("Updated landing banner:", response.data.updatedBanner);
       navigate("/admin/landing-banner");
+                          toast.success("Landing banner updated successfully!");
+      
     } catch (error) {
       console.error("Error updating landing banner:", error);
+                          toast.error("Failed to update landing banner");
+      
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {
       setIsSubmitting(false);

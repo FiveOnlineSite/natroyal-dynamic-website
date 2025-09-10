@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const Tags = () => {
   const navigate = useNavigate();
@@ -50,11 +51,16 @@ const Tags = () => {
       setTimeout(() => {
         navigate("/admin/tags");
       }, 3000);
+
+      toast.success("Tag deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting tags:", error);
       setErrorMessage(
         error.response?.data?.message || "Failed to delete tags"
       );
+      toast.error("Failed to delete tag");
+      
     }
   };
 

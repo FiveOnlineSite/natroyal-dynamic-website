@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Layout from "../../../components/AdminLayout";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 const Buttons = () => {
   const navigate = useNavigate();
@@ -88,9 +89,15 @@ const [brochure, setBrochure] = useState({
       setTimeout(() => {
         navigate("/admin/buttons");
       }, 1000);
+
+              toast.success("Button content updated successfully!");
+
     } catch (error) {
       console.error("Error updating button data:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+
+              toast.success("Failed to update button content");
+
     } finally {
       setIsSubmitting(false);
     }

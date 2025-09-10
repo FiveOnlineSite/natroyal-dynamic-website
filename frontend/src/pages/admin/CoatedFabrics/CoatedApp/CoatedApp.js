@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const CoatedApp = () => {
   const navigate = useNavigate();
@@ -55,11 +56,14 @@ const CoatedApp = () => {
       setTimeout(() => {
         navigate("/admin/coated-applications");
       }, 3000);
+      toast.success("Coated fabrics application deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting application:", error);
       setErrorMessage(
         error.response?.data?.message || "Failed to delete application"
       );
+      toast.error("Failed to delete coated fabrics application");
     }
   };
 

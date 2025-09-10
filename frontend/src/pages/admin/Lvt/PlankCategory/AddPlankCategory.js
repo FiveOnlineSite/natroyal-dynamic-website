@@ -3,6 +3,7 @@ import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
+import { toast } from "react-toastify";
 
 const AddPlankCategory = () => {
   const navigate = useNavigate();
@@ -38,9 +39,12 @@ const AddPlankCategory = () => {
       setTimeout(() => {
         navigate("/admin/plank-category");
       }, 1000);
+      toast.success("Plank category created successfully!");
     } catch (error) {
       console.error("Error creating planks category:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to create plank category");
+      
     } finally {
       setIsSubmitting(false);
     }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditHomeBanner = () => {
   const { id } = useParams();
@@ -125,8 +126,12 @@ const [validationError, setValidationError] = useState("");
 
       console.log("Updated home banner:", response.data.updatedBanner);
       navigate("/admin/home-banner");
+              toast.success("Home banner updated successfully!");
+
     } catch (error) {
       console.error("Error updating home banner:", error);
+              toast.error("Failed to update home banner");
+
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {
       setIsSubmitting(false);

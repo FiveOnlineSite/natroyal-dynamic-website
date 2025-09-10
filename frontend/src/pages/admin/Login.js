@@ -32,11 +32,8 @@ const Login = () => {
       console.error("Error logging in:", error);
       setErrorMessage("Invalid email or password. Please try again.");
 
-      setSuccessMessage(""); // Clear any previous success message
+      setSuccessMessage("");
       setLoading(false);
-      // setTimeout(() => {
-      //   navigate("/");
-      // }, 2000);
     }
   };
 

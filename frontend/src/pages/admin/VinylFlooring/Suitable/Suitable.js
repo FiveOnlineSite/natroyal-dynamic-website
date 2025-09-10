@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../../components/AdminLayout";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Suitable = () => {
   const [suitable, setSuitable] = useState([]);
@@ -61,8 +62,13 @@ const Suitable = () => {
       setTimeout(() => {
         navigate("/admin/suitable");
       }, 3000);
+
+              toast.success("Suitable deleted successfully!");
+
     } catch (error) {
       console.error("Error deleting suitable:", error);
+              toast.success("Failed to delete suitable");
+
     }
   };
 

@@ -4,7 +4,7 @@ import Layout from "../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import { toast } from "react-toastify";
 
 const KnitAbout = () => {
   const navigate = useNavigate();
@@ -64,11 +64,14 @@ const KnitAbout = () => {
         }
       );
 
+      toast.success("Knit about content updated successfully!");
       setTimeout(() => {
         navigate("/admin/knit-about");
       }, 1000);
     } catch (error) {
       console.error("Error updating Knit About data:", error);
+             toast.error(error.response?.data?.message || "Failed to update knit about content");
+      
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {
       setIsSubmitting(false);

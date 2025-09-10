@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../../components/AdminLayout";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const HomeBanner = () => {
   const [homeBanner, setHomeBanner] = useState([]);
@@ -55,10 +56,14 @@ const HomeBanner = () => {
       // }, 2000);
       console.log(response.data);
       setHomeBanner(homeBanner.filter((banner) => banner._id !== id));
+        toast.success("Home banner deleted successfully!");
+      
       setTimeout(() => {
         navigate("/admin/home-banner");
       }, 3000);
     } catch (error) {
+        toast.success("Failed to delete home banner");
+      
       console.error("Error deleting home banner:", error);
     }
   };

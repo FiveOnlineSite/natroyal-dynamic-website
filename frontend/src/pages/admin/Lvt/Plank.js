@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import Layout from "../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Plank = () => {
   const navigate = useNavigate();
@@ -66,9 +67,13 @@ const Plank = () => {
       setTimeout(() => {
         navigate("/admin/planks");
       }, 1000);
+                                      toast.success("Plank content updated successfully!");
+      
     } catch (error) {
       console.error("Error updating Plank:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+                                      toast.error("Failed to update plank content");
+      
     } finally {
       setIsSubmitting(false);
     }

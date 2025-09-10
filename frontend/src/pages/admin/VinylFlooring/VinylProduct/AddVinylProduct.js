@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddVinylProduct = () => {
   const navigate = useNavigate();
@@ -83,9 +84,13 @@ const AddVinylProduct = () => {
       });
 
       navigate("/admin/vinyl-products");
+              toast.success("Vinyl flooring product created successfully!");
+
     } catch (error) {
       console.error("Error adding vinyl product:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+              toast.error("Failed to create vinyl flooring product");
+
     } finally {
       setIsSubmitting(false);
     }

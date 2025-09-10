@@ -4,6 +4,7 @@ import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 const AddSeatingAppContent = () => {
   const navigate = useNavigate();
@@ -62,9 +63,14 @@ const AddSeatingAppContent = () => {
       setTimeout(() => {
         navigate("/admin/seating-application-content");
       }, 1000);
+
+              toast.success("Seating component application content created successfully!");
+      
     } catch (error) {
       console.error("Error adding seating applications:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+              toast.error("Failed to create seating component application content");
+      
     } finally {
       setIsSubmitting(false);
     }

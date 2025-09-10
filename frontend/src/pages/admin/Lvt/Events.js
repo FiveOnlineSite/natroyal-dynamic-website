@@ -3,6 +3,7 @@ import axios from "axios";
 import Layout from "../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
+import { toast } from "react-toastify";
 
 const Events = () => {
   const navigate = useNavigate();
@@ -92,9 +93,14 @@ const Events = () => {
       setTimeout(() => {
         navigate("/admin/events");
       }, 1000);
+
+      toast.success("Event updated successfully!");
+      
     } catch (error) {
       console.error("Error updating events:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to update event");
+      
     } finally {
       setIsSubmitting(false);
     }
@@ -119,8 +125,12 @@ const Events = () => {
       // Remove from local state
       const updatedEvents = events.filter((ev) => ev._id !== eventId);
       setEvents(updatedEvents);
+                                      toast.success("Event deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting event:", error);
+                                      toast.error("Failed to delete event");
+      
       setErrorMessage(
         error.response?.data?.message || "Failed to delete event"
       );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditBanner = () => {
   const { id } = useParams();
@@ -9,8 +10,7 @@ const EditBanner = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-const [validationError, setValidationError] = useState("");
-  
+  const [validationError, setValidationError] = useState("");
 
   const [formData, setFormData] = useState({
     alt: "",
@@ -60,8 +60,11 @@ const [validationError, setValidationError] = useState("");
           },
           type: bannerData.type
         });
+
+        
       } catch (error) {
         console.error("Error fetching banner:", error);
+        
         setErrorMessage("Failed to fetch banner data.");
       }
     };
@@ -141,8 +144,12 @@ const handleSubmit = async (e) => {
 
     console.log("Updated banner:", response.data.updatedBanner);
     navigate("/admin/banner");
+    toast.success("Banner updated successfully!");
+    
   } catch (error) {
     console.error("Error updating banner:", error);
+          toast.error("Failed to update banner!");
+    
     setErrorMessage(error.response?.data?.message || "An error occurred");
   } finally {
     setIsSubmitting(false);

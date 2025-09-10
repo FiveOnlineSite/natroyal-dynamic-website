@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const MetaData = () => {
   const [MetaData, setMetaData] = useState([]);
@@ -51,8 +52,13 @@ const MetaData = () => {
       setTimeout(() => {
         navigate("/admin/meta-data");
       }, 3000);
+
+              toast.success("Meta data deleted successfully!");
+      
     } catch (error) {
       console.error("Error deleting Meta data:", error);
+              toast.error("Failed to delete meta data");
+      
     }
   };
   return (

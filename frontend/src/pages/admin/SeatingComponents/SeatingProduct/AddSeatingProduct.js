@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddSeatingProduct = () => {
   const navigate = useNavigate();
@@ -71,9 +72,13 @@ const AddSeatingProduct = () => {
       });
 
       navigate("/admin/seating-products");
+              toast.success("Seating component product created successfully!");
+
     } catch (error) {
       console.error("Error adding seating product:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+              toast.error("Failed to create seating component product");
+      
     } finally {
       setIsSubmitting(false);
     }

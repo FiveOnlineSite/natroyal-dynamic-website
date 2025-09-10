@@ -4,6 +4,7 @@ import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 const AddVinylAppContent = () => {
   const navigate = useNavigate();
@@ -62,9 +63,14 @@ const AddVinylAppContent = () => {
     setTimeout(() => {
       navigate("/admin/vinyl-application-content");
     }, 1000);
+
+            toast.success("Vinyl flooring application content created successfully!");
+
   } catch (error) {
-    console.error("Error adding vinyl applications:", error);
+    console.error("Error adding vinyl application content:", error);
     setErrorMessage(error.response?.data?.message || "An error occurred");
+            toast.error("Failed to created vinyl flooring application content");
+
   } finally {
     setIsSubmitting(false);
   }

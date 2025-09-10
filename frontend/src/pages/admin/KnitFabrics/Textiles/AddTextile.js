@@ -4,7 +4,7 @@ import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import { toast } from "react-toastify";
 
 const AddTextile = () => {
   const navigate = useNavigate();
@@ -45,7 +45,6 @@ const AddTextile = () => {
     formData.append("title", title);
     formData.append("alt", alt);
 
-    // ✅ Append only if not empty
     if (content.trim()) {
       formData.append("content", content);
     }
@@ -68,14 +67,17 @@ const AddTextile = () => {
     });
 
     navigate("/admin/textiles");
+    toast.success("Textile created successfully!");
+    
   } catch (error) {
     console.error("Error adding textiles:", error);
     setErrorMessage(error.response?.data?.message || "An error occurred");
+    toast.error("Failed to create textile");
+    
   } finally {
     setIsSubmitting(false);
   }
 };
-
 
   return (
     <AdminLayout>

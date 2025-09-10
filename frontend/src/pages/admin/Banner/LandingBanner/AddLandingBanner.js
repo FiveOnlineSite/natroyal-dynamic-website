@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddLandingBanner = () => {
   const [banner, setBanner] = useState({ file: "" });
@@ -67,8 +68,12 @@ const AddLandingBanner = () => {
       );
 
       navigate("/admin/landing-banner");
+                    toast.success("Landing banner created successfully!");
+      
     } catch (error) {
       console.error("Error creating landing banner:", error);
+                    toast.error("Landing banner created successfully!");
+      
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {
       setIsSubmitting(false);

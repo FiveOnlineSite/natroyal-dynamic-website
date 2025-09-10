@@ -4,6 +4,7 @@ import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 const EditCoatedProduct = () => {
   const { id } = useParams();
@@ -155,9 +156,15 @@ const EditCoatedProduct = () => {
       setTimeout(() => {
         navigate("/admin/coated-products");
       }, 1000);
+
+            toast.success("Coated fabrics feature updated successfully!");
+      
     } catch (error) {
       console.error("Error adding coated products:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+
+            toast.error("Failed to update coated fabrics feature");
+      
     } finally {
       setIsSubmitting(false);
     }

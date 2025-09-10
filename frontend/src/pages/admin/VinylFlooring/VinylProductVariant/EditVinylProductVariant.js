@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EditVinylProductVariant = () => {
     const { _id , id} = useParams();
@@ -134,9 +135,15 @@ const EditVinylProductVariant = () => {
       setTimeout(() => {
         navigate("/admin/vinyl-product-variants");
       }, 1000);
+
+              toast.success("Vinyl product variant updated successfully!");
+
     } catch (error) {
       console.error("Error adding vinyl product variants:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+
+              toast.error("Failed to update vinyl product variant");
+
     } finally {
       setIsSubmitting(false);
     }

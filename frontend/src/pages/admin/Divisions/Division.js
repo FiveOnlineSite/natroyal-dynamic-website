@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const Division = () => {
   const navigate = useNavigate();
@@ -29,6 +30,44 @@ const Division = () => {
 
     fetchDivision();
   }, []);
+
+  const handleDelete = async (id) => {
+      const confirmDelete = window.confirm("Are you sure you want to delete this division?");
+      if (!confirmDelete) return;
+  
+      try {
+        const access_token = localStorage.getItem("access_token");
+        const apiUrl = process.env.REACT_APP_API_URL;
+  
+        const response = await axios.delete(
+          `${apiUrl}/api/division/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+        setDivision(null);
+        console.log(response.data);
+        setDivision(
+          Division.filter((Division) => Division._id !== id)
+        );
+        setTimeout(() => {
+          navigate("/admin/division");
+        }, 3000);
+  
+        toast.success("Division deleted successfully!");
+        
+      } catch (error) {
+        console.error("Error deleting division:", error);
+        setErrorMessage(
+          error.response?.data?.message || "Failed to delete division"
+        );
+  
+        toast.error("Failed to delete division");
+        
+      }
+    };
 
 
   return (
@@ -115,9 +154,9 @@ const Division = () => {
                         <td className="text-center">
                           <button
                             className="delete-btn"
-                            // onClick={() =>
-                            //   handleDeleteDivision(Division._id, Division.name)
-                            // }
+                            onClick={() =>
+                              handleDelete(Division._id)
+                            }
                           >
                             <i className="las la-trash"></i>{" "}
                           </button>

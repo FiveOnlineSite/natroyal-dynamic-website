@@ -4,6 +4,7 @@ import Layout from "../../../../components/AdminLayout";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const VinylProductContent = () => {
 
@@ -51,9 +52,14 @@ const handleDeleteAppContent = async (id, appName) => {
     setTimeout(() => {
         navigate("/admin/vinyl-product-content");
       }, 3000);
+
+              toast.success("Vinyl flooring product content deleted successfully!");
+
   } catch (error) {
     console.error("Error deleting product content:", error);
     setErrorMessage(error.response?.data?.message || "Failed to delete product content");
+            toast.error("Failed vinyl flooring product content");
+
   }
 };
 

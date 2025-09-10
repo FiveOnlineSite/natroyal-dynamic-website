@@ -3,6 +3,7 @@ import axios from "axios";
 import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { Editor } from "@tinymce/tinymce-react";
+import { toast } from "react-toastify";
 
 const EditPlankCategory = () => {
   const navigate = useNavigate();
@@ -75,9 +76,13 @@ const EditPlankCategory = () => {
       setTimeout(() => {
         navigate("/admin/plank-category");
       }, 1000);
+      toast.success("Plank category updated successfully!");
+      
     } catch (error) {
       console.error("Error updating planks category:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+      toast.error("Failed to update plank category");
+      
     } finally {
       setIsSubmitting(false);
     }

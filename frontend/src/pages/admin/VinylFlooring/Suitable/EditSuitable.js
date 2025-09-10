@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../../../../components/AdminLayout";
+import { toast } from "react-toastify";
 
 const EditSuitable = () => {
   const { id } = useParams();
@@ -127,9 +128,14 @@ useEffect(() => {
       setTimeout(() => {
         navigate("/admin/suitables");
       }, 1000);
+
+              toast.success("Suitable updated successfully!");
+
     } catch (error) {
       console.error("Error updating suitable:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+              toast.error("Failed to update suitable");
+
     } finally {
       setIsSubmitting(false);
     }

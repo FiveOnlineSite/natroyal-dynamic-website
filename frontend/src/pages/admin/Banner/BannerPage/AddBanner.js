@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../../../components/AdminLayout";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddBanner = () => {
+
   const [banner, setBanner] = useState({ file: "" });
   const [alt, setAlt] = useState("");
   const [heading, setHeading] = useState("");
@@ -12,7 +14,7 @@ const AddBanner = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-const [allPages, setAllPages] = useState([])
+  const [allPages, setAllPages] = useState([])
 
 useEffect(() => {
   const fetchAllPages = async () => {
@@ -80,8 +82,12 @@ setValidationError("")
       });
 
       navigate("/admin/banner");
+      toast.success("Banner created successfully!");
+      
     } catch (error) {
       console.error("Error creating banner:", error);
+            toast.error("Failed to create banner");
+      
       setErrorMessage(error.response?.data?.message || "An error occurred");
     } finally {
       setIsSubmitting(false);

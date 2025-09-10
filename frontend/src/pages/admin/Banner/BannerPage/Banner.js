@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../../../components/AdminLayout";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Banner = () => {
   const [banner, setBanner] = useState([]);
@@ -51,10 +52,13 @@ const Banner = () => {
       // }, 2000);
       console.log(response.data);
       setBanner(banner.filter((banner) => banner._id !== id));
+      toast.success("Banner deleted successfully!");
+      
       setTimeout(() => {
         navigate("/admin/banner");
       }, 3000);
     } catch (error) {
+                  toast.error("Failed to delete banner");
       console.error("Error deleting banner:", error);
     }
   };

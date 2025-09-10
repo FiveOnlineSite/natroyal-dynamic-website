@@ -4,6 +4,7 @@ import AdminLayout from "../../../../components/AdminLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { toast } from "react-toastify";
 
 const EditSeatingApp = () => {
   const { id } = useParams();
@@ -124,9 +125,14 @@ const EditSeatingApp = () => {
       setTimeout(() => {
         navigate("/admin/seating-applications");
       }, 1000);
+
+              toast.success("Seating component application updated successfully!");
+      
     } catch (error) {
       console.error("Error adding seating applications:", error);
       setErrorMessage(error.response?.data?.message || "An error occurred");
+              toast.error("Failed to update seating component application");
+      
     } finally {
       setIsSubmitting(false);
     }
