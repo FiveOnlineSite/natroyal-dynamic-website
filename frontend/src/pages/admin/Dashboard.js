@@ -154,7 +154,8 @@ const DashBoard = () => {
             </div>
           ))} */}
 
-          <h2>Natroyal Admin Panel</h2>
+          <h2>Dashboard</h2>
+          <h6>Welcome to Natroyal Group</h6>
         </div>
       </div>
     </AdminLayout>
