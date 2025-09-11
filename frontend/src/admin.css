@@ -690,6 +690,10 @@ select {
   appearance: auto !important;
 }
 
+.error-message{
+  color: var(--red-color)
+}
+
 @media only screen and (max-width: 1200px) {
   .sidebar {
     width: 70px;

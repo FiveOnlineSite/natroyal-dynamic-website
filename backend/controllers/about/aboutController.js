@@ -6,7 +6,7 @@ const fs = require("fs");
 const createAbout = async (req, res) => {
   try {
     const { video, content } = req.body;
-    
+
     let aboutVideo = {};
 
     const file = req.file;
@@ -23,7 +23,7 @@ const createAbout = async (req, res) => {
         });
       }
 
-    const maxVideoSize = 10 * 1024 * 1024; // 10 MB
+    const maxVideoSize = 10 * 1024 * 1024; 
 
     if (isVideo & file.size > maxVideoSize){
     return res.status(400).json({

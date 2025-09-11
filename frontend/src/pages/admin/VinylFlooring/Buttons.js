@@ -53,6 +53,13 @@ const [brochure, setBrochure] = useState({
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+     if (errorMessage) {
+                                      toast.error(errorMessage);
+                                      return;
+                                    }
+
+
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -118,12 +125,28 @@ const [brochure, setBrochure] = useState({
                   type="file"
                   name="technical_specification"
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
                     setTechnicalSpecification({
                       ...technicalSpecification,
                       file: e.target.files[0],
                     })
-                  }
+                  }}
                 />
                 {technicalSpecification?.filepath && (
   <img
@@ -142,6 +165,7 @@ const [brochure, setBrochure] = useState({
                             <CKEditor
                               editor={ClassicEditor}
                               data={installationMaintenance}
+                              required
                               onChange={(event, editor) => {
                                                                   const data = editor.getData();
                                                                   setInstallationMaintenance(data);
@@ -166,12 +190,26 @@ const [brochure, setBrochure] = useState({
                   type="file"
                   name="brochure"
                   accept=".pdf"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 5; 
+                    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} MB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    setErrorMessage("");
+
                     setBrochure({
                       ...brochure,
                       file: e.target.files[0],
                     })
-                  }
+                  }}
                 />
 
                 {brochure?.filepath && (

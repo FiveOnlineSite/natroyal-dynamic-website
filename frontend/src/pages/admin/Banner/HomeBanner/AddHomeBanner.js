@@ -19,6 +19,17 @@ const AddHomeBanner = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (validationError) {
+        toast.error(validationError);
+        return;
+    }
+
+     if (errorMessage) {
+        toast.error(errorMessage);
+        return;
+    }
+
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -93,13 +104,47 @@ setValidationError("")
                  <input
                    type="file"
                    name="banner"
+                   required
                    accept=".webp,.jpg,.jpeg,.png,.mp4"
-                   onChange={(e) =>
-                    setBanner({
-                      ...banner,
-                      file: e.target.files[0],
-                    })
-                  }
+                   onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (!file) return;
+
+                      const ext = file.name.split(".").pop().toLowerCase();
+                      const isImage = ["webp", "jpg", "jpeg", "png"].includes(ext);
+                      const isVideo = ext === "mp4";
+
+                      let maxSizeBytes = 0;
+
+                      if (isImage) maxSizeBytes = 500 * 1024; // 500 KB
+                      else if (isVideo) maxSizeBytes = 10 * 1024 * 1024; // 10 MB
+                      else {
+                        setErrorMessage("Only images or MP4 videos are allowed.");
+                        e.target.value = "";
+                        return;
+                      }
+
+                      if (file.size > maxSizeBytes) {
+                        setErrorMessage(
+                          isImage
+                            ? "Image size must be under 500 KB."
+                            : "Video size must be under 10 MB."
+                        );
+                        e.target.value = "";
+                        return;
+                      }
+
+                      // Clear any previous error
+                      setErrorMessage("");
+
+                      // Update banner state
+                      setBanner({
+                        ...banner,
+                        file,
+                        filepath: URL.createObjectURL(file),
+                        type: isImage ? "image" : "video",
+                      });
+                    }}
                  />
               </div>
             </div>

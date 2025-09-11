@@ -83,7 +83,7 @@ const EditBanner = () => {
 
     setFormData((prev) => ({
       ...prev,
-      type: isImage ? "image" : "video", // 👈 update type when new file chosen
+      type: isImage ? "image" : "video", 
       banner: {
         file,
         filepath: URL.createObjectURL(file),
@@ -100,6 +100,17 @@ const EditBanner = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (isSubmitting) return;
+
+  if (errorMessage) {
+                  toast.error(errorMessage);
+                  return;
+                }
+
+ if (validationError) {
+    toast.error(validationError);
+    return;
+}
+  
   setIsSubmitting(true);
   setErrorMessage("");
 
@@ -156,8 +167,6 @@ const handleSubmit = async (e) => {
   }
 };
 
-
-
   return (
     <Layout>
       <div className="theme-form-header">
@@ -169,12 +178,52 @@ const handleSubmit = async (e) => {
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Banner (Image OR Video)</label>
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   name="banner"
                   accept=".webp,.jpg,.jpeg,.png,.mp4"
-                  onChange={handleChange} 
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const ext = file.name.split(".").pop().toLowerCase();
+                    const isImage = ["webp", "jpg", "jpeg", "png"].includes(ext);
+                    const isVideo = ext === "mp4";
+
+                    let maxSizeBytes = 0;
+
+                    if (isImage) maxSizeBytes = 500 * 1024; // 500 KB
+                    else if (isVideo) maxSizeBytes = 10 * 1024 * 1024; // 10 MB
+                    else {
+                      setErrorMessage("Only images or MP4 videos are allowed.");
+                      e.target.value = "";
+                      return;
+                    }
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(
+                        isImage
+                          ? "Image size must be under 500 KB."
+                          : "Video size must be under 10 MB."
+                      );
+                      e.target.value = "";
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    setFormData((prev) => ({
+                      ...prev,
+                      type: isImage ? "image" : "video",
+                      banner: {
+                        file,
+                        filepath: URL.createObjectURL(file),
+                      },
+                    }));
+                  }}
                 />
+
                 {formData.type === "image" ? (
                   <img
                     className="form-profile"
@@ -202,6 +251,7 @@ const handleSubmit = async (e) => {
                   <input
                     type="text"
                     name="alt"
+                    required
                     value={formData.alt}
                     onChange={handleChange}
                   />
@@ -214,6 +264,7 @@ const handleSubmit = async (e) => {
                 <input
                   type="text"
                   name="heading"
+                  required
                   value={formData.heading}
                   onChange={handleChange}
                 />
@@ -221,21 +272,35 @@ const handleSubmit = async (e) => {
             </div>
              <div className="col-lg-6 col-md-6 col-sm-12 col-12">
             <div className="theme-form">
-              <label>Page</label>
-              <select
-                name="page"
-                value={formData.page}
-                disabled 
-                onChange={handleChange}
-              >
-                <option value="">Select a Page</option>
-                {allPages.map((page, index) => (
-                  <option key={index} value={page.url}>
-                    {page.label}
+                <label>Page</label>
+                <select
+                  name="page"
+                  required
+                  value={formData.page} 
+                  onChange={handleChange}
+                >
+                  <option value="" disabled>
+                    Select a Page
                   </option>
-                ))}
-              </select>
-            </div>
+
+                  {[
+                    { key: "about-us", label: "About Us", url: "/about-us" },
+                    { key: "our-divisions", label: "Our Divisions", url: "/our-divisions" },
+                    { key: "contact-us", label: "Contact Us", url: "/contact-us" },
+                  ].map((p, idx) => (
+                    <option key={`static-${idx}`} value={p.url}>
+                      {p.label}
+                    </option>
+                  ))}
+
+                  {allPages.map((p, idx) => (
+                    <option key={`dynamic-${idx}`} value={p.url}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
             </div>
 
             <div className="col-lg-12 col-md-12 col-sm-12 col-12">

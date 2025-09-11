@@ -75,6 +75,17 @@ const EditCoatedFeature = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (errorMessage) {
+                              toast.error(errorMessage);
+                              return;
+                            }
+        
+            if (validationError) {
+                              toast.error(validationError);
+                              return;
+                            }
+
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -151,7 +162,31 @@ const EditCoatedFeature = () => {
                   type="file"
                   name="icon"
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
+                    setFormData((prev) => ({
+                      ...prev,
+                        icon: {
+                          file,
+                        filepath: URL.createObjectURL(file),
+                        }
+                    }));
+                  }}
                 />
                 {formData.icon?.filepath && (
                   <img

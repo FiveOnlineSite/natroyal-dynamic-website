@@ -65,7 +65,13 @@ const About = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
-    setIsSubmitting(true);
+    
+    if (errorMessage) {
+    toast.error(errorMessage);
+    return;
+  }
+
+  setIsSubmitting(true);
     setErrorMessage("");
 
     try {
@@ -114,8 +120,33 @@ const About = () => {
                   type="file"
                   name="video"
                   accept=".mp4"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 10; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} MB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
+                    setFormData((prev) => ({
+                      ...prev,
+                      video: {
+                        file,
+                        filepath: URL.createObjectURL(file),
+                      },
+                    }));
+                  }}
                 />
+
 
                 {formData.video?.filepath && (
                   <video className="form-profile mt-2" src={formData.video?.filepath} width="200" autoPlay playsInline loop muted />
@@ -129,6 +160,7 @@ const About = () => {
                 <label>Content</label>
                 <CKEditor
                   editor={ClassicEditor}
+                  required
                   data={formData.content}
                   onChange={(event, editor) => {
                     const data = editor.getData();

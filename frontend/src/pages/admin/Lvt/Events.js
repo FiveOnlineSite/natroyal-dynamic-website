@@ -44,6 +44,12 @@ const Events = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (errorMessage) {
+                                  toast.error(errorMessage);
+                                  return;
+                                }
+
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -229,9 +235,9 @@ const Events = () => {
                         accept=".webp,.jpg,.jpeg,.png"
                         onChange={(e) => {
                           const file = e.target.files[0];
-                          if (file && file.size > 10 * 1024 * 1024) {
+                          if (file && file.size > 500 * 1024) {
                             setErrorMessage(
-                              "Thumbnail too large. Max size is 10MB."
+                              "Thumbnail too large. Max size is 500KB."
                             );
                             return;
                           }

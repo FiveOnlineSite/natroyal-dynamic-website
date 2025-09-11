@@ -28,7 +28,6 @@ const AddVinylProduct = () => {
       const apps = res.data.vinylApp || [];
       setApplications(apps);
 
-      // ✅ Pre-select the first application if available
       if (apps.length > 0) {
         setSelectedApplications([apps[0]._id]);
       }
@@ -50,8 +49,20 @@ const AddVinylProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
-    setIsSubmitting(true);
-    setErrorMessage("");
+  
+
+    if (errorMessage) {
+                                          toast.error(errorMessage);
+                                          return;
+                                        }
+                    
+                        if (validationError) {
+                                          toast.error(validationError);
+                                          return;
+                                        }
+    
+setValidationError("");
+setErrorMessage("");
 
     if (!image.file) {
       setValidationError("Image is required.");
@@ -63,6 +74,13 @@ const AddVinylProduct = () => {
       setIsSubmitting(false);
       return;
     }
+
+    if (selectedApplications.length === 0) {
+  setValidationError("Please select at least one application.");
+  setIsSubmitting(false);
+  return;
+}
+  setIsSubmitting(true);
 
     try {
       const access_token = localStorage.getItem("access_token");
@@ -104,7 +122,7 @@ const AddVinylProduct = () => {
       <div className="form-white-bg">
         <form onSubmit={handleSubmit}>
           <div className="row">
-            {/* ✅ Applications with checkboxes */}
+            {/* Applications with checkboxes */}
             <div className="col-12">
               <div className="theme-form">
                 <label>Applications</label>
@@ -128,6 +146,9 @@ const AddVinylProduct = () => {
                     </div>
                   ))}
                 </div>
+                {validationError && (
+                  <div className="text-danger mt-2">{validationError}</div>
+                )}
               </div>
             </div>
 
@@ -153,12 +174,29 @@ const AddVinylProduct = () => {
                   type="file"
                   name="image"
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
                     setImage({
-                      ...image,
-                      file: e.target.files[0],
-                    })
-                  }
+                        file,
+                        filepath: URL.createObjectURL(file),
+                      
+                    });
+                  }}
                 />
               </div>
             </div>

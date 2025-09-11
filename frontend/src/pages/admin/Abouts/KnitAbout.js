@@ -92,6 +92,7 @@ const KnitAbout = () => {
                 <input
                   type="text"
                   name="title1"
+                  required
                   value={title1}
                   onChange={(e) => setTitle1(e.target.value)}
                 />
@@ -117,6 +118,7 @@ const KnitAbout = () => {
                   type="text"
                   name="subtitle"
                   value={subtitle}
+                  required
                   onChange={(e) => setSubtitle(e.target.value)}
                 />
               </div>
@@ -133,6 +135,7 @@ const KnitAbout = () => {
                       const data = editor.getData();
                       setContent(data);
                     }}
+                    required
                     config={{
                       toolbar: [
                         "heading", "|",

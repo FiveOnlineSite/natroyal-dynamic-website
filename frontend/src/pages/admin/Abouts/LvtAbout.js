@@ -47,6 +47,12 @@ const LvtAbout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+     if (errorMessage) {
+        toast.error(errorMessage);
+        return;
+      }
+    
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -104,6 +110,7 @@ const LvtAbout = () => {
                 <input
                   type="text"
                   name="title1"
+                  required
                   value={title1}
                   onChange={(e) => setTitle1(e.target.value)}
                 />
@@ -129,6 +136,7 @@ const LvtAbout = () => {
                   type="text"
                   name="subtitle"
                   value={subtitle}
+                  required
                   onChange={(e) => setSubtitle(e.target.value)}
                 />
               </div>
@@ -141,6 +149,7 @@ const LvtAbout = () => {
                   type="text"
                   name="alt"
                   value={alt}
+                  required
                   onChange={(e) => setAlt(e.target.value)}
                 />
               </div>
@@ -154,12 +163,28 @@ const LvtAbout = () => {
                   type="file"
                   name="image"
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
                     setImage({
                       ...image,
                       file: e.target.files[0],
                     })
-                  }
+                  }}
                 />
                 {image.filepath && (
                   <img
@@ -183,6 +208,7 @@ const LvtAbout = () => {
                       const data = editor.getData();
                       setContent(data);
                    }}
+                   required
                    config={{
                                       toolbar: [
                                         "heading", "|",

@@ -6,16 +6,29 @@ const createUpload = require("../../utils/s3Uploads");
 
 const uploadMedia = createUpload("lvt-about");
 
+const handleUpload = (uploadFn) => (req, res, next) => {
+  uploadFn(req, res, (err) => {
+    if (err) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        return res.status(400).json({ message: "Image size should be max 500 KB" });
+      }
+      return res.status(400).json({ message: err.message });
+    }
+    next();
+  });
+};
+
+
 route.post(
   "/",
   adminMiddleware,
-  uploadMedia.single("image"),
+  handleUpload(uploadMedia.single("image")),
   lvtAboutController.createLvtAbout
 );
 
 route.patch(
   "/",
-  uploadMedia.single("image"),
+  handleUpload(uploadMedia.single("image")),
   adminMiddleware,
   lvtAboutController.updateLvtAbout
 );

@@ -47,6 +47,12 @@ const SeatingAbout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+    
+         if (errorMessage) {
+            toast.error(errorMessage);
+            return;
+        }
+        
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -105,6 +111,7 @@ const SeatingAbout = () => {
                   type="text"
                   name="title1"
                   value={title1}
+                  required
                   onChange={(e) => setTitle1(e.target.value)}
                 />
               </div>
@@ -130,12 +137,28 @@ const SeatingAbout = () => {
                   type="file"
                   name="image"
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
                     setImage({
                       ...image,
                       file: e.target.files[0],
                     })
-                  }
+                  }}
                 />
                 {image.filepath && (
                   <img
@@ -156,6 +179,7 @@ const SeatingAbout = () => {
                   type="text"
                   name="alt"
                   value={alt}
+                  required
                   onChange={(e) => setAlt(e.target.value)}
                 />
               </div>
@@ -172,6 +196,7 @@ const SeatingAbout = () => {
                                       const data = editor.getData();
                                       setContent(data);
                    }}
+                   required
                    config={{
                                       toolbar: [
                                         "heading", "|",

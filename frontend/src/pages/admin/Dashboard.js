@@ -138,7 +138,7 @@ const DashBoard = () => {
     <AdminLayout>
       <div className="container">
         <div className="row">
-          {dashboardItems.map((item, index) => (
+          {/* {dashboardItems.map((item, index) => (
             <div className="col-md-3" key={index}>
               <NavLink to={item.to} title={item.title}>
                 <div className="dashboardcard">
@@ -152,7 +152,9 @@ const DashBoard = () => {
                 </div>
               </NavLink>
             </div>
-          ))}
+          ))} */}
+
+          <h2>Natroyal Admin Panel</h2>
         </div>
       </div>
     </AdminLayout>

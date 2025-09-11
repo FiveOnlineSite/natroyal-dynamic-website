@@ -98,7 +98,7 @@ const updateWhatWeOffer = async (req, res) => {
         {
           filename: path.basename(imageFile.key), // "1756968423495-2.jpg"
           filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${imageFile.key}`, // keep "images/banners/..."
-          alt: alt || currentWhatWeOffer.image?.[0]?.alt || "",
+          
         },
       ];
     }
@@ -127,6 +127,8 @@ const updateWhatWeOffer = async (req, res) => {
       updatedFields.title2 = title2;
     if (typeof subtitle !== "undefined") updatedFields.subtitle = subtitle;
     if (typeof content !== "undefined") updatedFields.content = content;
+     if (typeof alt !== "undefined") updatedFields.alt = alt;
+
     // Update the model
     const updatedWhatWeOffer = await OfferModel.findByIdAndUpdate(
       currentWhatWeOffer._id,

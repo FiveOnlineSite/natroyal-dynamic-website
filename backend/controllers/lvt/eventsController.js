@@ -25,6 +25,8 @@ const createEvent = async (req, res) => {
 
     const uploadedEvent = [];
 
+    const MAX_FILE_SIZE = 500 * 1024;
+
     for (let i = 0; i < eventData.length; i++) {
       const event = eventData[i];
       const file = files[i];
@@ -37,10 +39,16 @@ const createEvent = async (req, res) => {
         });
       }
 
+      if (file.size > MAX_FILE_SIZE) {
+        return res.status(400).json({
+          message: `File size exceeds 500KB for ${file.originalname}`,
+        });
+      }
+
       uploadedEvent.push({
         youtube_thumbnail: [
          {
-           filename: path.basename(file.key), // "1756968423495-2.jpg"
+           filename: path.basename(file.key),
            filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
           }
         ],
@@ -78,10 +86,9 @@ const updateEvent = async (req, res) => {
       eventData = JSON.parse(req.body.event);
     }
 
-    const files = req.files; // using upload.any()
+    const files = req.files; 
     const fileMap = {};
 
-    // Create a lookup map: { youtube_thumbnail_0: file, youtube_thumbnail_1: file, ... }
     for (const file of files) {
       fileMap[file.fieldname] = file;
     }
@@ -96,9 +103,11 @@ const updateEvent = async (req, res) => {
 
     for (let i = 0; i < eventData.length; i++) {
       const event = eventData[i];
-      const file = fileMap[event.thumbnail_key]; // 👈 this is the key fix
+      const file = fileMap[event.thumbnail_key]; 
 
       let imageData = [];
+
+      const MAX_FILE_SIZE = 500 * 1024;
 
       if (file) {
         const extname = path.extname(file.originalname).toLowerCase();
@@ -106,6 +115,12 @@ const updateEvent = async (req, res) => {
         if (!isImage) {
           return res.status(400).json({
             message: `Unsupported image type: ${file.originalname}`,
+          });
+        }
+
+        if (file.size > MAX_FILE_SIZE) {
+          return res.status(400).json({
+            message: `File size exceeds 500KB for ${file.originalname}`,
           });
         }
       

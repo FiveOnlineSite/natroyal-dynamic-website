@@ -41,6 +41,17 @@ const AddCoatedProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (errorMessage) {
+                          toast.error(errorMessage);
+                          return;
+                        }
+    
+        if (validationError) {
+                          toast.error(validationError);
+                          return;
+                        }
+
     setIsSubmitting(true);
     setErrorMessage("");
     setValidationError("");
@@ -77,8 +88,8 @@ const AddCoatedProduct = () => {
       formData.append("application", application);
       formData.append("name", name);
       formData.append("alt", alt);
-      formData.append("button", button);
-      formData.append("content", content);
+      formData.append("button", button || "");
+      formData.append("content", content || "");
 
       if (image.file) {
         formData.append("image", image.file);
@@ -146,7 +157,6 @@ const AddCoatedProduct = () => {
                 <input
                   type="text"
                   name="name"
-                  required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -160,13 +170,31 @@ const AddCoatedProduct = () => {
                 <input
                   type="file"
                   name="image"
+                  required
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
                     setImage({
-                      ...image,
-                      file: e.target.files[0],
-                    })
-                  }
+                        file,
+                        filepath: URL.createObjectURL(file),
+                      
+                    });
+                  }}
                 />
               </div>
             </div>
@@ -188,7 +216,7 @@ const AddCoatedProduct = () => {
             {/* Button */}
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
-                <label>Button Text</label>
+                <label>Button</label>
                 <input
                   type="text"
                   name="button"
@@ -198,6 +226,7 @@ const AddCoatedProduct = () => {
               </div>
             </div>
 
+          {button.trim() !== "" && (
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Brochure (PDF)</label>
@@ -205,15 +234,33 @@ const AddCoatedProduct = () => {
                   type="file"
                   name="brochure"
                   accept=".pdf"
-                  onChange={(e) =>
+                  required
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 5; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
                     setBrochure({
-                      ...brochure,
-                      file: e.target.files[0],
-                    })
-                  }
+                        file,
+                        filepath: URL.createObjectURL(file),
+                      
+                    });
+                  }}
                 />
               </div>
             </div>
+            )}
 
             {/* Content */}
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">

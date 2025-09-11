@@ -31,6 +31,17 @@ const AddDivision = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (errorMessage) {
+                              toast.error(errorMessage);
+                              return;
+                            }
+        
+            if (validationError) {
+                              toast.error(validationError);
+                              return;
+                            }
+
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -143,6 +154,7 @@ const AddDivision = () => {
                             <CKEditor
                               editor={ClassicEditor}
                               data={content}
+                              required
                               onChange={(event, editor) => {
                                                                                                                                                                          const data = editor.getData();
                                                                                                                                                                          setContent(data);
@@ -167,13 +179,31 @@ const AddDivision = () => {
                 <input
                   type="file"
                   name="image"
+                  required
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
                     setImage({
-                      ...image,
-                      file: e.target.files[0],
-                    })
-                  }
+                        file,
+                        filepath: URL.createObjectURL(file),
+                      
+                    });
+                  }}
                 />
               </div>
             </div>
@@ -198,12 +228,29 @@ const AddDivision = () => {
                   type="file"
                   name="logo"
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
                     setLogo({
-                      ...logo,
-                      file: e.target.files[0],
-                    })
-                  }
+                        file,
+                        filepath: URL.createObjectURL(file),
+                      
+                    });
+                  }}
                 />
               </div>
             </div>

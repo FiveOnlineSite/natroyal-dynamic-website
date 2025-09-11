@@ -40,6 +40,12 @@ const Plank = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+      if (errorMessage) {
+      toast.error(errorMessage);
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -94,6 +100,7 @@ const Plank = () => {
                   type="text"
                   name="title1"
                   value={title1}
+                  required
                   onChange={(e) => setTitle1(e.target.value)}
                 />
               </div>
@@ -120,6 +127,7 @@ const Plank = () => {
                   type="text"
                   name="subtitle"
                   value={subtitle}
+                  required
                   onChange={(e) => setSubtitle(e.target.value)}
                 />
               </div>
@@ -132,12 +140,26 @@ const Plank = () => {
                   type="file"
                   name="brochure"
                   accept=".pdf"
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 5; 
+                    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} MB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    setErrorMessage("");
+
                     setBrochure({
                       ...brochure,
                       file: e.target.files[0],
                     })
-                  }
+                  }}
                 />
 
                 {brochure?.length > 0 && (

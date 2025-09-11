@@ -87,88 +87,125 @@ const EditCoatedProduct = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+  const { name, value, files } = e.target;
 
-    if (name === "image") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        image: {
-          file: files[0],
-          filepath: URL.createObjectURL(files[0]),
-        },
-      }));
-        } else if (name === "brochure") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        brochure: {
-          filename: files[0]?.name || prevFormData.brochure.filename,
-          filepath: URL.createObjectURL(files[0]),
-          file: files[0],
-        },
+  if (name === "image") {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      image: {
+        file: files[0],
+        filepath: URL.createObjectURL(files[0]),
+      },
+    }));
+  } else if (name === "brochure") {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      brochure: {
+        filename: files[0]?.name || prevFormData.brochure.filename,
+        filepath: URL.createObjectURL(files[0]),
+        file: files[0],
+      },
+    }));
+  } else if (name === "button") {
+    // When button is emptied, clear brochure too
+    if (value.trim() === "") {
+      setFormData((prev) => ({
+        ...prev,
+        button: "",
+        brochure: { file: "", filepath: "", filename: "" },
       }));
     } else {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [name]: value.trim() === "" ? "" : value,
-      }));
+      setFormData((prev) => ({ ...prev, button: value }));
     }
-  };
+  } else {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value.trim() === "" ? "" : value,
+    }));
+  }
+};
+
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-    setErrorMessage("");
+  e.preventDefault();
+  if (isSubmitting) return;
 
-    const isImage = !!formData.image.file;
+  if (errorMessage) {
+    toast.error(errorMessage);
+    return;
+  }
 
-    if (!isImage) {
-      setValidationError("Image is required.");
-      setIsSubmitting(false);
-      return;
+  if (validationError) {
+    toast.error(validationError);
+    return;
+  }
+
+  setIsSubmitting(true);
+  setErrorMessage("");
+
+  const isImage = !!formData.image.file || !!formData.image.filepath;
+
+  if (!isImage) {
+    setValidationError("Image is required.");
+    setIsSubmitting(false);
+    return;
+  }
+
+  // ✅ Validate brochure when button has text
+  if (
+    formData.button.trim() !== "" &&
+    !formData.brochure.file &&
+    !formData.brochure.filepath
+  ) {
+    setValidationError("Please upload a brochure when Button text is provided.");
+    setIsSubmitting(false);
+    return;
+  }
+
+  try {
+    const access_token = localStorage.getItem("access_token");
+    const apiUrl = process.env.REACT_APP_API_URL;
+    const formDataToSend = new FormData();
+
+    formDataToSend.append("name", formData.name || "");
+    formDataToSend.append("alt", formData.alt || "");
+    formDataToSend.append("content", formData.content || "");
+    formDataToSend.append("button", formData.button || "");
+
+    if (formData.image.file) {
+      formDataToSend.append("image", formData.image.file);
+    }
+    formDataToSend.append("application", formData.application);
+
+    if (formData.brochure?.file) {
+      formDataToSend.append("brochure", formData.brochure.file);
     }
 
-    try {
-      const access_token = localStorage.getItem("access_token");
-      const apiUrl = process.env.REACT_APP_API_URL;
-      const formDataToSend = new FormData();
-
-      formDataToSend.append("name", formData.name || "");
-      formDataToSend.append("alt", formData.alt || "");
-      formDataToSend.append("content", formData.content || "");
-
-      if (isImage) {
-        formDataToSend.append("image", formData.image.file);
-      }
-      formDataToSend.append("application", formData.application);
-
-      if (formData.brochure?.file) {
-        formDataToSend.append("brochure", formData.brochure.file);
-      }
-
-      await axios.patch(`${apiUrl}/api/coated-product/${id}`, formDataToSend, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      setTimeout(() => {
-        navigate("/admin/coated-products");
-      }, 1000);
-
-            toast.success("Coated fabrics feature updated successfully!");
-      
-    } catch (error) {
-      console.error("Error adding coated products:", error);
-      setErrorMessage(error.response?.data?.message || "An error occurred");
-
-            toast.error("Failed to update coated fabrics feature");
-      
-    } finally {
-      setIsSubmitting(false);
+    if (formData.button.trim() === "") {
+      formDataToSend.append("removeBrochure", "true");
     }
-  };
+
+    await axios.patch(`${apiUrl}/api/coated-product/${id}`, formDataToSend, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    setTimeout(() => {
+      navigate("/admin/coated-products");
+    }, 1000);
+
+    toast.success("Coated fabrics product updated successfully!");
+  } catch (error) {
+    console.error("Error updating coated products:", error);
+    setErrorMessage(error.response?.data?.message || "An error occurred");
+    toast.error("Failed to update coated fabrics product");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <AdminLayout>
@@ -221,7 +258,31 @@ const EditCoatedProduct = () => {
                   type="file"
                   name="image"
                   accept=".webp, .png, .jpg, .jpeg"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 500; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
+                    setFormData((prev) => ({
+                      ...prev,
+                        image: {
+                          file,
+                        filepath: URL.createObjectURL(file),
+                        }
+                    }));
+                  }}
                 />
                 {formData.image.filepath && (
                   <img
@@ -252,21 +313,47 @@ const EditCoatedProduct = () => {
                 <label>Button</label>
                 <input
                   type="text"
-                  name="alt"
+                  name="button"
                   value={formData.button}
                   onChange={handleChange}
                 />
               </div>
             </div>
 
-              <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+{formData.button.trim() !== "" && (
+    <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Brochure</label>
                 <input
+                  key={formData.button} 
                   type="file"
                   name="brochure"
                   accept=".pdf"
-                  onChange={handleChange}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const maxSizeMB = 5; // 10 MB
+                    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+                    if (file.size > maxSizeBytes) {
+                      setErrorMessage(`File is too large! Maximum allowed size is ${maxSizeMB} KB.`);
+                      e.target.value = ""; // clear the file input
+                      return;
+                    }
+
+                    // Clear any previous error
+                    setErrorMessage("");
+
+                    // Proceed if size is okay
+                    setFormData((prev) => ({
+                      ...prev,
+                        brochure: {
+                          file,
+                        filepath: URL.createObjectURL(file),
+                        }
+                    }));
+                  }}
                 />
                 {formData.brochure?.filepath && formData.brochure.filepath.trim() !== "" ? (
                           <a
@@ -281,6 +368,8 @@ const EditCoatedProduct = () => {
                         )}
               </div>
             </div>
+)}
+              
 
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
