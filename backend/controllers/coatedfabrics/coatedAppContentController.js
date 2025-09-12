@@ -2,6 +2,15 @@ const CoatedAppContentModel = require("../../models/coatedfabrics/coatedAppConte
 const CoatedAppModel = require("../../models/coatedfabrics/coatedAppModel");
 const mongoose = require("mongoose");
 
+const slugify = (str = "") =>
+  str
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")        // replace &
+    .replace(/\//g, "-")         // replace /
+    .replace(/[^a-z0-9]+/g, "-") // other chars → -
+    .replace(/^-+|-+$/g, "");    // trim - at start/end
+
 const createCoatedAppContent = async (req, res) => {
   try {
     const { title1, title2, content } = req.body;
@@ -98,30 +107,44 @@ const updateCoatedAppContent = async (req, res) => {
 
 const getCoatedAppContentByAppName = async (req, res) => {
   try {
-    let appName = req.params.name || ""; // "education" or "royal-star"
-     appName = appName.toLowerCase();
-
-     const contents = await CoatedAppContentModel.find().populate("application", "name");
-
-     const normalize = (str) =>
-           str?.toLowerCase().replace(/[-\s]+/g, "-").replace(/\//g, "-"); // turn spaces and dashes into "-"
-     
-     const appContent = contents.filter(
-      (c) => normalize(c.application?.name) === normalize(appName)
-    );
-
-    if (!appContent || appContent.length === 0) {
-      return res.status(404).json({ message: "No appContent found for this app" });
+      const paramSlug = slugify(req.params.name || "");
+  
+      // Get all apps (or you could query directly if you have many)
+      const applications = await CoatedApplicationModel.find({}, "name");
+  
+      console.log("paramSlug:", paramSlug);
+  
+  applications.forEach((a) =>
+    console.log("db name:", JSON.stringify(a.name), "=>", slugify(a.name))
+  );
+      // Find the app whose normalized name matches the URL
+      const matchedApp = applications.find(
+        (app) => slugify(app.name) === paramSlug
+      );
+  
+      if (!matchedApp) {
+        return res.status(404).json({ message: "Application not found" });
+      }
+  
+      // Fetch products linked to that application
+      const contents = await CoatedAppContentModel.find({
+        application: matchedApp._id,
+      }).populate("application", "name");
+  
+      if (!contents.length) {
+        return res
+          .status(404)
+          .json({ message: "No app content found for this application" });
+      }
+  
+      res.status(200).json({
+        message: "app content fetched successfully",
+        content: contents,
+      });
+    } catch (err) {
+      console.error("Error fetching coated app content by app name:", err);
+      res.status(500).json({ message: "Server error" });
     }
-
-    res.status(200).json({
-      message: "appContent fetched by app successfully",
-      appContent
-    });
-  } catch (err) {
-    console.error("Error fetching coated appContent by app name:", err);
-    res.status(500).json({ message: "Server error" });
-  }
 };
 
 const getCoatedAppContent = async (req, res) => {

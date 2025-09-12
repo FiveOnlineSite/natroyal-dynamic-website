@@ -90,7 +90,17 @@ const CoatedFabrics = () => {
           <div className="row applications-row mt-5">
             {coatedApp && coatedApp.map((application) => (
                <div className="col-lg-6">
-              <NavLink to={`/coated-fabrics/applications/${application.name.toLowerCase().replace(/\s+/g, "-")}`}>
+              <NavLink 
+                to={`/coated-fabrics/applications/${application.name
+                    .toLowerCase()
+                    .trim()
+                    .replace(/&/g, "and")
+                    .replace(/\//g, "-")
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-+|-+$/g, "")
+                  }`}
+                end
+              >
                 <div className="single-application">
                   {
                   application.image?.[0]?.filepath && (

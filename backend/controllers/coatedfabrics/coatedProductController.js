@@ -5,6 +5,15 @@ const mongoose = require("mongoose");
 const CoatedProductsModel = require("../../models/coatedfabrics/coatedProductModel");
 const CoatedApplicationModel = require("../../models/coatedfabrics/coatedAppModel");
 
+const slugify = (str = "") =>
+  str
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")        // replace &
+    .replace(/\//g, "-")         // replace /
+    .replace(/[^a-z0-9]+/g, "-") // other chars → -
+    .replace(/^-+|-+$/g, "");    // trim - at start/end
+
 const createCoatedProduct = async (req, res) => {
   try {
     let { alt, name, content, button, application } = req.body;
@@ -170,31 +179,42 @@ const updateCoatedProduct = async (req, res) => {
 
 const getCoatedProductByAppName = async (req, res) => {
   try {
-    let appName = req.params.name || "";
-    appName = appName.toLowerCase();
+    const paramSlug = slugify(req.params.name || "");
 
-    const products = await CoatedProductsModel.find().populate("application", "name");
+    // Get all apps (or you could query directly if you have many)
+    const applications = await CoatedApplicationModel.find({}, "name");
 
-    const normalize = (str) =>
-      str?.toLowerCase().replace(/[-\s]+/g, "-").replace(/\//g, "-"); // turn spaces and dashes into "-"
+    console.log("paramSlug:", paramSlug);
 
-
-    const product = products.filter(
-      (c) => normalize(c.application?.name) === normalize(appName)
+applications.forEach((a) =>
+  console.log("db name:", JSON.stringify(a.name), "=>", slugify(a.name))
+);
+    // Find the app whose normalized name matches the URL
+    const matchedApp = applications.find(
+      (app) => slugify(app.name) === paramSlug
     );
 
-    if (!product || product.length === 0) {
+    if (!matchedApp) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    // Fetch products linked to that application
+    const products = await CoatedProductsModel.find({
+      application: matchedApp._id,
+    }).populate("application", "name");
+
+    if (!products.length) {
       return res
         .status(404)
         .json({ message: "No products found for this application" });
     }
 
     res.status(200).json({
-      message: "productContent fetched by product successfully",
-      product,
+      message: "Products fetched successfully",
+      product: products,
     });
   } catch (err) {
-    console.error("Error fetching coated productContent by product name:", err);
+    console.error("Error fetching coated product by app name:", err);
     res.status(500).json({ message: "Server error" });
   }
 };

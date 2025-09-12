@@ -57,8 +57,8 @@ const Laboratory = () => {
         <div className="slide-container">
           <div className="poster-container">
             <img
-              // src="/images/coated-fabrics/R&D 5.png"
-              src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751286117/R_D_5_f6jjyy.png"
+              src="/images/coated-fabrics/R&D 5.png"
+              // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751286117/R_D_5_f6jjyy.png"
               alt="Poster"
               className="poster-image"
             />

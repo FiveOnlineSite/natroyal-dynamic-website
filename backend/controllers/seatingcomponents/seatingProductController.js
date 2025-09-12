@@ -10,7 +10,6 @@ const createSeatingProduct = async (req, res) => {
   try {
     let { alt, name, application } = req.body;
 
-    // 🔹 Check if application exists
     const applicationExists = await SeatingAppModel.findById(application);
     if (!applicationExists) {
       return res.status(400).json({ message: "Application not found" });
@@ -27,7 +26,9 @@ const createSeatingProduct = async (req, res) => {
     //   }
     // }
 
-    const totalSeatingProducts = await SeatingProductModel.countDocuments();
+    const totalSeatingProducts = await SeatingProductModel.countDocuments({
+      application,
+    });
 
     let imageData = {};
     if (req.file) {

@@ -114,8 +114,8 @@ const AboutCoated = () => {
         <div className="slide-container">
           <div className="poster-container">
             <img
-              // src="/images/banners/New Project.png"
-              src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277283/New_Project_ynkey7.png"
+              src="/images/banners/New Project.png"
+              // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277283/New_Project_ynkey7.png"
               alt="Poster"
               className="poster-image"
             />
@@ -209,8 +209,8 @@ const AboutCoated = () => {
             </div>
             <div className="col-lg-4">
               <img
-                // src="/images/coated-fabrics/WhatsApp Image 2025-06-02 at 14.28.47.jpeg"
-                src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751286128/WhatsApp_Image_2025-06-02_at_14.28.47_tqqe80.jpg"
+                src="/images/coated-fabrics/WhatsApp Image 2025-06-02 at 14.28.47.jpeg"
+                // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751286128/WhatsApp_Image_2025-06-02_at_14.28.47_tqqe80.jpg"
                 alt="quality-policy-img"
                 className="w-100"
               />

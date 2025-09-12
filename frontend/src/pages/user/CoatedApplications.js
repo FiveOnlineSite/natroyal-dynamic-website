@@ -83,15 +83,21 @@ const CoatedApplications = () => {
             <ul className="application-tabs d-flex align-items-center justify-content-center">
               {coatedAppTab && coatedAppTab.map((app) => (
               <li className="nav-item dropdown" key={app._id}>
-                <NavLink 
-                  className="nav-link" 
+                <NavLink
+                  className="nav-link"
                   to={`/coated-fabrics/applications/${app.name
-                  .toLowerCase()
-                  .replace(/[/\s]+/g, "-")}`} 
+                    .toLowerCase()
+                    .trim()
+                    .replace(/&/g, "and")
+                    .replace(/\//g, "-")
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-+|-+$/g, "")
+                  }`}
                   end
                 >
                   {app.name}
                 </NavLink>
+
               </li>
                ))}
             </ul>

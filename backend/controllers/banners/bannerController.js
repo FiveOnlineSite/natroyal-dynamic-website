@@ -205,9 +205,11 @@ const getPagesForBanner = async (req, res) => {
       if (!str || typeof str !== "string") return "";
       return str
         .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/\//g, "-"); 
+    .trim()
+    .replace(/&/g, "and")         // replace &
+    .replace(/\//g, "-")          // replace /
+    .replace(/[^a-z0-9]+/g, "-")  // non-alphanumeric → -
+    .replace(/^-+|-+$/g, ""); 
     };
 
     const safePage = (label, url) => ({

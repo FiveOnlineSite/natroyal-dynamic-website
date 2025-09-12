@@ -190,8 +190,8 @@ const RoyalKnit = () => {
           <div className="row align-items-center">
             <div className="col-lg-6">
               <img
-                // src="/images/banners/Products For Lamination 2.png"
-                src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277323/Products_For_Lamination_2_lt7kkt.png"
+                src="/images/banners/Products For Lamination 2.png"
+                // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277323/Products_For_Lamination_2_lt7kkt.png"
                 alt="about-knit-img"
                 className="w-100"
               />
@@ -289,8 +289,8 @@ const RoyalKnit = () => {
 
             <div className="col-lg-6 order-lg-2 order-1">
               <img
-                // src="/images/banners/Roll Image[1][1].jpg"
-                src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277330/Roll_Image_1_1_yllw8t.jpg"
+                src="/images/banners/Roll Image[1][1].jpg"
+                // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277330/Roll_Image_1_1_yllw8t.jpg"
                 alt="about-knit-img"
                 className="w-100"
               />
