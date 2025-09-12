@@ -16,17 +16,16 @@ const createSeatingProduct = async (req, res) => {
       return res.status(400).json({ message: "Application not found" });
     }
 
-    // 🔹 Only check duplicates if name is provided
-    if (name && name.trim()) {
-      const existingProduct = await SeatingProductModel.findOne({
-        name: name.trim(),
-      });
-      if (existingProduct) {
-        return res
-          .status(400)
-          .json({ message: "Product with this name already exists." });
-      }
-    }
+    // if (name && name.trim()) {
+    //   const existingProduct = await SeatingProductModel.findOne({
+    //     name: name.trim(),
+    //   });
+    //   if (existingProduct) {
+    //     return res
+    //       .status(400)
+    //       .json({ message: "Product with this name already exists." });
+    //   }
+    // }
 
     const totalSeatingProducts = await SeatingProductModel.countDocuments();
 
@@ -77,24 +76,24 @@ const updateSeatingProduct = async (req, res) => {
 
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-   if (name !== undefined) {
-  if (name.trim() === "") {
-    // User cleared the field → set it to empty
-    product.name = "";
-  } else {
-    // Check duplicate only if not empty
-    const duplicate = await SeatingProductModel.findOne({
-      name: name.trim(),
-      _id: { $ne: productId },
-    });
-    if (duplicate) {
-      return res
-        .status(400)
-        .json({ message: "Another product with this name already exists." });
-    }
-    product.name = name.trim();
-  }
-}
+//    if (name !== undefined) {
+//   if (name.trim() === "") {
+//     // User cleared the field → set it to empty
+//     product.name = "";
+//   } else {
+//     // Check duplicate only if not empty
+//     const duplicate = await SeatingProductModel.findOne({
+//       name: name.trim(),
+//       _id: { $ne: productId },
+//     });
+//     if (duplicate) {
+//       return res
+//         .status(400)
+//         .json({ message: "Another product with this name already exists." });
+//     }
+//     product.name = name.trim();
+//   }
+// }
 
     // Handle image upload...
     if (req.file) {
