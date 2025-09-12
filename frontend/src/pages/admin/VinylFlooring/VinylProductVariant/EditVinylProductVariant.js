@@ -112,7 +112,6 @@ const EditVinylProductVariant = () => {
                                           return;
                                         }
 
-    setIsSubmitting(true);
     setErrorMessage("");
 
     const isImage = !!formData.image.file;
@@ -122,6 +121,9 @@ const EditVinylProductVariant = () => {
       setIsSubmitting(false);
       return;
     }
+
+    setIsSubmitting(true);
+
 
     try {
       const access_token = localStorage.getItem("access_token");

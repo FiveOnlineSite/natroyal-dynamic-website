@@ -71,7 +71,8 @@ const ConnectSection = () => {
           {/* Left side video */}
           <div className="col-lg-6 p-lg-0 p-auto">
             <video
-              src="https://res.cloudinary.com/dcmdihrzp/video/upload/v1751367562/India_s_Largest_Manufacturer___LVT_PVC_Flooring_Leather_Fabrics_More_wdurva.mp4"
+              // src="https://res.cloudinary.com/dcmdihrzp/video/upload/v1751367562/India_s_Largest_Manufacturer___LVT_PVC_Flooring_Leather_Fabrics_More_wdurva.mp4"
+              src="/videos/connect.mp4"
               muted
               controls
               loop

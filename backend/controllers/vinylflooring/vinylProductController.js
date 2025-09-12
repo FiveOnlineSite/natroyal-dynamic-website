@@ -98,61 +98,74 @@ const updateVinylProduct = async (req, res) => {
     const product = await VinylProductModel.findById(productId);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
+    // --- Handle name duplicate check (same as before)
     if (name) {
       const duplicate = await VinylProductModel.findOne({
         name: name.trim(),
         _id: { $ne: productId },
       });
       if (duplicate) {
-        return res
-          .status(400)
-          .json({ message: "Another product with this name already exists." });
+        return res.status(400).json({ message: "Another product with this name already exists." });
       }
     }
 
+    // --- Handle image
     if (file) {
       const ext = path.extname(file.originalname).toLowerCase();
       if (![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) {
-        return res
-          .status(400)
-          .json({ message: `Unsupported file type: ${file.originalname}` });
+        return res.status(400).json({ message: `Unsupported file type: ${file.originalname}` });
       }
-      
       product.image = [
-         {
-                   filename: path.basename(file.key), // "1756968423495-2.jpg"
-                   filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
-                  }
+        {
+          filename: path.basename(file.key),
+          filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`,
+        },
       ];
     }
 
     if (alt !== undefined) product.alt = alt;
     if (name !== undefined) product.name = name;
 
-    // 👇 overwrite applications array
+    // --- Handle applications
     let apps = req.body.applications;
     if (typeof apps === "string") apps = JSON.parse(apps);
 
     if (!apps || !Array.isArray(apps) || apps.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "At least one application is required." });
+      return res.status(400).json({ message: "At least one application is required." });
     }
 
-    product.applications = apps;
+    const oldAppIds = product.applications.map(String);
+    const newAppIds = apps;
 
+    // Save new list to product
+    product.applications = newAppIds;
     await product.save();
+
+    // Find differences
+    const toAdd = newAppIds.filter((id) => !oldAppIds.includes(id));
+    const toRemove = oldAppIds.filter((id) => !newAppIds.includes(id));
+
+    if (toAdd.length > 0) {
+      await VinylAppModel.updateMany(
+        { _id: { $in: toAdd } },
+        { $addToSet: { products: product._id } }
+      );
+    }
+    if (toRemove.length > 0) {
+      await VinylAppModel.updateMany(
+        { _id: { $in: toRemove } },
+        { $pull: { products: product._id } }
+      );
+    }
+
     res.status(200).json({
       message: "Vinyl product updated successfully",
       vinylProduct: product,
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: `Error updating vinyl product: ${error.message}` });
+    res.status(500).json({ message: `Error updating vinyl product: ${error.message}` });
   }
 };
-
 
 const getProductWithSuitables = async (req, res) => {
   try {

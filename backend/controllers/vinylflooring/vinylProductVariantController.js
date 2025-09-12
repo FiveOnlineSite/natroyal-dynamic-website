@@ -8,10 +8,9 @@ const mongoose = require("mongoose");
 const createVinylProductVariant = async (req, res) => {
   try {
     const { alt, name, product } = req.body;
-    console.log("product id", product, typeof product);
-
+ 
     // Check if variant with same name exists
-    const variantWithSameName = await VinylProductVariantModel.findOne({ name: name.trim() });
+    const variantWithSameName = await VinylProductVariantModel.findOne({ name: name.trim(), product });
     if (variantWithSameName) {
       return res.status(400).json({ message: "Product variant with this name already exists." });
     }
@@ -76,10 +75,11 @@ const updateVinylProductVariant = async (req, res) => {
   try {
     const { alt, name, product } = req.body;
     const _id = req.params._id;
-
+     const file = req.file;
     if (name) {
       const duplicate = await VinylProductVariantModel.findOne({
         name: name.trim(),
+        product,
         _id: { $ne: _id },
       });
       if (duplicate) {
@@ -92,8 +92,8 @@ const updateVinylProductVariant = async (req, res) => {
       return res.status(404).json({ message: "Product variant not found" });
     }
 
-   if (req.files?.image?.[0]) {
-  const file = req.files.image[0];
+   if (file) {
+ 
     const ext = path.extname(file.originalname).toLowerCase();
     if (![".jpg", ".jpeg", ".png", ".webp"].includes(ext)) {
       return res.status(400).json({ message: `Unsupported file type: ${file.originalname}` });

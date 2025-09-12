@@ -50,8 +50,7 @@ const AddVinylProductVariant = () => {
                                           toast.error(validationError);
                                           return;
                                         }
-
-    setIsSubmitting(true);
+    
     setErrorMessage("");
 
     if (!image.file) {
@@ -64,6 +63,8 @@ const AddVinylProductVariant = () => {
       setIsSubmitting(false);
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const access_token = localStorage.getItem("access_token");

@@ -1,29 +1,30 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
 const VinylProductVariantSchema = new mongoose.Schema({
-      image: {
-        type: Array,
-        required: true,
-      },
-      alt: {
-        type: String,
-        required: true,
-      },
-      name: {
-        type: String,
-        required: true,
-        unique: true,
-      },
-      product: {
-        type: mongoose.Types.ObjectId,
-        ref: "vinylproducts",
-        required: true,
-      },
+  image: {
+    type: Array,
+    required: true,
+  },
+  alt: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  product: {
+    type: mongoose.Schema.Types.ObjectId,   // <- use Schema.Types.ObjectId
+    ref: "vinylproducts",
+    required: true,
+  },
 });
 
+VinylProductVariantSchema.index({ name: 1, product: 1 }, { unique: true });
+
 const VinylProductVariantModel = mongoose.model(
-  "vinylproductvriant",
+  "vinylproductvariant",     // also correct the typo in model name
   VinylProductVariantSchema
 );
 

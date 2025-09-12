@@ -136,7 +136,7 @@ const VinylProduct = () => {
                             onClick={() =>
                               handleDeleteApplication(
                                 product._id,
-                                product.application.name
+                                product.name
                               )
                             }
                           >

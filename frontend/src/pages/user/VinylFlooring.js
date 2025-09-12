@@ -84,36 +84,45 @@ const VinylFlooring = () => {
        <section className="applications-section vinyl-applications-section">
           <div className="container">
             <div className="row">
-              <ul className="application-tabs d-lg-flex align-items-center justify-content-center d-none">
-                {vinylAppWithProduct && vinylAppWithProduct.map((app) => (
-                  <li key={app._id} className="nav-item dropdown">
-                    <a
-                      className="nav-link dropdown-toggle"
-                      href={`/vinyl-flooring/applications/${app.name
-                              .toLowerCase()
-                              .replace(/[/\s]+/g, "-").replace(/\//g, "-")}`} 
-                      role="button"
-                    >
-                      {app.name}
-                    </a>
-                    <ul className="dropdown-menu">
-                      {app.products && app.products.map((product) => (
-                        <li key={product._id}>
-                          <a 
-                            className="dropdown-item" 
-                            href={`/vinyl-flooring/products/${product.name
-                              .toLowerCase()
-                              .replace(/[/\s]+/g, "-")}`} 
-                            end 
-                          >
-                            {product.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
-                ))}
-              </ul>
+<ul className="application-tabs d-lg-flex align-items-center justify-content-center d-none">
+  {vinylAppWithProduct &&
+    vinylAppWithProduct.map((app) => (
+      <li key={app._id} className="nav-item dropdown">
+        <a
+          className="nav-link dropdown-toggle"
+          href={`/vinyl-flooring/applications/${app.name
+            .toLowerCase()
+            .replace(/[/\s]+/g, "-")}`}
+          role="button"
+        >
+          {app.name}
+        </a>
+
+        <ul className="dropdown-menu">
+          {app.products &&
+            app.products.map((product) => {
+              const productHref =
+                product.name.toLowerCase() === "lvt"
+                  ? "/lvt-flooring"
+                  : `/vinyl-flooring/products/${product.name
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")
+                      .replace(/\//g, "-")}`;
+
+              return (
+                <li key={product._id}>
+                  <a className="dropdown-item" href={productHref}>
+                    {product.name}
+                  </a>
+                </li>
+              );
+            })}
+        </ul>
+      </li>
+    ))}
+</ul>
+
+
             </div>
           </div>
         </section>

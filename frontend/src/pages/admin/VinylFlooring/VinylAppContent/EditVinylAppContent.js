@@ -92,7 +92,7 @@ const EditVinylAppContent = () => {
         `${apiUrl}/api/vinyl-application-content/${id}`,
         {
           title1: formData.title1,
-          title2: formData.title2,
+          title2: formData.title2 || "",
           content: formData.content,
           application: formData.application,
         },
@@ -183,6 +183,7 @@ const EditVinylAppContent = () => {
                 <CKEditor
                   editor={ClassicEditor}
                   data={formData.content}
+                  required
                   onChange={(event, editor) => {
                                                                                                  const data = editor.getData();
                                                                                                   setFormData((prev) => ({ ...prev, content: data }));

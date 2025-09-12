@@ -137,7 +137,7 @@ useEffect(() => {
       });
 
       setTimeout(() => {
-        navigate("/admin/suitables");
+        navigate("/admin/suitable");
       }, 1000);
 
               toast.success("Suitable updated successfully!");

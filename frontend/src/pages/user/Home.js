@@ -141,28 +141,28 @@ const Home = () => {
 
   const productsData = [
     {
-      // image: "/images/banners/casual-girl-surfing-laptop-home.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277230/casual-girl-surfing-laptop-home_wvq8rv.png",
+      image: "/images/banners/casual-girl-surfing-laptop-home.png",
+      // image:
+      //   "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277230/casual-girl-surfing-laptop-home_wvq8rv.png",
       title: "Vinyl Flooring",
       link: "/vinyl-flooring",
       // content:
       //   "Our PVC Vinyl Flooring offers durability for sectors like Education, Healthcare, Retail, and more.",
     },
     {
-      // image:
-      //   "/images/banners/beautiful-luxury-pillow-sofa-decoration-livingroom-interior-background.png",
       image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277224/beautiful-luxury-pillow-sofa-decoration-livingroom-interior-background_br2lnv.png",
+        "/images/banners/beautiful-luxury-pillow-sofa-decoration-livingroom-interior-background.png",
+      // image:
+      //   "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277224/beautiful-luxury-pillow-sofa-decoration-livingroom-interior-background_br2lnv.png",
       title: "Luxury Vinyl Planks & Tiles (LVT)",
       link: "/lvt-flooring",
       // content:
       //   "LVT provide a durable, stylish, and low-maintenance flooring option ideal for various sectors like education, healthcare, and retail.",
     },
     {
-      // image: "/images/banners/pexels-mikebirdy-1633602.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277308/pexels-mikebirdy-1633602_u9zcxu.png",
+      image: "/images/banners/pexels-mikebirdy-1633602.png",
+      // image:
+      //   "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277308/pexels-mikebirdy-1633602_u9zcxu.png",
       title: "Coated Fabrics",
       link: "/coated-fabrics",
       // content:
@@ -170,18 +170,18 @@ const Home = () => {
     },
 
     {
-      // image: "/images/banners/seating-component.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277331/seating-component_si3llt.png",
+      image: "/images/banners/seating-component.png",
+      // image:
+      //   "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277331/seating-component_si3llt.png",
       title: "Seating Components",
       link: "/seating-components",
       // content:
       //   "Seating components provide comfort, durability, and support for various furniture applications.",
     },
     {
-      // image: "/images/banners/left wall.png",
-      image:
-        "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277267/left_wall_otyu1f.png",
+      image: "/images/banners/left wall.png",
+      // image:
+      //   "https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277267/left_wall_otyu1f.png",
       title: "Knit Fabrics",
       link: "/knit-fabrics",
       // content:

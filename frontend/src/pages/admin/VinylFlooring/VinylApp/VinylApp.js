@@ -34,58 +34,34 @@ const VinylApp = () => {
     fetchVinylApp();
   }, []);
 
- const handleDeleteApplication = async (id, name) => {
+const handleDeleteApplication = async (id, name) => {
+  const confirmed = window.confirm(
+    `Are you sure you want to delete the "${name}" application?\n\n` +
+    "All content linked to this application and any product that only belongs to it will also be deleted."
+  );
+
+  if (!confirmed) return;
+
   try {
-    const access_token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
     const apiUrl = process.env.REACT_APP_API_URL;
 
-    // First delete attempt
+    // call API with forceDelete right away
     await axios.delete(`${apiUrl}/api/vinyl-application/${id}`, {
-      headers: { Authorization: `Bearer ${access_token}` },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
-    setVinylApp(vinylApp.filter((app) => app._id !== id));
+    setVinylApp((prev) => prev.filter((app) => app._id !== id));
+    toast.success("Vinyl flooring application deleted successfully!");
     navigate("/admin/vinyl-applications");
-  } catch (error) {
-    // If backend sends custom restriction message
-    if (error.response?.data?.message && error.response?.data?.productName) {
-      const confirmDelete = window.confirm(
-        `${error.response.data.message}\n\nDo you still want to delete this "${name}" application along with the product?`
-      );
-
-      if (confirmDelete) {
-        try {
-          const access_token = localStorage.getItem("access_token");
-          const apiUrl = process.env.REACT_APP_API_URL;
-
-         await axios.delete(
-            `${apiUrl}/api/vinyl-application/${id}?forceDelete=true`,
-            { headers: { Authorization: `Bearer ${access_token}` } }
-          );
-
-          setVinylApp(vinylApp.filter((app) => app._id !== id));
-          navigate("/admin/vinyl-applications");
-
-                  toast.success("Vinyl flooring application deleted successfully!");
-
-        } catch (forceError) {
-          console.error("Error force deleting application:", forceError);
-          setErrorMessage(
-            forceError.response?.data?.message || "Failed to delete application"
-          );
-
-                  toast.error("Failed to delete vinyl flooring application");
-
-        }
-      }
-    } else {
-      console.error("Error deleting application:", error);
-      setErrorMessage(
-        error.response?.data?.message || "Failed to delete application"
-      );
-    }
+  } catch (err) {
+    console.error("Delete failed:", err);
+    setErrorMessage(err.response?.data?.message || "Failed to delete application");
+    toast.error("Failed to delete vinyl flooring application");
   }
 };
+
+
 
   return (
     <AdminLayout>

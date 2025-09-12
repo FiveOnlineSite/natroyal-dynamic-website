@@ -129,7 +129,7 @@ console.log(response.data);
                           <button
                             className="delete-btn"
                             onClick={() =>
-                              handleDeleteApplication(variant._id, variant.application.name)
+                              handleDeleteApplication(variant._id, variant.name)
                             }
                           >
                             <i className="las la-trash"></i>{" "}

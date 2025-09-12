@@ -2404,6 +2404,16 @@ ul li::before {
   overflow-y: auto;          */
 }
 
+.clients-section .slick-slider .slick-list .slick-track{
+display: flex !important;
+align-items: center !important;
+justify-content: center !important;
+}
+
+.clients-section .image-container .product-image{
+  width: 150px;
+}
+
 
 @keyframes smallScale {
   0% {

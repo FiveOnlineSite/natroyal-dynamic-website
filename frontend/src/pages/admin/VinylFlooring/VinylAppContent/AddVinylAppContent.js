@@ -52,7 +52,7 @@ const AddVinylAppContent = () => {
       {
         application,
         title1: title1,
-        title2: title2,
+        title2: title2 || "",
         content: plainContent, 
       },
       {
@@ -126,7 +126,7 @@ const AddVinylAppContent = () => {
                   type="text"
                   value={title2}
                   onChange={(e) => setTitle2(e.target.value)}
-                  required
+                 
                 />
               </div>
             </div>
@@ -138,6 +138,7 @@ const AddVinylAppContent = () => {
                  <CKEditor
                    editor={ClassicEditor}
                    data={content}
+                   required
                    onChange={(event, editor) => {
                                                                                   const data = editor.getData();
                                                                                   setContent(data);

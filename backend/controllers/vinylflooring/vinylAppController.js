@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs");
 const mongoose = require("mongoose");
 const VinylAppContentModel = require("../../models/vinylflooring/vinylAppContentModel");
+const SuitableModel = require("../../models/vinylflooring/suitableModel");
 
 const createVinylApp = async (req, res) => {
   try {
@@ -114,16 +115,13 @@ const updateVinylApp = async (req, res) => {
       if (![".webp", ".jpg", ".jpeg", ".png"].includes(extname)) {
         return res.status(400).json({ message: "Unsupported image type." });
       }
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "vinyl_applications/images",
-      });
+
       updateData.image = [
         {
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        },
+                         filename: path.basename(file.key), // "1756968423495-2.jpg"
+                         filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                        }
       ];
-      fs.unlinkSync(file.path);
     }
 
     if (req.files?.icon?.[0]) {
@@ -132,16 +130,12 @@ const updateVinylApp = async (req, res) => {
       if (![".webp", ".jpg", ".jpeg", ".png"].includes(extname)) {
         return res.status(400).json({ message: "Unsupported icon type." });
       }
-      const uploadResult = await cloudinary.uploader.upload(file.path, {
-        folder: "vinyl_applications/icons",
-      });
       updateData.icon = [
         {
-          filename: uploadResult.original_filename,
-          filepath: uploadResult.secure_url,
-        },
+                         filename: path.basename(file.key), // "1756968423495-2.jpg"
+                         filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
+                        }
       ];
-      fs.unlinkSync(file.path);
     }
 
     // Add text fields (only if provided)
@@ -268,10 +262,10 @@ const getAllVinylApps = async (req, res) => {
 const deleteVinylApp = async (req, res) => {
   try {
     const { _id } = req.params;
-    const { forceDelete } = req.query;
 
-    const vinylApp = await VinylApplicationModel.findById(_id);
+    const objectId = new mongoose.Types.ObjectId(_id);
 
+    const vinylApp = await VinylApplicationModel.findById(objectId);
     if (!vinylApp) {
       return res.status(400).json({
         message: "No vinyl application found to delete. Kindly add one.",
@@ -280,38 +274,25 @@ const deleteVinylApp = async (req, res) => {
 
     // Step 1: Find products linked to this application
     const productsLinked = await VinylProductModel.find({
-      applications: new mongoose.Types.ObjectId(_id),
+      applications: objectId,
     });
 
     for (const product of productsLinked) {
-      if (product.applications.length === 1) {
-        if (!forceDelete) {
-          // Stop deletion & inform frontend
-          return res.status(400).json({
-            message: `Cannot delete this application. Product "${product.name}" has only one application linked. Deleting this would also delete the product.`,
-            productId: product._id,
-            productName: product.name,
-          });
-        } else {
-          // If forceDelete=true → delete product as well
-          await VinylProductModel.findByIdAndDelete(product._id);
-        }
-      } else {
-        // Remove the app from product's applications array
+      
         await VinylProductModel.updateOne(
           { _id: product._id },
-          { $pull: { applications: mongoose.Types.ObjectId(_id) } }
+          { $pull: { applications: objectId } }
         );
-      }
     }
 
-    // Step 3: If safe, delete the application
-    const deletedVinylApp = await VinylApplicationModel.findOneAndDelete({
-      _id,
+    // Step 3: delete application and related content
+    const deletedVinylApp = await VinylApplicationModel.findByIdAndDelete(objectId);
+    const deletedVinylAppContent = await VinylAppContentModel.deleteMany({
+      application: objectId,
     });
 
-    const deletedVinylAppContent = await VinylAppContentModel.deleteMany({
-      application: _id,
+    const deletedSuitable = await SuitableModel.deleteMany({
+      application: objectId,
     });
 
     return res.status(200).json({
@@ -325,6 +306,7 @@ const deleteVinylApp = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   createVinylApp,
