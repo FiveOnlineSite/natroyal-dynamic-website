@@ -280,7 +280,7 @@ const AdminSidebar = () => {
 
            <li>
             <NavLink to="/admin/division" title="Divisions">
-              <span className="las la-cogs"></span> <span>Divisions</span>
+              <span className="las la-cogs"></span> <span>Our Divisions</span>
             </NavLink>
           </li>
 
