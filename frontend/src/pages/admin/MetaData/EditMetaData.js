@@ -9,13 +9,35 @@ const EditMetaData = () => {
   const [metaData, setMetaData] = useState("");
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [validationError, setValidationError] = useState("");
+  
   const [formData, setFormData] = useState({
     page: "",
     metaTitle: "",
     metaDescription: "",
     metaKeyword: "",
   });
+
+    const [allPages, setAllPages] = useState([])
+    
+    useEffect(() => {
+      const fetchAllPages = async () => {
+          try {
+            const apiUrl = process.env.REACT_APP_API_URL;
+            const response = await axios.get(
+              `${apiUrl}/api/banner/all-pages`
+            );
+            const pagesData = response.data.pages;
+            setAllPages(pagesData);
+    
+          } catch (error) {
+            console.error("Error fetching all pages:", error);
+          } 
+        }
+    
+        fetchAllPages();
+      }, []);
 
   useEffect(() => {
     const fetchmetaData = async () => {
@@ -58,6 +80,20 @@ const EditMetaData = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      if (isSubmitting) return;
+    
+      if (errorMessage) {
+                      toast.error(errorMessage);
+                      return;
+                    }
+    
+     if (validationError) {
+        toast.error(validationError);
+        return;
+    }
+      
+      setIsSubmitting(true);
+      setErrorMessage("");
 
     try {
       const formDataToSend = new FormData();
@@ -91,7 +127,9 @@ const EditMetaData = () => {
       );
       toast.error("Failed to update meta data");
       
-    }
+    } finally {
+    setIsSubmitting(false);
+  }
   };
 
   return (
@@ -106,13 +144,33 @@ const EditMetaData = () => {
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
                 <div className="theme-form">
                   <label>Page</label>
-                  <input
-                    type="text"
-                    name="page"
-                    required
-                    value={formData.page}
-                    onChange={handleChange}
-                  />
+                   <select
+                     name="page"
+                     required
+                     disabled
+                     value={formData.page} 
+                     onChange={handleChange}
+                   >
+                  <option value="" disabled>
+                    Select a Page
+                  </option>
+
+                  {[
+                    { key: "about-us", label: "About Us", url: "/about-us" },
+                    { key: "our-divisions", label: "Our Divisions", url: "/our-divisions" },
+                    { key: "contact-us", label: "Contact Us", url: "/contact-us" },
+                  ].map((p, idx) => (
+                    <option key={`static-${idx}`} value={p.url}>
+                      {p.label}
+                    </option>
+                  ))}
+
+                  {allPages.map((p, idx) => (
+                    <option key={`dynamic-${idx}`} value={p.url}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
                 </div>
               </div>
 
@@ -132,12 +190,12 @@ const EditMetaData = () => {
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
                 <div className="theme-form">
                   <label>Meta Description</label>
-                  <input
-                    type="text"
+                  <textarea
+                    rows="4"
                     name="metaDescription"
                     value={formData.metaDescription}
                     onChange={handleChange}
-                  />
+                  ></textarea>
                 </div>
               </div>
 

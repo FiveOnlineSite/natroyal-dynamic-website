@@ -122,7 +122,17 @@ const CoatedFabrics = () => {
                   </div>
                   <div className="application-overlay">
                     <div className="application-border">
-                      <NavLink to={`/coated-fabrics/applications/${application.name.toLowerCase().replace(/\s+/g, "-")}`}>
+                      <NavLink 
+                        to={`/coated-fabrics/applications/${application.name
+                          .toLowerCase()
+                          .trim()
+                          .replace(/&/g, "and")
+                          .replace(/\//g, "-")
+                          .replace(/[^a-z0-9]+/g, "-")
+                          .replace(/^-+|-+$/g, "")
+                        }`}
+                        end
+                      >
                         View More
                       </NavLink>
                     </div>

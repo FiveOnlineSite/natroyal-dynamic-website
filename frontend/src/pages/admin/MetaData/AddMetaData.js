@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../../components/AdminLayout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -11,9 +11,47 @@ const AddMetaData = () => {
   const [metaKeyword, setMetaKeyword] = useState("");
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
+const [isSubmitting, setIsSubmitting] = useState(false);
+    const [validationError, setValidationError] = useState("");
+  
+    const [allPages, setAllPages] = useState([])
+  
+  useEffect(() => {
+    const fetchAllPages = async () => {
+        try {
+          const apiUrl = process.env.REACT_APP_API_URL;
+          const response = await axios.get(
+            `${apiUrl}/api/banner/all-pages`
+          );
+          const pagesData = response.data.pages;
+          setAllPages(pagesData);
+  
+        } catch (error) {
+          console.error("Error fetching all pages:", error);
+        } 
+      }
+  
+      fetchAllPages();
+    }, []);
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    
+         if (validationError) {
+                 toast.error(validationError);
+                 return;
+             }
+         
+              if (errorMessage) {
+                 toast.error(errorMessage);
+                 return;
+             }
+    
+        setIsSubmitting(true);
+        setErrorMessage("");
+setValidationError("")
 
     try {
       // Create a FormData object to store the form data
@@ -49,6 +87,8 @@ const AddMetaData = () => {
       );
       toast.error("Failed to add meta data");
       
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -63,13 +103,28 @@ const AddMetaData = () => {
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Page</label>
-                <input
-                  type="text"
+                <select
                   name="page"
+                  required
                   value={page}
                   onChange={(e) => setPage(e.target.value)}
-                  required
-                />
+                >
+                  <option value="" disabled>
+                    Select a Page
+                  </option>
+
+                  {/* Static pages */}
+                  <option value="/about-us">About Us</option>
+                  <option value="/our-divisions">Our Divisions</option>
+                  <option value="/contact-us">Contact Us</option>
+
+                  {/* Dynamic pages from API */}
+                  {allPages.map((p, idx) => (
+                    <option key={idx} value={p.url}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -87,12 +142,12 @@ const AddMetaData = () => {
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">
               <div className="theme-form">
                 <label>Meta Description</label>
-                <input
-                  type="text"
+                <textarea
+                  rows="4"
                   name="metaDescription"
                   value={metaDescription}
                   onChange={(e) => setMetaDescription(e.target.value)}
-                />
+                ></textarea>
               </div>
             </div>
             <div className="col-lg-6 col-md-6 col-sm-12 col-12">

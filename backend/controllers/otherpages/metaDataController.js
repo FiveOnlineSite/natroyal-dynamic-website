@@ -3,6 +3,11 @@ const MetaDataModel = require("../../models/otherpages/metaDataModel");
 
 const createMetaData = async (req, res) => {
   const { page, metaTitle, metaDescription, metaKeyword } = req.body;
+ const existingPage = await MetaDataModel.findOne({ page: page.trim() });
+    if (existingPage)
+      return res
+        .status(400)
+        .json({ message: "Banner already exists for this page" });
 
   try {
     const newMetaData = new MetaDataModel({
@@ -20,6 +25,59 @@ const createMetaData = async (req, res) => {
     res
       .status(500)
       .json({ message: "Error creating meta data: " + error.message });
+  }
+};
+
+const updateMetaData = async (req, res) => {
+  try {
+    const { metaTitle, metaDescription, metaKeyword, page} = req.body;
+
+    const existingMetaData = await MetaDataModel.findById(req.params._id);
+
+    if (!existingMetaData) {
+      return res.status(404).json({ message: "Meta data already exist." });
+    }
+   
+    let updatedPage = existingMetaData.page;
+
+    if (page && page !== existingMetaData.page) {
+      const conflictingMetaData = await MetaDataModel.findOne({ page });
+
+      if (conflictingMetaData) {
+        // Swap pages
+        await MetaDataModel.findByIdAndUpdate(conflictingMetaData._id, {
+          page: existingMetaData.page,
+        });
+
+        updatedPage = page; // Assign the new page to the current banner
+      } else {
+        // No conflict, update page normally
+        updatedPage = page;
+      }
+    }
+
+    // Create object with updated fields
+    const updatedFields = {
+      page: updatedPage,
+      metaTitle,
+      metaKeyword,
+      metaDescription
+    };
+
+    const updatedMetaData = await MetaDataModel.findByIdAndUpdate(
+      req.params._id,
+      updatedFields,
+      { new: true }
+    );
+
+    return res.status(200).json({
+      message: "Meta data updated successfully.",
+      updatedMetaData,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: `Error in updating meta data due to ${error.message}`,
+    });
   }
 };
 
@@ -63,41 +121,41 @@ const getMetaDataByPage = async (req, res) => {
   }
 };
 
-const updateMetaData = async (req, res) => {
-  try {
-    const { page, metaTitle, metaDescription, metaKeyword } = req.body;
+// const updateMetaData = async (req, res) => {
+//   try {
+//     const { page, metaTitle, metaDescription, metaKeyword } = req.body;
 
-    const metaData = await MetaDataModel.findById(req.params._id);
+//     const metaData = await MetaDataModel.findById(req.params._id);
 
-    if (!metaData) {
-      return res.status(400).json({
-        message: "No meta data found with this id to update.",
-      });
-    }
+//     if (!metaData) {
+//       return res.status(400).json({
+//         message: "No meta data found with this id to update.",
+//       });
+//     }
 
-    const updatedFields = {
-      ...(page && { page }),
-      ...(metaTitle && { metaTitle }),
-      ...(metaDescription && { metaDescription }),
-      ...(metaKeyword && { metaKeyword }),
-    };
+//     const updatedFields = {
+//       ...(page && { page }),
+//       ...(metaTitle && { metaTitle }),
+//       ...(metaDescription && { metaDescription }),
+//       ...(metaKeyword && { metaKeyword }),
+//     };
 
-    const updatedMetaData = await MetaDataModel.findByIdAndUpdate(
-      req.params._id,
-      updatedFields,
-      { new: true }
-    );
+//     const updatedMetaData = await MetaDataModel.findByIdAndUpdate(
+//       req.params._id,
+//       updatedFields,
+//       { new: true }
+//     );
 
-    res.status(200).json({
-      message: "Meta data updated successfully",
-      updatedMetaData,
-    });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: `Error updating meta data: ${error.message}` });
-  }
-};
+//     res.status(200).json({
+//       message: "Meta data updated successfully",
+//       updatedMetaData,
+//     });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: `Error updating meta data: ${error.message}` });
+//   }
+// };
 
 const getAllMetaDatas = async (req, res) => {
   try {
