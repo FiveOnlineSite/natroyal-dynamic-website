@@ -15,6 +15,7 @@ const SeatingProductsSchema = new mongoose.Schema({
   },
   sequence: {
     type: Number,
+    required: true,
   },
   application: {
     type: mongoose.Types.ObjectId,

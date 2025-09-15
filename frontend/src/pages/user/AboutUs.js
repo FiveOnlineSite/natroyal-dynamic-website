@@ -211,8 +211,8 @@ const AboutUs = () => {
               <div className="company-content">
                 <div className="company-thumbnail">
                   <img
-                    // src="/images/banners/63e3a12fc187c70f011a62d15d0de6fe 1.png"
-                    src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277213/63e3a12fc187c70f011a62d15d0de6fe_1_hiyjxv.png"
+                    src="/images/banners/63e3a12fc187c70f011a62d15d0de6fe 1.png"
+                    // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277213/63e3a12fc187c70f011a62d15d0de6fe_1_hiyjxv.png"
                     alt="company"
                     className="w-100"
                   />
@@ -245,8 +245,8 @@ const AboutUs = () => {
               <div className="company-content">
                 <div className="company-thumbnail">
                   <img
-                    // src="/images/banners/living-room (2).png"
-                    src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277270/living-room_2_irwujg.png"
+                    src="/images/banners/living-room (2).png"
+                    // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277270/living-room_2_irwujg.png"
                     alt="company"
                     className="w-100"
                   />
@@ -314,8 +314,8 @@ const AboutUs = () => {
               <div className="company-content">
                 <div className="company-thumbnail">
                   <img
-                    // src="/images/banners/pexels-emmanuel-codden-1502600-18362051.png"
-                    src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277297/pexels-emmanuel-codden-1502600-18362051_wanahq.png"
+                    src="/images/banners/pexels-emmanuel-codden-1502600-18362051.png"
+                    // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277297/pexels-emmanuel-codden-1502600-18362051_wanahq.png"
                     alt="company"
                     className="w-100"
                   />
@@ -347,8 +347,8 @@ const AboutUs = () => {
               <div className="company-content">
                 <div className="company-thumbnail">
                   <img
-                    // src="/images/banners/Products For Coating 1.png"
-                    src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277323/Products_For_Coating_1_y97fzk.png"
+                    src="/images/banners/Products For Coating 1.png"
+                    // src="https://res.cloudinary.com/dcmdihrzp/image/upload/v1751277323/Products_For_Coating_1_y97fzk.png"
                     alt="company"
                     className="w-100"
                   />

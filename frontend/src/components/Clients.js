@@ -5,7 +5,7 @@ const Clients = () => {
   const clientsSetting = {
     dots: false,
     arrows: false,
-    infinite: false, // Enables infinite scrolling
+    infinite: true, // Enables infinite scrolling
     speed: 3000, // Duration of one complete slide transition in ms
     slidesToShow: 5, // Number of slides visible
     autoplay: true, // Enables autoplay

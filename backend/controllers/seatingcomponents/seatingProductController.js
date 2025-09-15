@@ -73,30 +73,13 @@ const updateSeatingProduct = async (req, res) => {
   try {
     const { alt, name, sequence, application } = req.body;
     const productId = req.params._id;
+
     const product = await SeatingProductModel.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
 
-    if (!product) return res.status(404).json({ message: "Product not found" });
-
-//    if (name !== undefined) {
-//   if (name.trim() === "") {
-//     // User cleared the field → set it to empty
-//     product.name = "";
-//   } else {
-//     // Check duplicate only if not empty
-//     const duplicate = await SeatingProductModel.findOne({
-//       name: name.trim(),
-//       _id: { $ne: productId },
-//     });
-//     if (duplicate) {
-//       return res
-//         .status(400)
-//         .json({ message: "Another product with this name already exists." });
-//     }
-//     product.name = name.trim();
-//   }
-// }
-
-    // Handle image upload...
+    // ---------- Handle image upload ----------
     if (req.file) {
       const file = req.file;
       const ext = path.extname(file.originalname).toLowerCase();
@@ -105,60 +88,41 @@ const updateSeatingProduct = async (req, res) => {
           .status(400)
           .json({ message: `Unsupported file type: ${file.originalname}` });
       }
-      
+
       product.image = [
         {
-                                filename: path.basename(file.key), // "1756968423495-2.jpg"
-                                filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
-                               }
+          filename: path.basename(file.key),
+          filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}`,
+        },
       ];
     }
 
-     if (sequence && sequence !== product.sequence) {
-        // Get products only from the same application
-        const seatingProducts = await SeatingProductModel.find({ application: product.application }).sort({ sequence: 1 });
+    // ---------- Swap logic for sequence ----------
+    if (sequence !== undefined) {
+      const newSequence = Number(sequence);
 
-        let updateOperations = [];
-        let maxSequence = seatingProducts.length;
-
-        if (sequence > maxSequence) {
-          return res.status(400).json({
-            message: `Invalid sequence. The sequence cannot be greater than ${maxSequence} for this application.`,
-          });
-        }
-
-        seatingProducts.forEach((sp) => {
-          if (sp._id.toString() !== product._id.toString()) {
-            if (sp.sequence >= sequence && sp.sequence < product.sequence) {
-              updateOperations.push({
-                updateOne: {
-                  filter: { _id: sp._id },
-                  update: { $inc: { sequence: 1 } },
-                },
-              });
-            } else if (sp.sequence > product.sequence && sp.sequence <= sequence) {
-              updateOperations.push({
-                updateOne: {
-                  filter: { _id: sp._id },
-                  update: { $inc: { sequence: -1 } },
-                },
-              });
-            }
-          }
+      if (newSequence !== product.sequence) {
+        // Only look in the same application
+        const otherProduct = await SeatingProductModel.findOne({
+          application: product.application,
+          sequence: newSequence,
+          _id: { $ne: product._id },
         });
 
-        if (updateOperations.length > 0) {
-          await SeatingProductModel.bulkWrite(updateOperations);
+        if (otherProduct) {
+          // swap their sequence values
+          otherProduct.sequence = product.sequence;
+          await otherProduct.save();
         }
 
-        if (sequence && sequence !== product.sequence) {
-          product.sequence = sequence;
-        }
+        product.sequence = newSequence;
       }
+    }
 
-
+    // ---------- Update alt ----------
     if (alt !== undefined) product.alt = alt;
 
+    // ---------- Update application ----------
     if (application) {
       if (!mongoose.Types.ObjectId.isValid(application)) {
         return res.status(400).json({ message: "Invalid application ID" });
@@ -167,11 +131,11 @@ const updateSeatingProduct = async (req, res) => {
       if (!applicationExists) {
         return res.status(400).json({ message: "Application not found" });
       }
-      
       product.application = application;
     }
 
     await product.save();
+
     res.status(200).json({
       message: "Seating product updated successfully",
       seatingProduct: product,
@@ -182,6 +146,7 @@ const updateSeatingProduct = async (req, res) => {
       .json({ message: `Error updating seating product: ${error.message}` });
   }
 };
+
 
 const getSeatingProductsByAppId = async (req, res) => {
   try {
@@ -282,7 +247,8 @@ const getSeatingProducts = async (req, res) => {
   try {
     const seatingProducts = await SeatingProductModel.find()
       .populate("application") // <-- populate the applications field
-      .lean();
+      .lean()
+      .sort({ application: 1, sequence: 1 });
 
     if (!seatingProducts.length) {
       return res.status(400).json({ message: "No products found" });
@@ -292,6 +258,7 @@ const getSeatingProducts = async (req, res) => {
       message: "seating products fetched successfully.",
       productCount: seatingProducts.length,
       seatingProducts,
+      
     });
   } catch (error) {
     return res.status(500).json({
@@ -304,37 +271,44 @@ const deleteSeatingProduct = async (req, res) => {
   try {
     const { _id } = req.params;
 
-    const seatingProduct = await SeatingProductModel.findById(_id);
-
-    if (!seatingProduct) {
-      return res.status(400).json({
-        message: "No coated product found to delete. Kindly add one.",
-      });
+    // --- Find the product ---
+    const prod = await SeatingProductModel.findById(_id);
+    if (!prod) {
+      return res.status(404).json({ message: "Product not found" });
     }
 
-    const deletedSequence = seatingProduct.sequence;
+    const appId = prod.application; 
+    const deletedSeq = prod.sequence;
 
-    // Step 3: If safe, delete the application
-    const deletedSeatingProduct = await SeatingProductModel.findOneAndDelete({
-      _id,
-    });
+    console.log("Deleting", { appId, deletedSeq });
 
-    // Update the sequence of the remaining team members
-    const updateResult = await SeatingProductModel.updateMany(
-      { sequence: { $gt: deletedSequence } },
+    // --- Delete the product first ---
+    await SeatingProductModel.deleteOne({ _id });
+
+    // --- Shift only inside same application ---
+    const result = await SeatingProductModel.updateMany(
+      {
+        application: appId,
+        sequence: { $gt: deletedSeq },
+      },
       { $inc: { sequence: -1 } }
     );
 
-    console.log(`Updated ${updateResult.modifiedCount} team member's sequence.`);
+    console.log("Shifted", result.modifiedCount, "docs");
+
+    // --- Return new ordered list for confirmation ---
+    const updatedList = await SeatingProductModel.find({ application: appId })
+      .sort({ sequence: 1 })
+      .lean();
 
     return res.status(200).json({
-      message: "Seating product deleted successfully.",
-      deletedSeatingProduct,
+      message: "Seating product deleted & sequence adjusted",
+      updatedCount: result.modifiedCount,
+      products: updatedList,
     });
-  } catch (error) {
-    return res.status(500).json({
-      message: `Error in deleting Seating product due to ${error.message}`,
-    });
+  } catch (err) {
+    console.error("Delete error:", err);
+    return res.status(500).json({ message: `Error deleting: ${err.message}` });
   }
 };
 

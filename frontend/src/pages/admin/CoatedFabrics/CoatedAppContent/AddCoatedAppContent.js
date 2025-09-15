@@ -45,8 +45,6 @@ const AddCoatedAppContent = () => {
       const access_token = localStorage.getItem("access_token");
       const apiUrl = process.env.REACT_APP_API_URL;
 
-      // Strip HTML tags to get plain text
-      const plainContent = content.replace(/<\/?[^>]+(>|$)/g, "");
 
       await axios.post(
         `${apiUrl}/api/coated-application-content`,
@@ -54,7 +52,7 @@ const AddCoatedAppContent = () => {
           application,
           title1: title1,
           title2: title2,
-          content: plainContent,
+          content: content,
         },
         {
           headers: { Authorization: `Bearer ${access_token}` },
@@ -127,7 +125,6 @@ const AddCoatedAppContent = () => {
                   type="text"
                   value={title2}
                   onChange={(e) => setTitle2(e.target.value)}
-                  required
                 />
               </div>
             </div>

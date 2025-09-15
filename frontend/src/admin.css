@@ -30,7 +30,7 @@ a {
 }
 a:hover {
   text-decoration: none !important;
-  color: inherit;
+  /* color: inherit; */
 }
 .sidebar {
   width: 260px;

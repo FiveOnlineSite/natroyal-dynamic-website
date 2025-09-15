@@ -7,7 +7,6 @@ import metaDataMap from "../../data/metaDataMap";
 import axios from "axios"
 import MetaDataComponent from "../../components/MetaDataComponent";
 
-
 const CoatedApplications = () => {
   const { category } = useParams(); // Get category from URL
 
@@ -59,9 +58,10 @@ const CoatedApplications = () => {
                           try {
                             const apiUrl = process.env.REACT_APP_API_URL;
                             const response = await axios.get(`${apiUrl}/api/coated-application-content/application/${name}`);
-                            const CoatedAppContent = response.data.appContent;
+                            const CoatedAppContent = response.data.content;
                     
                             setCoatedAppContent(CoatedAppContent);
+                            console.log("app content", CoatedAppContent)
                          } catch (error) {
                             console.error("Error fetching application content:", error);
                           } 
@@ -80,7 +80,22 @@ const CoatedApplications = () => {
         <div className="container">
           <div className="row">
              
-            <ul className="application-tabs d-flex align-items-center justify-content-center">
+            <ul className="application-tabs d-lg-flex d-none align-items-center justify-content-center">
+               <li className="nav-item dropdown">
+                              <NavLink className="nav-link" to="/coated-fabrics" end>
+                                Home
+                              </NavLink>
+                            </li>
+                            <li className="nav-item dropdown">
+                              <NavLink className="nav-link" to="/awards-and-recognition" end>
+                                Awards & Recognition
+                              </NavLink>
+                            </li>
+                            <li className="nav-item dropdown">
+                              <NavLink className="nav-link" to="/research-and-development" end>
+                                Research & Development (R&D)
+                              </NavLink>
+                            </li>
               {coatedAppTab && coatedAppTab.map((app) => (
               <li className="nav-item dropdown" key={app._id}>
                 <NavLink
@@ -125,82 +140,81 @@ const CoatedApplications = () => {
          ))}
       </section>
 
-      <section className="application-types-section coated-application-section">
-        <div className="container">
-          <div className="row justify-content-center ">
-            <div className="col-lg-9">
-              {coatedProduct &&
-                coatedProduct.map((product) => (
-                  <div
-                    className="row align-items-center justify-content-center"
-                    key={product._id}
-                  >
-                     {product.content === "" && (
-                      <>
-                       <div className="col-lg-4 mb-4">
-                     {product?.image?.length > 0 && product.image[0]?.filepath && (
-                        <img
-                          src={product.image[0].filepath}
-                          alt={product.alt || "product image"}
-                          className="w-100 coated-img"
-                        />
-                      )}
-                     
-                    </div>
-                    <div className="col-lg-7 offset-lg-1 mt-4 mt-lg-0">
-                      <h4 className="mb-4">
-                        <i>{product.name}</i>
-                      </h4>
-                        {product.content && (
-                            <div className="paragraph gray-para" dangerouslySetInnerHTML={{__html: product.content}}>
-                          </div>
-                        )}
-                      {product.button && (
-                        <div className="d-flex mt-3">
-                          {product.brochure && product.brochure?.filepath && product.brochure.filepath !== "" && (
-                            <NavLink
-                              to={product.brochure.filepath}
-                              target="_blank"
-                              className="custom-button"
-                            >
-                            {product.button}
-                            </NavLink>
-                          )}
-                          
-                        </div>
-                      )}
-                    
-                    </div>
-                      </>
-                   
-                     )}
-                  </div>
-                ))}
-            </div>
-          </div>
+  
 
-          
-          <div className="row coated-big-img-div align-items-center justify-content-center mb-5">
-            {coatedProduct &&
-                coatedProduct.map((product) => (
-                  <>
-                  {product.content && (
-                <div className="col-lg-6 col-md-6 col-12 mt-4" key={product._id}>
-                  <h4 className="mb-4 text-center">
-                    {product.name && <i>{product.name}</i>}
-                  </h4>
-                  {product.image?.[0]?.filepath && (
-                    <img src={product.image?.[0].filepath} alt={product.alt} className="w-100" />
-                  )} 
+      <section className="application-types-section coated-application-section">
+  <div className="container">
+    
+      <div
+        className="row align-items-center justify-content-center mb-5"
+      >
+        {coatedProduct?.map((product) => (
+          <>
+        {product.content ? (
+          <div className="col-lg-9">
+            <div className="row align-items-center justify-content-center">
+               {product.image?.[0]?.filepath && (
+              <div className="col-lg-4 mb-4" key={product._id}>
+                <img
+                  src={product.image[0].filepath}
+                  alt={product.alt || "product image"}
+                  className="w-100 coated-img"
+                />
+              </div>
+            )}
+             <div className="col-lg-7 offset-lg-1 mt-4 mt-lg-0">
+              <h4 className="mb-4">
+                <i>{product.name}</i>
+              </h4>
+               <div
+                 className="paragraph gray-para mt-3"
+                 dangerouslySetInnerHTML={{ __html: product.content }}
+               >
+               </div>
+
+              {product.button && product.brochure?.filepath && (
+                <div className="d-flex mt-3">
+                  <NavLink
+                    to={product.brochure.filepath}
+                    target="_blank"
+                    className="custom-button"
+                  >
+                    {product.button}
+                  </NavLink>
                 </div>
-                  )}
-                  </>
-             
-                  ))}
+              )}
+            </div>
+            </div>
+           
+
+           
           </div>
-                
-        </div>
-      </section>
+        ) : (
+          <>
+            <div className="col-lg-6 col-md-6 col-6 mt-4" key={product._id}>
+              <h4 className="mb-4 text-center">
+                {product.name && <i>{product.name}</i>}
+              </h4>
+
+              {product.image?.[0]?.filepath && (
+                <img
+                  src={product.image[0].filepath}
+                  alt={product.alt}
+                  className="w-100"
+                />
+              )}
+
+             
+            </div>
+          </>
+        )}
+          </>
+         ))}
+      </div>
+   
+  </div>
+</section>
+
 
       <CoatedApplicationModal />
     </Layout>

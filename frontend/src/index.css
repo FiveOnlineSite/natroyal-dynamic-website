@@ -1649,6 +1649,10 @@ body {
   padding: 50px 0;
 }
 
+.perfect-flooring-section img{
+  object-fit: contain;
+}
+
 .category-img-container img,
 .category-img-container {
   position: relative;
@@ -2106,6 +2110,8 @@ body {
 
 .features-div img {
   filter: invert(1);
+  height: 90px;
+  object-fit: contain;
 }
 
 .business-section {
@@ -2411,7 +2417,8 @@ justify-content: center !important;
 }
 
 .clients-section .image-container .product-image{
-  width: 150px;
+  /* width: 150px; */
+  aspect-ratio: 5;
 }
 
 

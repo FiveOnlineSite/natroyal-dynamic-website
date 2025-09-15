@@ -8,8 +8,6 @@ const createTextile = async (req, res) => {
   try {
     let { title, content, alt, lamination_content, coating_content, tags } =
       req.body;
-
-
       
           const duplicate = await TextilesModel.findOne({
             title: title.trim(),
@@ -246,9 +244,11 @@ const getTextiles = async (req, res) => {
 
 const deleteTextile = async (req, res) => {
   try {
-    const textile = await TextilesModel.findById({
-      _id: req.params._id,
-    });
+
+    const { _id } = req.params;
+    const textile = await TextilesModel.findById(
+      _id,
+    );
 
     if (textile.length === 0) {
       return res.status(400).json({
@@ -256,10 +256,10 @@ const deleteTextile = async (req, res) => {
       });
     }
 
-    const deletedTextile = await TextilesModel.findByIdAndDelete(textile._id);
+    const deletedTextile = await TextilesModel.findByIdAndDelete(_id);
 
     const deletedTag = await TagsModel.deleteMany({
-      textiles: _id,
+      textile: _id,
     });
     return res.status(200).json({
       message: "Textile deleted successfully.",

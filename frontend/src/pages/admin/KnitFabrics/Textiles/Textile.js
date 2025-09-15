@@ -33,7 +33,7 @@ const Textile = () => {
     fetchTextiles();
   }, []);
 
-  const handleDeleteApplication = async (id, title) => {
+  const handleDelete = async (id, title) => {
     const confirmDelete = window.confirm(
       `Are you sure you want to delete this "${title}" textiles?`
     );
@@ -135,7 +135,7 @@ const Textile = () => {
                           <button
                             className="delete-btn"
                             onClick={() =>
-                              handleDeleteApplication(app._id, app.title)
+                              handleDelete(app._id, app.title)
                             }
                           >
                             <i className="las la-trash"></i>{" "}

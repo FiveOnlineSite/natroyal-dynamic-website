@@ -22,14 +22,14 @@ const createCoatedProduct = async (req, res) => {
     button = button?.trim() || "";
     content = content?.trim() || "";
 
-    const existingProduct = await CoatedProductsModel.findOne({
-      name: name.trim(),
-    });
-    if (existingProduct) {
-      return res
-        .status(400)
-        .json({ message: "Product with this name already exists." });
-    }
+    // const existingProduct = await CoatedProductsModel.findOne({
+    //   name: name.trim(),
+    // });
+    // if (existingProduct) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "Product with this name already exists." });
+    // }
 
     const applicationExists = await CoatedApplicationModel.findById(
       application

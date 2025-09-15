@@ -110,7 +110,7 @@ const getCoatedAppContentByAppName = async (req, res) => {
       const paramSlug = slugify(req.params.name || "");
   
       // Get all apps (or you could query directly if you have many)
-      const applications = await CoatedApplicationModel.find({}, "name");
+      const applications = await CoatedAppModel.find({}, "name");
   
       console.log("paramSlug:", paramSlug);
   
@@ -142,8 +142,8 @@ const getCoatedAppContentByAppName = async (req, res) => {
         content: contents,
       });
     } catch (err) {
-      console.error("Error fetching coated app content by app name:", err);
-      res.status(500).json({ message: "Server error" });
+      console.error("Error fetching coated app content by app name:", err.message);
+      res.status(500).json({ message: `Server error ${err.message}` });
     }
 };
 

@@ -97,7 +97,7 @@ const EditDivision = () => {
     } else {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: value.trim(),
+        [name]: value,
       }));
     }
   };

@@ -44,16 +44,14 @@ const AddVinylAppContent = () => {
     const access_token = localStorage.getItem("access_token");
     const apiUrl = process.env.REACT_APP_API_URL;
 
-    // Strip HTML tags to get plain text
-    const plainContent = content.replace(/<\/?[^>]+(>|$)/g, "");
-
+    
     await axios.post(
       `${apiUrl}/api/vinyl-application-content`,
       {
         application,
         title1: title1,
         title2: title2 || "",
-        content: plainContent, 
+        content: content, 
       },
       {
         headers: { Authorization: `Bearer ${access_token}` },

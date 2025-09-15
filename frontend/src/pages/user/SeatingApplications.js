@@ -75,7 +75,7 @@ const location = useLocation()
       const fetchSeatingProductByApp = async () => {
         try {
           const apiUrl = process.env.REACT_APP_API_URL;
-          const response = await axios.get(`${apiUrl}/api/seating-product/application/by-name/${name}`);
+          const response = await axios.get(`${apiUrl}/api/seating-product/application/${name}`);
           const seatingProductByApp = response.data.product;
                 
           setSeatingProductByApp(seatingProductByApp);
@@ -85,7 +85,7 @@ const location = useLocation()
       };
                 
       fetchSeatingProductByApp();
-    }, []);
+    }, [name]);
 
    const [seatingAppContent, setSeatingAppContent] = useState([]);
                 
@@ -138,8 +138,8 @@ const location = useLocation()
         {seatingAppContent && seatingAppContent.map((appcontent) => (
           <React.Fragment key={appcontent._id}>
             <h2 className="title new-title text-center">
-              {appcontent.title1} 
-              {appcontent.title2 && (
+              {appcontent.title1} {""}
+              {appcontent.title2 && ( 
                 <span className="yellow-title">{appcontent.title2}</span>
               )}
             </h2>
@@ -161,8 +161,8 @@ const location = useLocation()
           <div className="row justify-content-center">
             <div className="col-lg-12">
               <div className="row justify-content-center">
-                {seatingProductByApp && seatingProductByApp.map((product, index) => (
-                  <div className="col-lg-4 col-md-6 col-12" key={index}>
+                {seatingProductByApp && seatingProductByApp.map((product) => (
+                  <div className="col-lg-4 col-md-6 col-12" key={product._id}>
                     <div className="mission-div mb-5">
                       <div className="mission-no">{product.sequence}</div>
                       <div className="seating-application-img">

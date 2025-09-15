@@ -1,6 +1,27 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const CoatedApplicationModal = () => {
+
+  const [coatedApp, setCoatedApp] = useState([])
+        
+                useEffect(() => {
+                  const fetchApp = async () => {
+                    try {
+                      const apiUrl = process.env.REACT_APP_API_URL;
+                      const response = await axios.get(`${apiUrl}/api/coated-application`);
+                      const coatedApp = response.data.coatedApp;
+              
+                      setCoatedApp(coatedApp);
+                   } catch (error) {
+                      console.error("Error fetching application :", error);
+                    } 
+                  };
+              
+                  fetchApp();
+                }, []);
+  
+
   return (
     <div className="applications-accordions">
       {/* Applications Button - Opens Modal */}
@@ -51,74 +72,27 @@ const CoatedApplicationModal = () => {
                     Research & Development (R&D)
                   </a>
                 </li>
-                <li>
+                {coatedApp &&
+                coatedApp.map((app) => {
+                  return (
+                <li key={app._id}>
                   <a
                     className="dropdown-item"
-                    href="/coated-fabrics/automotive"
+                    href={`/coated-fabrics/applications/${app.name
+                    .toLowerCase()
+                    .trim()
+                    .replace(/&/g, "and")
+                    .replace(/\//g, "-")
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-+|-+$/g, "")
+                  }`}
+                    end
                   >
-                    Automotive
+                    {app.name}
                   </a>
                 </li>
-                <li>
-                  <a className="dropdown-item" href="/coated-fabrics/truck">
-                    Truck
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/coated-fabrics/tractor">
-                    Tractor
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/coated-fabrics/golf-cart">
-                    Golf Cart
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="dropdown-item"
-                    href="/coated-fabrics/marine-recreational-vehicles"
-                  >
-                    Marine & Recreational Vehicles
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="dropdown-item"
-                    href="/coated-fabrics/residential-contract-furnishing"
-                  >
-                    Residential & Contract Furnishing
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    className="dropdown-item"
-                    href="/coated-fabrics/two-wheelers"
-                  >
-                    Two Wheelers
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    className="dropdown-item"
-                    href="/coated-fabrics/healthcare"
-                  >
-                    Healthcare
-                  </a>
-                </li>
-
-                <li>
-                  <a className="dropdown-item" href="/coated-fabrics/fashion">
-                    Fashion
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="/coated-fabrics/footwear">
-                    Footwear
-                  </a>
-                </li>
+                  )
+                })}
               </ul>
             </div>
           </div>

@@ -35,7 +35,7 @@ const SeatingProduct = () => {
 
   const handleDeleteProduct = async (id, name) => {
     const confirmDelete = window.confirm(
-      `Are you sure you want to delete this "${name}" product?`
+      `Are you sure you want to delete this product from "${name}"?`
     );
     if (!confirmDelete) return;
 
