@@ -87,6 +87,7 @@ const handleDeleteApplication = async (id, name) => {
                      <th className="text-center">Icon</th>
                     <th className="text-center">Icon Alt</th>
                      <th className="text-center">Content</th>
+                     <th className="text-center">Sequence</th>
                     
                     <th className="text-center">Edit</th>
                   </tr>
@@ -127,6 +128,8 @@ const handleDeleteApplication = async (id, name) => {
                         </td>
                         <td className="text-center"> {vinylApp.icon_alt}</td>
                          <td className="text-center"> {vinylApp.content}</td>
+                         <td className="text-center"> {vinylApp.sequence}</td>
+
                          <td className="text-center">
                           <Link
                             to={`/admin/edit/vinyl-applications/${vinylApp._id}`}

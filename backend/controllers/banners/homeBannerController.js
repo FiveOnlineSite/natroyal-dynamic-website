@@ -99,7 +99,7 @@ const updateHomeBanner = async (req, res) => {
      let bannerData = existingBanner.banner;
 
    const file = req.file;
-   
+
  if (req.file) {
          const ext = path.extname(file.originalname).toLowerCase();
          const isImage = [".webp", ".jpg", ".jpeg", ".png"].includes(ext);
@@ -152,6 +152,16 @@ const updateHomeBanner = async (req, res) => {
       });
     }
 
+   updatedFields = {
+      heading,
+      heading_color,
+      button,
+      button_url,
+      banner: bannerData,
+      type: fileType,
+      alt: fileType === "image" ? altText : "", // clear alt if it's video
+    };
+
     if (sequence !== undefined) {
       const newSequence = Number(sequence);
 
@@ -164,24 +174,14 @@ const updateHomeBanner = async (req, res) => {
         });
 
         if (otherBanners) {
-          // swap their sequence values
-          otherBanners.sequence = existingBanner.sequence;
-          await otherBanners.save();
-        }
-
-        existingBanner.sequence = newSequence;
+      // Swap their sequence values
+      await homeBannerModel.findByIdAndUpdate(otherBanners._id, {
+        sequence: existingBanner.sequence,
+      });
+    }
+        updatedFields.sequence = newSequence;
       }
     }
-
-    const updatedFields = {
-      heading,
-      heading_color,
-      button,
-      button_url,
-      banner: bannerData,
-      type: fileType,
-      alt: fileType === "image" ? altText : "", // clear alt if it's video
-    };
 
     const updatedBanner = await homeBannerModel.findByIdAndUpdate(
       req.params._id,
@@ -222,7 +222,7 @@ const getHomeBanner = async (req, res) => {
 
 const getHomeBanners = async (req, res) => {
   try {
-    const banners = await homeBannerModel.find();
+    const banners = await homeBannerModel.find().sort({sequence: 1});
 
     if (banners.length === 0) {
       return res.status(400).json({
@@ -243,35 +243,32 @@ const getHomeBanners = async (req, res) => {
 
 const deleteHomeBanner = async (req, res) => {
   try {
-
     const { _id } = req.params;
 
-    const bannerExists = await homeBannerModel.findById(_id);
+    // Find the banner first
+    const deletedBanner = await homeBannerModel.findById(_id);
 
-    if (bannerExists.length === 0) {
+    if (!deletedBanner) {
       return res.status(400).json({
         message: "No banners are created. Kindly create one.",
       });
     }
 
-    const deletedSeq = bannerExists.sequence;
+    const deletedSeq = deletedBanner.sequence;
 
+    // Delete the banner
+    await homeBannerModel.findByIdAndDelete(_id);
 
-    await homeBannerModel.deleteOne(_id);
-
+    // Shift sequences of other banners
     const result = await homeBannerModel.updateMany(
-      {
-        sequence: { $gt: deletedSeq },
-      },
+      { sequence: { $gt: deletedSeq } },
       { $inc: { sequence: -1 } }
     );
 
     console.log("Shifted", result.modifiedCount, "docs");
 
-    // --- Return new ordered list for confirmation ---
-    const updatedList = await homeBannerModel.find()
-      .sort({ sequence: 1 })
-      .lean();
+    // Return updated list
+    const updatedList = await homeBannerModel.find().sort({ sequence: 1 }).lean();
 
     return res.status(200).json({
       message: "Home banner deleted & sequence updated successfully.",
@@ -284,6 +281,7 @@ const deleteHomeBanner = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   createHomeBanner,

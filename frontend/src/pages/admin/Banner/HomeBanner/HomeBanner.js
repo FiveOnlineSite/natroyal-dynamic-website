@@ -67,6 +67,7 @@ const HomeBanner = () => {
       console.error("Error deleting home banner:", error);
     }
   };
+  
   return (
     <AdminLayout>
       <div className="pages-headers ">

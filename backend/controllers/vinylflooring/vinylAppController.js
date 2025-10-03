@@ -66,6 +66,8 @@ const createVinylApp = async (req, res) => {
                 }
     }
 
+    const totalVinylApps = await VinylApplicationModel.countDocuments();
+
     const newVinylApplication = new VinylApplicationModel({
       image: imageData ? [imageData] : [],
       alt,
@@ -74,6 +76,7 @@ const createVinylApp = async (req, res) => {
       name,
       content,
       link,
+      sequence: totalVinylApps + 1,
     });
 
     await newVinylApplication.save();
@@ -91,10 +94,14 @@ const createVinylApp = async (req, res) => {
 
 const updateVinylApp = async (req, res) => {
   try {
-    const { alt, icon_alt, name, content, link } = req.body;
+    const { alt, icon_alt, name, content, link, sequence } = req.body;
     const appId = req.params._id;
 
-    // Check duplicate name (excluding current app)
+    const existingVinylApp = await VinylApplicationModel.findById(appId);
+    if (!existingVinylApp) {
+      return res.status(404).json({ message: "Vinyl application not found." });
+    }
+
     if (name) {
       const duplicate = await VinylApplicationModel.findOne({
         name: name.trim(),
@@ -138,7 +145,27 @@ const updateVinylApp = async (req, res) => {
       ];
     }
 
-    // Add text fields (only if provided)
+    if (sequence !== undefined) {
+  const newSequence = Number(sequence);
+
+  if (newSequence !== existingVinylApp.sequence) {
+    const otherVinylApp = await VinylApplicationModel.findOne({
+      sequence: newSequence,
+      _id: { $ne: existingVinylApp._id },
+    });
+
+    if (otherVinylApp) {
+      // swap the other app's sequence to current app's sequence
+      await VinylApplicationModel.findByIdAndUpdate(otherVinylApp._id, {
+        sequence: existingVinylApp.sequence,
+      });
+    }
+
+    // include sequence in updateData so it's persisted
+    updateData.sequence = newSequence;
+  }
+}
+
     if (alt !== undefined) updateData.alt = alt;
     if (icon_alt !== undefined) updateData.icon_alt = icon_alt;
     if (name !== undefined) updateData.name = name;
@@ -239,7 +266,7 @@ const getVinylApp = async (req, res) => {
 
 const getAllVinylApps = async (req, res) => {
   try {
-    const vinylApp = await VinylApplicationModel.find();
+    const vinylApp = await VinylApplicationModel.find().sort({sequence: 1});
 
     if (vinylApp.length === 0) {
       return res.status(400).json({
@@ -262,7 +289,6 @@ const getAllVinylApps = async (req, res) => {
 const deleteVinylApp = async (req, res) => {
   try {
     const { _id } = req.params;
-
     const objectId = new mongoose.Types.ObjectId(_id);
 
     const vinylApp = await VinylApplicationModel.findById(objectId);
@@ -272,21 +298,16 @@ const deleteVinylApp = async (req, res) => {
       });
     }
 
-    // Step 1: Find products linked to this application
-    const productsLinked = await VinylProductModel.find({
-      applications: objectId,
-    });
+    await VinylProductModel.updateMany(
+      { applications: objectId },
+      { $pull: { applications: objectId } }
+    );
 
-    for (const product of productsLinked) {
-      
-        await VinylProductModel.updateOne(
-          { _id: product._id },
-          { $pull: { applications: objectId } }
-        );
+    const deletedVinylApp = await VinylApplicationModel.findByIdAndDelete(objectId);
+    if (!deletedVinylApp) {
+      return res.status(400).json({ message: "Vinyl application not found or already deleted." });
     }
 
-    // Step 3: delete application and related content
-    const deletedVinylApp = await VinylApplicationModel.findByIdAndDelete(objectId);
     const deletedVinylAppContent = await VinylAppContentModel.deleteMany({
       application: objectId,
     });
@@ -295,11 +316,21 @@ const deleteVinylApp = async (req, res) => {
       application: objectId,
     });
 
+    await VinylApplicationModel.updateMany(
+      { sequence: { $gt: deletedVinylApp.sequence } },
+      { $inc: { sequence: -1 } }
+    );
+
+    const updatedList = await VinylApplicationModel.find().sort({ sequence: 1 }).lean();
+
     return res.status(200).json({
       message: "Vinyl application deleted successfully.",
       deletedVinylApp,
       deletedVinylAppContent,
+      deletedSuitable,
+      updatedList
     });
+    
   } catch (error) {
     return res.status(500).json({
       message: `Error in deleting vinyl application due to ${error.message}`,

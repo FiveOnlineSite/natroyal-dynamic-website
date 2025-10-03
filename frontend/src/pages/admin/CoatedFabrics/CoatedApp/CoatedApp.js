@@ -88,6 +88,8 @@ const CoatedApp = () => {
                     <th>Name</th>
                     <th className="text-center">Image</th>
                     <th className="text-center">Alt</th>
+                    <th className="text-center">Sequence</th>
+
 
                     <th className="text-center">Edit</th>
                   </tr>
@@ -112,6 +114,7 @@ const CoatedApp = () => {
                           )}
                         </td>
                         <td className="text-center"> {app.alt}</td>
+                        <td className="text-center"> {app.sequence}</td>
 
                         <td className="text-center">
                           <Link

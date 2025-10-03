@@ -13,6 +13,7 @@
     "axios": "^1.11.0",
     "bootstrap": "^5.3.3",
     "cra-template": "1.2.0",
+    "file-saver": "^2.0.5",
     "lineicons": "^1.3.2",
     "lineicons-react": "^2.0.0",
     "owl.carousel": "^2.3.4",
@@ -27,7 +28,8 @@
     "react-slick": "^0.30.3",
     "react-toastify": "^11.0.5",
     "slick-carousel": "^1.8.1",
-    "swiper": "^11.2.0"
+    "swiper": "^11.2.0",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

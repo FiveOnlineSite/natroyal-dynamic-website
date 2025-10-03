@@ -21,6 +21,7 @@ const EditCoatedApp = () => {
       file: "",
       filepath: "",
     },
+    sequence: ""
   });
 
   useEffect(() => {
@@ -42,6 +43,7 @@ const EditCoatedApp = () => {
             file: coatedAppData.image?.[0]?.filename || "",
             filepath: coatedAppData.image?.[0]?.filepath || "",
           },
+          sequence: coatedAppData.sequence
         });
       } catch (error) {
         console.error("Error fetching coated app:", error);
@@ -114,6 +116,8 @@ const EditCoatedApp = () => {
 
       formDataToSend.append("name", formData.name || "");
       formDataToSend.append("alt", formData.alt || "");
+      formDataToSend.append("sequence", formData.sequence || "");
+
       if (isImage) {
         formDataToSend.append("image", formData.image.file);
       }
@@ -147,7 +151,7 @@ const EditCoatedApp = () => {
   return (
     <AdminLayout>
       <div className="theme-form-header">
-        <h2>Edit coated applications</h2>
+        <h2>Edit Coated Applications</h2>
       </div>
       <div className="form-white-bg">
         <form onSubmit={handleSubmit}>
@@ -219,6 +223,20 @@ const EditCoatedApp = () => {
                 />
               </div>
             </div>
+
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Sequence</label>
+                <input
+                  type="text"
+                  name="sequence"
+                  value={formData.sequence}
+                  required
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
             {errorMessage && (
               <div className="text-danger col-12 mt-2">{errorMessage}</div>
             )}

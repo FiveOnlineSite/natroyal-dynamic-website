@@ -23,6 +23,7 @@ const EditSeatingApp = () => {
       file: "",
       filepath: "",
     },
+    sequence: ""
   });
 
   useEffect(() => {
@@ -44,7 +45,9 @@ const EditSeatingApp = () => {
             file: seatingAppData.image?.[0]?.filename || "",
             filepath: seatingAppData.image?.[0]?.filepath || "",
           },
-          content: seatingAppData.content
+          content: seatingAppData.content,
+          sequence: seatingAppData.sequence
+
         });
       } catch (error) {
         console.error("Error fetching seating app:", error);
@@ -116,6 +119,7 @@ const EditSeatingApp = () => {
         formDataToSend.append("image", formData.image.file);
       }formDataToSend.append("content", formData.content || "");
       
+      formDataToSend.append("sequence", formData.sequence || "");
 
       await axios.patch(
         `${apiUrl}/api/seating-application/${id}`,
@@ -147,7 +151,7 @@ const EditSeatingApp = () => {
   return (
     <AdminLayout>
       <div className="theme-form-header">
-        <h2>Edit seating applications</h2>
+        <h2>Edit Seating Applications</h2>
       </div>
       <div className="form-white-bg">
         <form onSubmit={handleSubmit}>
@@ -243,6 +247,19 @@ const EditSeatingApp = () => {
                                        />
                                       </div>
                                     </div>
+
+                                    <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Sequence</label>
+                <input
+                  type="text"
+                  name="sequence"
+                  value={formData.sequence}
+                  required
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
 
             {errorMessage && (
               <div className="text-danger col-12 mt-2">{errorMessage}</div>

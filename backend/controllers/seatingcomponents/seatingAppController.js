@@ -1,5 +1,4 @@
 const SeatingAppModel = require("../../models/seatingcomponents/seatingAppModel");
-const cloudinary = require("../../utils/cloudinary");
 const path = require("path");
 const fs = require("fs");
 const mongoose = require("mongoose");
@@ -36,11 +35,14 @@ const createSeatingApp = async (req, res) => {
                              }
     }
 
+    const totalSeatingApps = await SeatingAppModel.countDocuments();
+
     const newSeatingApplication = new SeatingAppModel({
       image: imageData ? [imageData] : [],
       alt,
       name,
       content,
+      sequence: totalSeatingApps + 1,
     });
 
     await newSeatingApplication.save();
@@ -58,7 +60,7 @@ const createSeatingApp = async (req, res) => {
 
 const updateSeatingApp = async (req, res) => {
   try {
-    const { alt, name, content } = req.body;
+    const { alt, name, content, sequence } = req.body;
 
     const _id = req.params._id;
 
@@ -95,6 +97,27 @@ const updateSeatingApp = async (req, res) => {
                               }
       ];
     }
+
+    if (sequence !== undefined) {
+          const newSequence = Number(sequence);
+        
+          if (newSequence !== seatingApplication.sequence) {
+            const otherSeatingApp = await SeatingAppModel.findOne({
+              sequence: newSequence,
+              _id: { $ne: seatingApplication._id },
+            });
+        
+            if (otherSeatingApp) {
+              // swap the other app's sequence to current app's sequence
+              await SeatingAppModel.findByIdAndUpdate(otherSeatingApp._id, {
+                sequence: seatingApplication.sequence,
+              });
+            }
+        
+            // include sequence in updateData so it's persisted
+            seatingApplication.sequence = newSequence;
+          }
+        }
 
     // update text fields
     if (alt !== undefined) seatingApplication.alt = alt;
@@ -139,7 +162,7 @@ const getSeatingApp = async (req, res) => {
 
 const getSeatingApps = async (req, res) => {
   try {
-    const seatingApp = await SeatingAppModel.find();
+    const seatingApp = await SeatingAppModel.find().sort({sequence: 1});
 
     if (seatingApp.length === 0) {
       return res.status(400).json({
@@ -162,8 +185,9 @@ const getSeatingApps = async (req, res) => {
 const deleteSeatingApp = async (req, res) => {
   try {
     const { _id } = req.params;
-
-    const seatingApp = await SeatingAppModel.findById(_id);
+    const objectId = new mongoose.Types.ObjectId(_id);
+    
+    const seatingApp = await SeatingAppModel.findById(objectId);
 
     if (!seatingApp) {
       return res.status(400).json({
@@ -171,25 +195,31 @@ const deleteSeatingApp = async (req, res) => {
       });
     }
 
-    // Step 3: If safe, delete the application
-    const deletedSeatingApp = await SeatingAppModel.findOneAndDelete({
-      _id,
-    });
+    const deletedSeatingApp = await SeatingAppModel.findByIdAndDelete(objectId);
 
     const deletedSeatingProduct = await SeatingProductModel.deleteMany({
-      application: _id,
+      application: objectId,
     });
 
     const deletedSeatingAppContent = await SeatingAppContentModel.deleteMany({
-      application: _id,
+      application: objectId,
     });
+
+    await SeatingAppModel.updateMany(
+          { sequence: { $gt: deletedSeatingApp.sequence } },
+          { $inc: { sequence: -1 } }
+        );
+
+    const updatedList = await SeatingAppModel.find().sort({ sequence: 1 }).lean();
 
     return res.status(200).json({
       message: "seating application deleted successfully.",
       deletedSeatingApp,
       deletedSeatingAppContent,
       deletedSeatingProduct,
+      updatedList
     });
+
   } catch (error) {
     return res.status(500).json({
       message: `Error in deleting seating application due to ${error.message}`,

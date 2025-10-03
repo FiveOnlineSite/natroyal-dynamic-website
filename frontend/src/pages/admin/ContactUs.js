@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-bootstrap";
 import { toast } from "react-toastify";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const Contact = () => {
   const [contact, setContact] = useState([]);
@@ -67,11 +69,48 @@ const Contact = () => {
     c.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const downloadExcel = () => {
+
+    const worksheet = XLSX.utils.json_to_sheet(
+      contact.map(
+        ({ name, email, phone, message, createdAt }) => ({
+          Name: name,
+          Email: email,
+          Phone: phone,
+          Message: message,
+          Date: new Date(createdAt).toLocaleDateString("en-IN"),
+          Time: new Date(createdAt).toLocaleTimeString("en-IN", {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        })
+      )
+    );
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Contacts");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(data, "Natroyal_Contact_List.xlsx");
+  };
+
   return (
     <AdminLayout>
       <div className="pages-headers">
         <div className="row align-items-center justify-content-center">
+          <div className="col-lg-6">
             <h2>Contact Us</h2>
+          </div>
+          <div className="col-lg-6 d-flex justify-content-end">
+             <button onClick={downloadExcel} className="theme-cta border-0">
+              Download Excel
+            </button>
+          </div>
         </div>
       </div>
 

@@ -36,10 +36,13 @@ const createCoatedApp = async (req, res) => {
            }
     }
 
+    const totalCoatedApps = await CoatedApplicationModel.countDocuments();
+
     const newCoatedApplication = new CoatedApplicationModel({
       image: imageData ? [imageData] : [],
       alt,
       name,
+      sequence: totalCoatedApps + 1,
     });
 
     await newCoatedApplication.save();
@@ -57,7 +60,7 @@ const createCoatedApp = async (req, res) => {
 
 const updateCoatedApp = async (req, res) => {
   try {
-    const { alt, name } = req.body;
+    const { alt, name, sequence } = req.body;
 
     const _id = req.params._id;
 
@@ -94,6 +97,27 @@ const updateCoatedApp = async (req, res) => {
             filepath: `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${file.key}` // keep "images/banners/..."
            }
       ];
+    }
+
+    if (sequence !== undefined) {
+      const newSequence = Number(sequence);
+    
+      if (newSequence !== coatedApplication.sequence) {
+        const otherCoatedApp = await CoatedApplicationModel.findOne({
+          sequence: newSequence,
+          _id: { $ne: coatedApplication._id },
+        });
+    
+        if (otherCoatedApp) {
+          // swap the other app's sequence to current app's sequence
+          await CoatedApplicationModel.findByIdAndUpdate(otherCoatedApp._id, {
+            sequence: coatedApplication.sequence,
+          });
+        }
+    
+        // include sequence in updateData so it's persisted
+        coatedApplication.sequence = newSequence;
+      }
     }
 
     // update text fields
@@ -138,7 +162,7 @@ const getCoatedApp = async (req, res) => {
 
 const getCoatedApps = async (req, res) => {
   try {
-    const coatedApp = await CoatedApplicationModel.find();
+    const coatedApp = await CoatedApplicationModel.find().sort({sequence: 1});
 
     if (coatedApp.length === 0) {
       return res.status(400).json({
@@ -161,34 +185,44 @@ const getCoatedApps = async (req, res) => {
 const deleteCoatedApp = async (req, res) => {
   try {
     const { _id } = req.params;
+    const objectId = new mongoose.Types.ObjectId(_id);
 
-    const coatedApp = await CoatedApplicationModel.findById(_id);
+    const coatedApp = await CoatedApplicationModel.findById(objectId);
 
     if (!coatedApp) {
       return res.status(400).json({
         message: "No coated application found to delete. Kindly add one.",
       });
     }
-
-    // Step 3: If safe, delete the application
-    const deletedCoatedApp = await CoatedApplicationModel.findOneAndDelete({
-      _id,
-    });
+    const deletedCoatedApp = await CoatedApplicationModel.findByIdAndDelete(objectId);
+    
+    if (!deletedCoatedApp) {
+      return res.status(400).json({ message: "Coated application not found or already deleted." });
+    }
 
     const deletedCoatedProduct = await CoatedProductModel.deleteMany({
-      application: _id,
+      application: objectId,
     });
 
     const deletedCoatedAppContent = await CoatedAppContentModel.deleteMany({
-      application: _id,
+      application: objectId,
     });
+
+    await CoatedApplicationModel.updateMany(
+      { sequence: { $gt: deletedCoatedApp.sequence } },
+      { $inc: { sequence: -1 } }
+    );
+
+    const updatedList = await CoatedApplicationModel.find().sort({ sequence: 1 }).lean();
 
     return res.status(200).json({
       message: "Coated application deleted successfully.",
       deletedCoatedApp,
       deletedCoatedAppContent,
       deletedCoatedProduct,
+      updatedList
     });
+    
   } catch (error) {
     return res.status(500).json({
       message: `Error in deleting Coated application due to ${error.message}`,

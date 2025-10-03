@@ -29,6 +29,7 @@ const EditVinylApp = () => {
        file: "",
        filepath: "",
      },
+     sequence: ""
    });
 
    
@@ -55,6 +56,7 @@ const EditVinylApp = () => {
             file: vinylAppData.icon?.[0]?.filename || "",
             filepath: vinylAppData.icon?.[0]?.filepath || "",
           },
+          sequence: vinylAppData.sequence,
         });
       } catch (error) {
         console.error("Error fetching vinyl app:", error);
@@ -136,6 +138,8 @@ const EditVinylApp = () => {
       formDataToSend.append("content", formData.content || "");
       formDataToSend.append("alt", formData.alt || "");
       formDataToSend.append("icon_alt", formData.icon_alt || "");
+      formDataToSend.append("sequence", formData.sequence || "");
+
       if (isImage) {
         formDataToSend.append("image", formData.image.file);
       }
@@ -170,7 +174,7 @@ const EditVinylApp = () => {
   return (
     <AdminLayout>
       <div className="theme-form-header">
-        <h2>Edit vinyl applications</h2>
+        <h2>Edit Vinyl Application</h2>
       </div>
       <div className="form-white-bg">
         <form onSubmit={handleSubmit}>
@@ -326,6 +330,19 @@ const EditVinylApp = () => {
                 />
               </div>
             </div>
+
+            <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+                          <div className="theme-form">
+                            <label>Sequence</label>
+                            <input
+                              type="text"
+                              name="sequence"
+                              value={formData.sequence}
+                              required
+                              onChange={handleChange}
+                            />
+                          </div>
+                        </div>
 
             {errorMessage && (
               <div className="text-danger col-12 mt-2">{errorMessage}</div>
