@@ -113,9 +113,9 @@ const EditSeatingProduct = () => {
                                     }
     setErrorMessage("");
 
-     if (formData.order > totalSeatingProduct) {
+     if (formData.sequence > totalSeatingProduct) {
       setErrorMessage(
-        `Total entries are ${totalSeatingProduct}. Order number cannot be greater than ${totalSeatingProduct}`
+        `Total entries are ${totalSeatingProduct}. Sequence cannot be greater than ${totalSeatingProduct}`
       );
       return;
     }

@@ -15,6 +15,9 @@ const CoatedApplicationSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  sequence: {
+    type: Number,
+  }
 });
 
 const CoatedApplicationModel = mongoose.model(

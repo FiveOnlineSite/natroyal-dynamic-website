@@ -11,6 +11,7 @@ const EditHomeBanner = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 const [validationError, setValidationError] = useState("");
+  const [totalHomeBanners, setTotalHomBanners] = useState(0);
   
   const [formData, setFormData] = useState({
     alt: "",
@@ -22,6 +23,7 @@ const [validationError, setValidationError] = useState("");
     heading_color: "",
     button: "",
     button_url: "",
+    sequence: ""
   });
 
   useEffect(() => {
@@ -42,8 +44,17 @@ const [validationError, setValidationError] = useState("");
             file: homeBannerData.banner.filename,
             filepath: homeBannerData.banner.filepath || "",
           },
-          type: homeBannerData.type
+          type: homeBannerData.type,
+          sequence: homeBannerData.sequence
         });
+
+        const totalHomeBanners = await axios.get(
+          `${apiUrl}/api/home-banner`
+        );
+        const totalCount = totalHomeBanners.data.count;
+        setTotalHomBanners(totalCount);
+                console.log("Count", totalCount);
+                
       } catch (error) {
         console.error("Error fetching home banner:", error);
         setErrorMessage("Failed to fetch home banner data.");
@@ -54,6 +65,9 @@ const [validationError, setValidationError] = useState("");
   }, [id]);
 
    const handleChange = (e) => {
+    setErrorMessage("")
+    setValidationError("")
+
     const { name, value, files } = e.target;
 
     if (name === "banner" && files?.length > 0) {
@@ -93,7 +107,15 @@ const [validationError, setValidationError] = useState("");
     }
 
     setIsSubmitting(true);
+
     setErrorMessage("");
+
+     if (formData.sequence > totalHomeBanners) {
+      setErrorMessage(
+        `Total entries are ${totalHomeBanners}. Sequence cannot be greater than ${totalHomeBanners}`
+      );
+      return;
+    }
 
     const isImage = formData.type === "image";
   const isVideo = formData.type === "video";
@@ -110,6 +132,7 @@ const [validationError, setValidationError] = useState("");
     formDataToSend.append("heading_color", formData.heading_color || "");
     formDataToSend.append("button", formData.button || "");
     formDataToSend.append("button_url", formData.button_url || "");
+      formDataToSend.append("sequence", Number(formData.sequence) || "");
 
     if (formData.banner.file instanceof File) {
     formDataToSend.append("banner", formData.banner.file);
@@ -297,10 +320,27 @@ const [validationError, setValidationError] = useState("");
                 />
               </div>
             </div>
-
+  <div className="col-lg-6 col-md-6 col-sm-12 col-12">
+              <div className="theme-form">
+                <label>Sequence</label>
+                <input
+                  type="text"
+                  name="sequence"
+                  value={formData.sequence}
+                  required
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
             <div className="col-lg-12 col-md-12 col-sm-12 col-12">
               {errorMessage && (
-                <div className="error-message">{errorMessage}</div>
+                <div className="error-message text-danger">{errorMessage}</div>
+              )}
+            </div>
+
+            <div className="col-lg-12 col-md-12 col-sm-12 col-12">
+              {validationError && (
+                <div className="validation-message text-danger">{validationError}</div>
               )}
             </div>
 

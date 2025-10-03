@@ -18,6 +18,9 @@ const SeatingApplicationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  sequence: {
+    type: Number,
+  }
 });
 
 const SeatingApplicationModel = mongoose.model(

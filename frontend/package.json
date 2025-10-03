@@ -2,6 +2,7 @@
   "name": "natroyal",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "dependencies": {
     "@ckeditor/ckeditor5-alignment": "^46.0.3",
     "@ckeditor/ckeditor5-build-classic": "^41.4.2",

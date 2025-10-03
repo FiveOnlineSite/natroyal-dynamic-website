@@ -36,6 +36,9 @@ const VinylApplicationSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  sequence: {
+    type: Number,
+  }
 });
 
 const VinylApplication = mongoose.model(

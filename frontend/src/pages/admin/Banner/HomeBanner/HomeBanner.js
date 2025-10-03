@@ -62,7 +62,7 @@ const HomeBanner = () => {
         navigate("/admin/home-banner");
       }, 3000);
     } catch (error) {
-        toast.success("Failed to delete home banner");
+        toast.error("Failed to delete home banner");
       
       console.error("Error deleting home banner:", error);
     }
@@ -91,6 +91,7 @@ const HomeBanner = () => {
                     <th className="text-center">Heading Color</th>
                     <th className="text-center">Button</th>
                     <th className="text-center">Button Url</th>
+                    <th className="text-center">Sequence</th>
                     <th className="text-center">Edit</th>
                     {/* <th className="text-center">Delete</th> */}
                   </tr>
@@ -137,6 +138,7 @@ const HomeBanner = () => {
                         </td>
                         <td className="text-center">{banners.button}</td>
                         <td className="text-center">{banners.button_url}</td>
+                        <td className="text-center">{banners.sequence}</td>
                         <td className="text-center">
                           <Link
                             to={`/admin/edit/home-banner/${banners._id}`}

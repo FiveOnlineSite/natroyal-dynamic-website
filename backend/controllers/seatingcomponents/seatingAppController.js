@@ -105,7 +105,7 @@ const updateSeatingApp = async (req, res) => {
     res.status(200).json({
       message: "seating application updated successfully",
       seatingApplication,
-    });
+    }); 
   } catch (error) {
     // full log in backend
     res.status(500).json({

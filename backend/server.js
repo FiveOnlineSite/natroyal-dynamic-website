@@ -12,9 +12,6 @@ dotenv.config();
 
 const PORT = process.env.PORT || 8000;
 
-// Serve the static files from the React app
-// app.use(express.static(path.join(__dirname, "frontend/build")));
-
 app.use(cors());
 
 app.use((req, res, next) => {
@@ -94,31 +91,12 @@ app.use("/api/division", Route.divisionsRoute);
 app.use("/api/meta-data", Route.metaDataRoute);
 app.use("/api/contact", Route.contactRoute);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-// app.use("/api/uploads", uploadRoutes);
-
-// app.use("/docs", express.static(path.join(__dirname, "docs")));
-
-// // Serve the sitemap at /sitemap.xml
-// app.get("/sitemap.xml", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public/sitemap.xml"));
-// });
-
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
-// });
-
-// app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../frontend/build/index.html"));
-// });
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // All other requests will be handled by React
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+});
 
 connectDb();
 

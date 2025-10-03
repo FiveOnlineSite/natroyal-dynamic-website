@@ -75,6 +75,7 @@ const AddVinylApp = () => {
         formData.append("image", image.file);
       }
       if (icon.file) {
+
         formData.append("icon", icon.file);
       }
 

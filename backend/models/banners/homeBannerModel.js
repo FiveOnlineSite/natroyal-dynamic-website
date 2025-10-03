@@ -30,6 +30,9 @@ const HomeBannerSchema = new mongoose.Schema({
   button_url: {
     type: String,
   },
+  sequence: {
+    type: Number,
+  }
 });
 
 const HomeBannerModel = mongoose.model("Home Banner", HomeBannerSchema);
