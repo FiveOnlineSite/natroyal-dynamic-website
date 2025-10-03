@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 app.get("/api", (req, res) => {
   res.send("This is backend");
@@ -97,10 +97,9 @@ app.use("/api/division", Route.divisionsRoute);
 app.use("/api/meta-data", Route.metaDataRoute);
 app.use("/api/contact", Route.contactRoute);
 
-app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // All other requests will be handled by React
-app.get("*", (req, res) => {
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
 });
 
