@@ -12,7 +12,13 @@ dotenv.config();
 
 const PORT = process.env.PORT || 8000;
 
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:3000", "http://localhost:8000"],
+  methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
