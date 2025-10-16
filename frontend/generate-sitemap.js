@@ -1,7 +1,6 @@
 const { SitemapStream, streamToPromise } = require("sitemap");
 const { createWriteStream } = require("fs");
 
-// The base URL of your site
 const sitemap = new SitemapStream({
   hostname: "https://www.natroyalgroup.com",
 });
@@ -25,7 +24,6 @@ const routes = [
   "/awards-and-recognition",
   "/research-and-development",
 
-  // Static samples for dynamic routes — you must replace with actual values
   "/vinyl-flooring/education",
   "/vinyl-flooring/healthcare",
   "/vinyl-flooring/residential",
