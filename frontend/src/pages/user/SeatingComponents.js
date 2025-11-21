@@ -8,6 +8,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import LandingBanner from "../../components/LandingBanner";
 import { useState } from "react";
 import axios from "axios";
+import MetaDataComponent from "../../components/MetaDataComponent"
 
 const SeatingComponents = () => {
 
@@ -51,53 +52,6 @@ const SeatingComponents = () => {
     ],
   };
 
-  useEffect(() => {
-    const fetchMetaTag = async () => {
-      // Canonical URL logic
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (linkCanonical) {
-        linkCanonical.setAttribute("href", canonicalUrl);
-      } else {
-        linkCanonical = document.createElement("link");
-        linkCanonical.rel = "canonical";
-        linkCanonical.href = canonicalUrl;
-        document.head.appendChild(linkCanonical);
-      }
-
-      // 💡 Set static meta tags BEFORE the fetch
-      const defaultMeta = {
-        title:
-          "Seating Components Manufacturer in India | PU Foam, Metal Frames & Upholstery for Automotive & Auditorium",
-        description:
-          "Natroyal is a leading manufacturer of seating components in India – including metal seat frames, PU molded foam, and upholstery for metro, bus, car, cinema, and auditorium seating systems.",
-        keyword:
-          "seating components India, PU foam seat manufacturer, metal seat frame supplier, automotive seat components, auditorium seating parts, bus seat frames, car seat foam, upholstered seating solutions, metro seating manufacturers, trim covers for seats, molded foam supplier India, OEM seating solutions India",
-      };
-
-      // Add meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-      metaDescription.setAttribute("content", defaultMeta.description);
-
-      // Add meta keywords
-      let metaKeyword = document.querySelector('meta[name="keywords"]');
-      if (!metaKeyword) {
-        metaKeyword = document.createElement("meta");
-        metaKeyword.name = "keywords";
-        document.head.appendChild(metaKeyword);
-      }
-      metaKeyword.setAttribute("content", defaultMeta.keyword);
-
-      document.title = defaultMeta.title;
-    };
-    console.log(document.querySelector('meta[name="description"]').content);
-    fetchMetaTag();
-  }, []);
 
     const [seatingAbout, setSeatingAbout] = useState([])
 
@@ -137,6 +91,7 @@ const SeatingComponents = () => {
 
   return (
     <Layout>
+<MetaDataComponent/>
 
     <LandingBanner page={currentPath}/>
 

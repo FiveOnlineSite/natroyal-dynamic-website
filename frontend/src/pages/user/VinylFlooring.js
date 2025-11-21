@@ -8,8 +8,9 @@ import { NavLink, useLocation } from "react-router-dom";
 import bootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
 import ApplicationsModal from "../../components/ApplicationsModal";
 import LandingBanner from "../../components/LandingBanner";
-import { useState } from "react";
+import { useState, useParams } from "react";
 import axios from "axios";
+import MetaDataComponent from "../../components/MetaDataComponent"
 
 const VinylFlooring = () => {
  const location = useLocation();
@@ -38,7 +39,6 @@ const VinylFlooring = () => {
   };
 
     const [vinylApp, setVinylApp] = useState("");
-   
 
    useEffect(() => {
       const fetchVinylApp = async () => {
@@ -78,7 +78,7 @@ const VinylFlooring = () => {
 
   return (
     <Layout>
-
+<MetaDataComponent/>
     <LandingBanner page={currentPath}/>
 
        <section className="applications-section vinyl-applications-section">
@@ -121,8 +121,6 @@ const VinylFlooring = () => {
       </li>
     ))}
 </ul>
-
-
             </div>
           </div>
         </section>

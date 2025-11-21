@@ -117,6 +117,10 @@ setValidationError("")
                   <option value="/about-us">About Us</option>
                   <option value="/our-divisions">Our Divisions</option>
                   <option value="/contact-us">Contact Us</option>
+                  <option value="/vinyl-flooring">Vinyl Flooring</option>
+                  <option value="/coated-fabrics">Coated Fabrics</option>
+                  <option value="/seating-components">Seating Components</option>
+                  <option value="/knit-fabrics">Knit Fabrics</option>
 
                   {/* Dynamic pages from API */}
                   {allPages.map((p, idx) => (

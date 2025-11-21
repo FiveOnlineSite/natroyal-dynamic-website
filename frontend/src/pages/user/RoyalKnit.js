@@ -9,6 +9,7 @@ import Layout from "../../components/Layout";
 import LandingBanner from "../../components/LandingBanner";
 import axios from "axios";
 import { useState } from "react";
+import MetaDataComponent from "../../components/MetaDataComponent"
 
 const RoyalKnit = () => {
 
@@ -52,7 +53,6 @@ const RoyalKnit = () => {
   };
 
 
-
   const textilesSettings = {
     dots: false,
     nextArrow: <OfferingsNextArrow />,
@@ -90,55 +90,6 @@ const RoyalKnit = () => {
     ],
   };
 
-  useEffect(() => {
-    const fetchMetaTag = async () => {
-      // Canonical URL logic
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (linkCanonical) {
-        linkCanonical.setAttribute("href", canonicalUrl);
-      } else {
-        linkCanonical = document.createElement("link");
-        linkCanonical.rel = "canonical";
-        linkCanonical.href = canonicalUrl;
-        document.head.appendChild(linkCanonical);
-      }
-
-      // 💡 Set static meta tags BEFORE the fetch
-      const defaultMeta = {
-        title:
-          "Knit Fabric Manufacturer in India | Circular & Warp Knitted Fabrics Exporter to USA, UK, Germany & South Africa",
-        description:
-          "Natroyal is a leading knit fabric manufacturer in India, exporting circular and warp-knitted fabrics, headliners, lamination, and high-tenacity fabrics to the USA, UK, Germany, and South Africa.",
-        keyword:
-          "knit fabric manufacturer India, circular knitted fabric exporter, warp knit fabric supplier, headliner fabrics, circular knitted fabrics, warp knitted fabrics, fire retardant fabrics, water repellent fabrics, anti-bacterial fabrics, recycled fabrics, high tenacity fabrics, automotive lamination fabrics, knitted textiles for USA, UK, Germany, South Africa, industrial knit fabrics, apparel knit fabric India, upholstery knit fabric, automotive knit fabrics, knitted polyester fabric, global fabric exporters India",
-      };
-
-      // Add meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-      metaDescription.setAttribute("content", defaultMeta.description);
-
-      // Add meta keywords
-      let metaKeyword = document.querySelector('meta[name="keywords"]');
-      if (!metaKeyword) {
-        metaKeyword = document.createElement("meta");
-        metaKeyword.name = "keywords";
-        document.head.appendChild(metaKeyword);
-      }
-      metaKeyword.setAttribute("content", defaultMeta.keyword);
-
-      document.title = defaultMeta.title;
-    };
-    console.log(document.querySelector('meta[name="description"]').content);
-    fetchMetaTag();
-  }, []);
-
-
     const [knitAbout, setKnitAbout] = useState([])
 
   useEffect(() => {
@@ -159,7 +110,7 @@ const RoyalKnit = () => {
 
   return (
     <Layout>
-
+<MetaDataComponent/>
       <LandingBanner page={currentPath}/>
 
       <section className="about-knit-section">

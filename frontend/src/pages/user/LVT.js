@@ -10,7 +10,7 @@ import Layout from "../../components/Layout";
 import { useState } from "react";
 import axios from "axios";
 import LandingBanner from "../../components/LandingBanner";
-
+import MetaDataComponent from "../../components/MetaDataComponent"
 const LVT = () => {
 
   const location = useLocation()
@@ -92,54 +92,6 @@ const LVT = () => {
   ];
 
   const [lvtAbout, setLvtAbout] = useState([])
-
-  useEffect(() => {
-    const fetchMetaTag = async () => {
-      // Canonical URL logic
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (linkCanonical) {
-        linkCanonical.setAttribute("href", canonicalUrl);
-      } else {
-        linkCanonical = document.createElement("link");
-        linkCanonical.rel = "canonical";
-        linkCanonical.href = canonicalUrl;
-        document.head.appendChild(linkCanonical);
-      }
-
-      // 💡 Set static meta tags BEFORE the fetch
-      const defaultMeta = {
-        title:
-          "Natroyal LVT Flooring | Indian Manufacturer & Exporter to USA & UK",
-        description:
-          "Natroyal is a leading Indian manufacturer and global exporter of LVT Flooring, Luxury Vinyl Tiles, and Vinyl Planks. Exporting to the USA and UK, we offer durable, stylish, and easy-to-install flooring for residential and commercial interiors.",
-        keyword:
-          "LVT flooring India, Indian LVT flooring manufacturer, Luxury Vinyl Tile India, vinyl plank supplier India, LVT flooring exporter to USA, vinyl flooring USA importer, water-resistant vinyl planks USA, LVT flooring UK, vinyl tiles UK distributor, luxury vinyl plank UK, anti-slip vinyl flooring, wood-look vinyl tiles, commercial vinyl flooring, residential vinyl flooring, Natroyal vinyl exporter, luxury flooring manufacturer India",
-      };
-
-      // Add meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-      metaDescription.setAttribute("content", defaultMeta.description);
-
-      // Add meta keywords
-      let metaKeyword = document.querySelector('meta[name="keywords"]');
-      if (!metaKeyword) {
-        metaKeyword = document.createElement("meta");
-        metaKeyword.name = "keywords";
-        document.head.appendChild(metaKeyword);
-      }
-      metaKeyword.setAttribute("content", defaultMeta.keyword);
-
-      document.title = defaultMeta.title;
-    };
-    console.log(document.querySelector('meta[name="description"]').content);
-    fetchMetaTag();
-  }, []);
 
    useEffect(() => {
       const fetchLvtAbout = async () => {
@@ -239,7 +191,7 @@ const LVT = () => {
 
   return (
     <Layout>
-
+<MetaDataComponent/>
       <LandingBanner page={currentPath}/>
 
       <section className="product-category-section">

@@ -4,7 +4,6 @@ import { Navigate, NavLink, useLocation, useParams } from "react-router-dom";
 import Banner from "../../components/Banner";
 import ApplicationsModal from "../../components/ApplicationsModal";
 import { useEffect } from "react";
-import metaDataMap from "../../data/metaDataMap";
 import axios from "axios";
 import { useState } from "react";
 
@@ -14,64 +13,10 @@ const VinylApp = () => {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  useEffect(() => {
-    const meta = metaDataMap.vinylFlooring[category] || {
-      title: "Vinyl Flooring Applications | Natroyal",
-      description:
-        "Explore a wide range of vinyl flooring applications by Natroyal. Durable, stylish, and suited for every space.",
-      keywords:
-        "vinyl flooring, flooring applications, commercial vinyl flooring, residential vinyl flooring",
-    };
-
-    // Set Document Title
-    document.title = meta.title;
-
-    // Utility to update or create meta tag
-    const updateMeta = (name, content) => {
-      let element = document.querySelector(`meta[name="${name}"]`);
-      if (!element) {
-        element = document.createElement("meta");
-        element.name = name;
-        document.head.appendChild(element);
-      }
-      element.setAttribute("content", content);
-    };
-
-    // Apply metadata
-    updateMeta("description", meta.description);
-    updateMeta("keywords", meta.keywords);
-
-    // Set canonical tag
-    const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-    let linkCanonical = document.querySelector('link[rel="canonical"]');
-    if (!linkCanonical) {
-      linkCanonical = document.createElement("link");
-      linkCanonical.rel = "canonical";
-      document.head.appendChild(linkCanonical);
-    }
-    linkCanonical.href = canonicalUrl;
-  }, [category]);
-
    const { name } = useParams();
 
    const [vinylAppContent, setVinylAppContent] = useState([]);
 
-      useEffect(() => {
-         const fetchVinylAppContentByAppName = async () => {
-           try {
-             const apiUrl = process.env.REACT_APP_API_URL;
-             const response = await axios.get(`${apiUrl}/api/vinyl-application-content/application/${name}`);
-             const VinylAppContentData = response.data.appContent;
-     
-             setVinylAppContent(VinylAppContentData);
-          } catch (error) {
-             console.error("Error fetching application:", error);
-           } 
-         };
-     
-         fetchVinylAppContentByAppName();
-       }, [name]);
-  
     const [vinylProduct, setVinylProduct] = useState("");
 
      useEffect(() => {
