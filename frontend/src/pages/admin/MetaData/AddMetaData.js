@@ -121,6 +121,10 @@ setValidationError("")
                   <option value="/coated-fabrics">Coated Fabrics</option>
                   <option value="/seating-components">Seating Components</option>
                   <option value="/knit-fabrics">Knit Fabrics</option>
+                  <option value="/awards-and-recognition">Awards & Recognition</option>
+                  <option value="/research-and-development">Research & Development (R&D)</option>
+
+                  
 
                   {/* Dynamic pages from API */}
                   {allPages.map((p, idx) => (

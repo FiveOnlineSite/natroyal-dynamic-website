@@ -163,6 +163,8 @@ const EditMetaData = () => {
                     { key: "coated-fabrics", label: "Coated Fabrics", url: "/coated-fabrics" },
                     { key: "seating-components", label: "Seating Components", url: "/seating-components" },
                     { key: "knit-fabrics", label: "Knit Fabrics", url: "/knit-fabrics" },
+                    { key: "awards-and-recognition", label: "Awards & Recognition", url: "/awards-and-recognition" },
+                    { key: "research-and-development", label: "Research & Development (R&D)", url: "/research-and-development" },
 
                   ].map((p, idx) => (
                     <option key={`static-${idx}`} value={p.url}>

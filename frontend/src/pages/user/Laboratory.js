@@ -1,58 +1,13 @@
 import React, { useEffect } from "react";
 import Layout from "../../components/Layout";
 import { NavLink } from "react-router-dom";
+import MetaDataComponent from "../../components/MetaDataComponent"
 
 const Laboratory = () => {
-  useEffect(() => {
-    const fetchMetaTag = async () => {
-      // Canonical URL logic
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (linkCanonical) {
-        linkCanonical.setAttribute("href", canonicalUrl);
-      } else {
-        linkCanonical = document.createElement("link");
-        linkCanonical.rel = "canonical";
-        linkCanonical.href = canonicalUrl;
-        document.head.appendChild(linkCanonical);
-      }
-
-      // 💡 Set static meta tags BEFORE the fetch
-      const defaultMeta = {
-        title:
-          "Innovative Research & Product Development | Coated Fabrics & Vinyl Solutions – Natroyal India",
-        description:
-          "Natroyal’s R&D team leads innovation in coated fabrics, artificial leather, faux leather, and sustainable materials. Engineered for performance, safety, and durability across industries in India.",
-        keyword:
-          "coated fabrics R&D India, Natroyal product innovation, synthetic leather development, faux leather R&D, vinyl flooring innovation, sustainable material research India, industrial textile innovation, coated fabric research and development, eco-friendly manufacturing India, advanced materials innovation",
-      };
-
-      // Add meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-      metaDescription.setAttribute("content", defaultMeta.description);
-
-      // Add meta keywords
-      let metaKeyword = document.querySelector('meta[name="keywords"]');
-      if (!metaKeyword) {
-        metaKeyword = document.createElement("meta");
-        metaKeyword.name = "keywords";
-        document.head.appendChild(metaKeyword);
-      }
-      metaKeyword.setAttribute("content", defaultMeta.keyword);
-
-      document.title = defaultMeta.title;
-    };
-    console.log(document.querySelector('meta[name="description"]').content);
-    fetchMetaTag();
-  }, []);
 
   return (
     <Layout>
+      <MetaDataComponent/>
       <section className="landing-banner-section">
         <div className="slide-container">
           <div className="poster-container">

@@ -7,7 +7,7 @@ const createMetaData = async (req, res) => {
     if (existingPage)
       return res
         .status(400)
-        .json({ message: "Banner already exists for this page" });
+        .json({ message: "Meta Data already exists for this page" });
 
   try {
     const newMetaData = new MetaDataModel({
