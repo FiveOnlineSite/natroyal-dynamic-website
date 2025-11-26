@@ -11,6 +11,7 @@ import { useState } from "react";
 import axios from "axios";
 import LandingBanner from "../../components/LandingBanner";
 import MetaDataComponent from "../../components/MetaDataComponent"
+
 const LVT = () => {
 
   const location = useLocation()
@@ -32,7 +33,6 @@ const LVT = () => {
       </button>
     );
   };
-
 
   const videosSettings = {
     dots: false,
