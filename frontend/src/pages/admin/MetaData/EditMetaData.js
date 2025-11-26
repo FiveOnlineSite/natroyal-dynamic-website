@@ -159,6 +159,11 @@ const EditMetaData = () => {
                     { key: "about-us", label: "About Us", url: "/about-us" },
                     { key: "our-divisions", label: "Our Divisions", url: "/our-divisions" },
                     { key: "contact-us", label: "Contact Us", url: "/contact-us" },
+                    { key: "vinyl-flooring", label: "Vinyl Flooring", url: "/vinyl-flooring" },
+                    { key: "coated-fabrics", label: "Coated Fabrics", url: "/coated-fabrics" },
+                    { key: "seating-components", label: "Seating Components", url: "/seating-components" },
+                    { key: "knit-fabrics", label: "Knit Fabrics", url: "/knit-fabrics" },
+
                   ].map((p, idx) => (
                     <option key={`static-${idx}`} value={p.url}>
                       {p.label}
