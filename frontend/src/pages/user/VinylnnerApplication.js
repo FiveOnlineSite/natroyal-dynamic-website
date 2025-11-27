@@ -6,6 +6,7 @@ import { Modal } from "react-bootstrap";
 import ApplicationsModal from "../../components/ApplicationsModal";
 import innerAppMetaDataMap from "../../data/innerAppMetaDataMap";
 import axios from "axios";
+import MetaDataComponent from "../../components/MetaDataComponent"
 
 const VinylnnerApplication = () => {
   const [technicalModal, setTechnicalModal] = useState(false);
@@ -15,43 +16,43 @@ const VinylnnerApplication = () => {
  const location = useLocation()
   const currentPath = location.pathname
 
-  useEffect(() => {
-    const meta = innerAppMetaDataMap[name] || {
-      title: "Vinyl Flooring Applications | Natroyal",
-      description:
-        "Explore a wide range of vinyl flooring applications by Natroyal. Durable, stylish, and suited for every space.",
-      keywords:
-        "vinyl flooring, flooring applications, commercial vinyl flooring, residential vinyl flooring",
-    };
+  // useEffect(() => {
+  //   const meta = innerAppMetaDataMap[name] || {
+  //     title: "Vinyl Flooring Applications | Natroyal",
+  //     description:
+  //       "Explore a wide range of vinyl flooring applications by Natroyal. Durable, stylish, and suited for every space.",
+  //     keywords:
+  //       "vinyl flooring, flooring applications, commercial vinyl flooring, residential vinyl flooring",
+  //   };
 
-    // Set Document Title
-    document.title = meta.title;
+  //   // Set Document Title
+  //   document.title = meta.title;
 
-    // Utility to update or create meta tag
-    const updateMeta = (name, content) => {
-      let element = document.querySelector(`meta[name="${name}"]`);
-      if (!element) {
-        element = document.createElement("meta");
-        element.name = name;
-        document.head.appendChild(element);
-      }
-      element.setAttribute("content", content);
-    };
+  //   // Utility to update or create meta tag
+  //   const updateMeta = (name, content) => {
+  //     let element = document.querySelector(`meta[name="${name}"]`);
+  //     if (!element) {
+  //       element = document.createElement("meta");
+  //       element.name = name;
+  //       document.head.appendChild(element);
+  //     }
+  //     element.setAttribute("content", content);
+  //   };
 
-    // Apply metadata
-    updateMeta("description", meta.description);
-    updateMeta("keywords", meta.keywords);
+  //   // Apply metadata
+  //   updateMeta("description", meta.description);
+  //   updateMeta("keywords", meta.keywords);
 
-    // Set canonical tag
-    const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-    let linkCanonical = document.querySelector('link[rel="canonical"]');
-    if (!linkCanonical) {
-      linkCanonical = document.createElement("link");
-      linkCanonical.rel = "canonical";
-      document.head.appendChild(linkCanonical);
-    }
-    linkCanonical.href = canonicalUrl;
-  }, [name]);
+  //   // Set canonical tag
+  //   const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
+  //   let linkCanonical = document.querySelector('link[rel="canonical"]');
+  //   if (!linkCanonical) {
+  //     linkCanonical = document.createElement("link");
+  //     linkCanonical.rel = "canonical";
+  //     document.head.appendChild(linkCanonical);
+  //   }
+  //   linkCanonical.href = canonicalUrl;
+  // }, [name]);
 
   const openModal = (type) => {
     if (type === "technical") {
@@ -178,6 +179,7 @@ const VinylnnerApplication = () => {
   return (
     <>
       <Layout>
+        <MetaDataComponent/>
         <Banner page={currentPath} />
 
          <section className="applications-section vinyl-applications-section">

@@ -6,6 +6,7 @@ import ApplicationsModal from "../../components/ApplicationsModal";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
+import MetaDataComponent from "../../components/MetaDataComponent"
 
 const VinylApp = () => {
   const { category } = useParams(); // Get category from URL
@@ -56,7 +57,7 @@ const VinylApp = () => {
 
   return (
     <Layout>
-
+<MetaDataComponent/>
     <Banner page={currentPath}/>
 
         <section className="applications-section vinyl-applications-section">

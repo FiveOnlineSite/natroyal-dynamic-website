@@ -52,7 +52,6 @@ const SeatingComponents = () => {
     ],
   };
 
-
     const [seatingAbout, setSeatingAbout] = useState([])
 
        useEffect(() => {
