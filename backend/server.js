@@ -4,6 +4,8 @@ const connectDb = require("./config/db");
 const Route = require("./routes/index");
 const cors = require("cors");
 const path = require("path");
+const redirects = require("./redirects");
+
 const uploadRoutes = require("./routes/uploadRoutes");
 const app = express();
 app.use(express.json());
@@ -97,6 +99,15 @@ app.use("/api/division", Route.divisionsRoute);
 app.use("/api/meta-data", Route.metaDataRoute);
 app.use("/api/contact", Route.contactRoute);
 
+app.use((req, res, next) => {
+  const target = redirects[req.path];
+
+  if (target) {
+    return res.redirect(301, target);
+  }
+
+  next();
+});
 
 // All other requests will be handled by React
 app.get(/^\/(?!api).*/, (req, res) => {
