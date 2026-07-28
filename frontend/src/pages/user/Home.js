@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 import ConnectSection from "../../components/ConnectSection";
 import { Helmet } from "react-helmet";
 // import { NavLink } from "react-router-dom";
+import MetaDataComponent from "../../components/MetaDataComponent";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("pan-india");
@@ -259,56 +260,57 @@ const Home = () => {
     },
   ];
 
-  useEffect(() => {
-    const fetchMetaTag = async () => {
-      // Canonical URL logic
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
-      let linkCanonical = document.querySelector('link[rel="canonical"]');
-      if (linkCanonical) {
-        linkCanonical.setAttribute("href", canonicalUrl);
-      } else {
-        linkCanonical = document.createElement("link");
-        linkCanonical.rel = "canonical";
-        linkCanonical.href = canonicalUrl;
-        document.head.appendChild(linkCanonical);
-      }
+  // useEffect(() => {
+  //   const fetchMetaTag = async () => {
+  //     // Canonical URL logic
+  //     const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
+  //     let linkCanonical = document.querySelector('link[rel="canonical"]');
+  //     if (linkCanonical) {
+  //       linkCanonical.setAttribute("href", canonicalUrl);
+  //     } else {
+  //       linkCanonical = document.createElement("link");
+  //       linkCanonical.rel = "canonical";
+  //       linkCanonical.href = canonicalUrl;
+  //       document.head.appendChild(linkCanonical);
+  //     }
 
-      // 💡 Set static meta tags BEFORE the fetch
-      const defaultMeta = {
-        title:
-          "Natroyal Group | LVT, PVC Flooring, Coated Fabrics, Knit Fabrics, Seating Components",
-        description:
-          "Explore Natroyal Group – India’s top manufacturer of Luxury Vinyl Tiles (LVT), PVC vinyl flooring, coated fabrics, knit fabrics, and seating components. Trusted globally since 1954.",
-      };
+  //     // 💡 Set static meta tags BEFORE the fetch
+  //     const defaultMeta = {
+  //       title:
+  //         "Natroyal Group | LVT, PVC Flooring, Coated Fabrics, Knit Fabrics, Seating Components",
+  //       description:
+  //         "Explore Natroyal Group – India’s top manufacturer of Luxury Vinyl Tiles (LVT), PVC vinyl flooring, coated fabrics, knit fabrics, and seating components. Trusted globally since 1954.",
+  //     };
 
-      // Add meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
-      if (!metaDescription) {
-        metaDescription = document.createElement("meta");
-        metaDescription.name = "description";
-        document.head.appendChild(metaDescription);
-      }
-      metaDescription.setAttribute("content", defaultMeta.description);
+  //     // Add meta description
+  //     let metaDescription = document.querySelector('meta[name="description"]');
+  //     if (!metaDescription) {
+  //       metaDescription = document.createElement("meta");
+  //       metaDescription.name = "description";
+  //       document.head.appendChild(metaDescription);
+  //     }
+  //     metaDescription.setAttribute("content", defaultMeta.description);
 
-      // Add meta keywords
-      let metaKeyword = document.querySelector('meta[name="keywords"]');
-      if (!metaKeyword) {
-        metaKeyword = document.createElement("meta");
-        metaKeyword.name = "keywords";
-        document.head.appendChild(metaKeyword);
-      }
-      metaKeyword.setAttribute("content", defaultMeta.keyword);
+  //     // Add meta keywords
+  //     let metaKeyword = document.querySelector('meta[name="keywords"]');
+  //     if (!metaKeyword) {
+  //       metaKeyword = document.createElement("meta");
+  //       metaKeyword.name = "keywords";
+  //       document.head.appendChild(metaKeyword);
+  //     }
+  //     metaKeyword.setAttribute("content", defaultMeta.keyword);
 
-      document.title = defaultMeta.title;
-    };
-    console.log(document.querySelector('meta[name="description"]').content);
-    fetchMetaTag();
-  }, []);
+  //     document.title = defaultMeta.title;
+  //   };
+  //   console.log(document.querySelector('meta[name="description"]').content);
+  //   fetchMetaTag();
+  // }, []);
 
 
   return (
     <>
       <Layout>
+        <MetaDataComponent />
         <section className="home-banner-section" id="hero">
           <BannerSlider
             settings={bannerSettings}

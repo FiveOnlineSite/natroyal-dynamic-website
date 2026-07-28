@@ -156,6 +156,8 @@ const EditMetaData = () => {
                   </option>
 
                   {[
+                    { key: "home", label: "Home", url: "/" },
+
                     { key: "about-us", label: "About Us", url: "/about-us" },
                     { key: "our-divisions", label: "Our Divisions", url: "/our-divisions" },
                     { key: "contact-us", label: "Contact Us", url: "/contact-us" },

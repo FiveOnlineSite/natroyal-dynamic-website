@@ -3,13 +3,14 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 const MetaDataComponent = () => {
-  const location = useLocation(); // gives current URL (pathname, search, hash)
+  const location = useLocation();
 
   useEffect(() => {
     const fetchMetaTag = async () => {
-      // Add canonical tag
-      const canonicalUrl = `${window.location.origin}${window.location.pathname}`;
+      const canonicalUrl = `${window.location.origin}${location.pathname}`;
+
       let linkCanonical = document.querySelector('link[rel="canonical"]');
+
       if (linkCanonical) {
         linkCanonical.setAttribute("href", canonicalUrl);
       } else {
@@ -22,23 +23,31 @@ const MetaDataComponent = () => {
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
 
-        // Use full pathname instead of only last segment
-        let page = location.pathname;
+        // Keep homepage as "/"
+        const page = location.pathname || "/";
 
-        if (page === "/" || page === "") {
-          page = "/home";
-        }
+        const response = await axios.get(
+          `${apiUrl}/api/meta-data/by-page`,
+          {
+            params: {
+              page,
+            },
+          }
+        );
 
-        const response = await axios.get(`${apiUrl}/api/meta-data/by-page${page}`);
         const metaTag = response.data;
 
-        // Update <title>
-        document.title = metaTag.metaTitle || "Default Title";
+        document.title = metaTag.metaTitle || "Natroyal";
 
-        // Meta description
-        let metaDescription = document.querySelector('meta[name="description"]');
+        let metaDescription = document.querySelector(
+          'meta[name="description"]'
+        );
+
         if (metaDescription) {
-          metaDescription.setAttribute("content", metaTag.metaDescription || "");
+          metaDescription.setAttribute(
+            "content",
+            metaTag.metaDescription || ""
+          );
         } else {
           metaDescription = document.createElement("meta");
           metaDescription.name = "description";
@@ -46,23 +55,31 @@ const MetaDataComponent = () => {
           document.head.appendChild(metaDescription);
         }
 
-        // Meta keywords
-        let metaKeyword = document.querySelector('meta[name="keywords"]');
+        let metaKeyword = document.querySelector(
+          'meta[name="keywords"]'
+        );
+
         if (metaKeyword) {
-          metaKeyword.setAttribute("content", metaTag.metaKeyword || "");
+          metaKeyword.setAttribute(
+            "content",
+            metaTag.metaKeyword || ""
+          );
         } else {
           metaKeyword = document.createElement("meta");
-          metaKeyword.name = "keywords"; // ✅ should be "keywords", not "keyword"
+          metaKeyword.name = "keywords";
           metaKeyword.content = metaTag.metaKeyword || "";
           document.head.appendChild(metaKeyword);
         }
       } catch (error) {
-        console.error("Error fetching meta tag:", error);
+        console.error(
+          "Error fetching meta tag:",
+          error.response?.data || error.message
+        );
       }
     };
 
     fetchMetaTag();
-  }, [location]);
+  }, [location.pathname]);
 
   return null;
 };
