@@ -101,23 +101,26 @@ const getMetaDataById = async (req, res) => {
 
 const getMetaDataByPage = async (req, res) => {
   try {
-    // When using *, Express puts it in req.params[0]
-    let page = req.params[0];
+    const page = req.query.page || "/";
 
-    // Ensure leading slash
-    if (!page.startsWith("/")) {
-      page = "/" + page;
-    }
+    console.log("Searching metadata for:", page);
 
     const metaData = await MetaDataModel.findOne({ page });
 
     if (!metaData) {
-      return res.status(404).json({ message: "Meta data not found for this page." });
+      return res.status(404).json({
+        message: `Metadata not found for page: ${page}`,
+      });
     }
 
-    res.status(200).json(metaData);
+    return res.status(200).json(metaData);
   } catch (error) {
-    res.status(500).json({ message: `Error fetching meta data: ${error.message}` });
+    console.error("Metadata fetch error:", error);
+
+    return res.status(500).json({
+      message: "Failed to fetch metadata",
+      error: error.message,
+    });
   }
 };
 
